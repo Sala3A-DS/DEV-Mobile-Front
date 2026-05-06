@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "82453122437",
+    "project_id": "sasi-ee12a",
+    "storage_bucket": "sasi-ee12a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:82453122437:android:28f62128c469e9c4e8c8ec",
+        "android_client_info": {
+          "package_name": "com.example.agend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfm6oT2MWlAKubMPudCGouGnVkbt50FqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
