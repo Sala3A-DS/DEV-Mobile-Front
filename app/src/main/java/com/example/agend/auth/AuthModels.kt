@@ -1,29 +1,38 @@
 package com.example.agend.auth
 
-// --- LOGIN ---
+// --- LOGIN & REGISTRO ---
 data class LoginRequest(val email: String, val senha: String)
 
-// ATUALIZADO: Agora o login recebe o Token e os dados do Usuário
+data class RegisterRequest(val nome: String, val email: String, val senha: String, val cargo: String)
+
+// ATUALIZADO: O back-end agora devolve um Token JWT além do usuário
 data class LoginResponse(
     val token: String,
     val user: UserResponse
 )
 
 data class UserResponse(
-    val id: String?, // No Firebase o ID é String, não Int
+    val id: String?, // ATUALIZADO: No Firebase o ID é String (ex: "yX8aB...")
     val nome: String,
     val email: String,
     val cargo: String
 )
 
-// --- REGISTRO ---
-data class RegisterRequest(val nome: String, val email: String, val senha: String, val cargo: String)
+// --- AS 3 ETAPAS DE RECUPERAÇÃO DE SENHA ---
+data class ForgotPasswordRequest(val email: String) // Passo 1: Pede o código
+data class VerifyCodeRequest(val email: String, val codigo: String) // Passo 2: Digita o código
+data class ResetPasswordRequest(val email: String, val novaSenha: String) // Passo 3: Nova senha
 
-// --- RECUPERAÇÃO DE SENHA (3 Passos) ---
-data class ForgotPasswordRequest(val email: String) // Passo 1: Só envia e-mail
-data class VerifyCodeRequest(val email: String, val codigo: String) // Passo 2: Valida código
-data class ResetPasswordRequest(val email: String, val novaSenha: String) // Passo 3: Define senha
+// --- AGENDAMENTOS (Mantido o seu original) ---
+data class BookingRequest(
+    val nomeFuncionario: String,
+    val spaceId: Int,
+    val dataHora: String
+)
 
-// --- AGENDAMENTOS ---
-data class BookingRequest(val nomeFuncionario: String, val spaceId: Int, val dataHora: String)
-data class BookingResponse(val id: String, val nomeFuncionario: String, val spaceId: Int, val dataHora: String)
+data class BookingResponse(
+    val id: Int,
+    val nomeFuncionario: String,
+    val spaceId: Int,
+    val dataHora: String
+)
