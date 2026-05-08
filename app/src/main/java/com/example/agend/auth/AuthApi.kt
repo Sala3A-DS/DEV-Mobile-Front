@@ -1,32 +1,32 @@
 package com.example.agend.auth
 
-import retrofit2.Response
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface AuthApi {
 
-    @POST("api/auth/login")
-    suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
-
-    @POST("api/auth/register")
-    suspend fun register(@Body request: RegisterRequest): Response<String>
-
-    // FLUXO DE SENHA ATUALIZADO
-    @POST("api/auth/forgot-password")
-    suspend fun sendCode(@Body request: ForgotPasswordRequest): Response<String>
-
-    @POST("api/auth/verify-code")
-    suspend fun verifyCode(@Body request: VerifyCodeRequest): Response<String>
-
-    @POST("api/auth/reset-password")
-    suspend fun resetPassword(@Body request: ResetPasswordRequest): Response<String>
-
-    // AGENDAMENTOS
     @POST("api/bookings")
-    suspend fun makeBooking(@Body booking: BookingRequest): Response<String>
+    fun makeBooking(@Body booking: BookingRequest): Call<String>
 
     @GET("api/bookings")
-    suspend fun listarAgendamentos(): Response<List<BookingResponse>>
+    fun listarAgendamentos(): Call<List<BookingResponse>>
+
+    // ATUALIZADO: Agora retorna o LoginResponse (que contém o Token)
+    @POST("api/auth/login")
+    fun login(@Body request: LoginRequest): Call<LoginResponse>
+
+    @POST("api/auth/register")
+    fun register(@Body request: RegisterRequest): Call<String>
+
+    // --- AS 3 ROTAS DE SENHA ATUALIZADAS ---
+    @POST("api/auth/forgot-password")
+    fun forgotPassword(@Body request: ForgotPasswordRequest): Call<String>
+
+    @POST("api/auth/verify-code")
+    fun verifyCode(@Body request: VerifyCodeRequest): Call<String>
+
+    @POST("api/auth/reset-password")
+    fun resetPassword(@Body request: ResetPasswordRequest): Call<String>
 }
