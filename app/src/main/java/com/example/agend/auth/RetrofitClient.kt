@@ -5,25 +5,24 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
+
     private const val BASE_URL = "https://dev-mobile-back.onrender.com/"
     
-    // Variável para guardar o token na memória (ou carregar do SharedPreferences)
+    // ATUALIZADO: Variável global para guardar o Token quando o usuário logar
     var token: String? = null
 
-    private val client = OkHttpClient.Builder().addInterceptor { chain ->
+    // ATUALIZADO: Isso funciona como um "carimbo". Se tivermos um Token, ele carimba em todas as requisições.
+    private val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
         val requestBuilder = chain.request().newBuilder()
-        
-        // Se tivermos um token, adicionamos no cabeçalho de todas as chamadas
         token?.let {
             requestBuilder.addHeader("Authorization", "Bearer $it")
         }
-        
         chain.proceed(requestBuilder.build())
     }.build()
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .client(client) // Adicionamos o cliente com suporte a Token
+        .client(httpClient) // Usando o cliente com Token
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
