@@ -1,30 +1,29 @@
 package com.example.agend.auth
 
-// O que o Android envia
+// --- LOGIN ---
 data class LoginRequest(val email: String, val senha: String)
 
-data class RegisterRequest(val nome: String, val email: String, val senha: String, val cargo: String)
+// ATUALIZADO: Agora o login recebe o Token e os dados do Usuário
+data class LoginResponse(
+    val token: String,
+    val user: UserResponse
+)
 
-data class ForgotPasswordRequest(val email: String, val novaSenha: String)
-
-// O que o Android recebe de volta após o login com sucesso
 data class UserResponse(
-    val id: Int,
+    val id: String?, // No Firebase o ID é String, não Int
     val nome: String,
     val email: String,
     val cargo: String
 )
 
-data class BookingResponse(
-    val id: Int,
-    val nomeFuncionario: String,
-    val spaceId: Int,
-    val dataHora: String
-)
+// --- REGISTRO ---
+data class RegisterRequest(val nome: String, val email: String, val senha: String, val cargo: String)
 
-// O formato exato que o Spring Boot exige para criar uma reserva
-data class BookingRequest(
-    val nomeFuncionario: String,
-    val spaceId: Int,
-    val dataHora: String
-)
+// --- RECUPERAÇÃO DE SENHA (3 Passos) ---
+data class ForgotPasswordRequest(val email: String) // Passo 1: Só envia e-mail
+data class VerifyCodeRequest(val email: String, val codigo: String) // Passo 2: Valida código
+data class ResetPasswordRequest(val email: String, val novaSenha: String) // Passo 3: Define senha
+
+// --- AGENDAMENTOS ---
+data class BookingRequest(val nomeFuncionario: String, val spaceId: Int, val dataHora: String)
+data class BookingResponse(val id: String, val nomeFuncionario: String, val spaceId: Int, val dataHora: String)
