@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@color/yarooms_blue_dark">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,32 +16,40 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Criar Nova Senha"
-            android:textSize="26sp"
+            android:text="CRIAR NOVA SENHA"
+            android:textSize="24sp"
+            android:letterSpacing="0.1"
             android:textStyle="bold"
+            android:textColor="@color/yarooms_gold"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crie uma nova senha forte para acessar sua conta."
+            android:text="Defina uma nova senha forte para proteger sua conta."
             android:textAlignment="center"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:layout_marginBottom="32dp"
-            android:textColor="#757575"/>
+            android:textColor="@color/gray_text"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutNovaSenha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:passwordToggleEnabled="true"
-            android:hint="Nova Senha">
+            app:passwordToggleTint="@color/yarooms_gold"
+            android:textColorHint="@color/gray_text"
+            app:hintTextColor="@color/yarooms_gold"
+            app:boxStrokeColor="@color/yarooms_gold"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editNovaSenha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:hint="Nova Senha"
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -49,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:visibility="gone"
             android:layout_marginBottom="16dp">
 
@@ -58,18 +67,17 @@
                 android:layout_height="6dp"
                 android:orientation="horizontal"
                 android:weightSum="4">
-                <View android:id="@+id/barra1" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#E0E0E0"/>
-                <View android:id="@+id/barra2" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#E0E0E0"/>
-                <View android:id="@+id/barra3" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#E0E0E0"/>
-                <View android:id="@+id/barra4" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="#E0E0E0"/>
+                <View android:id="@+id/barra1" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#44FFFFFF"/>
+                <View android:id="@+id/barra2" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#44FFFFFF"/>
+                <View android:id="@+id/barra3" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#44FFFFFF"/>
+                <View android:id="@+id/barra4" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="#44FFFFFF"/>
             </LinearLayout>
 
-            <TextView android:id="@+id/textoForcaSenha" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Força da senha" android:textSize="12sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
-            <TextView android:id="@+id/reqMinimo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Mínimo 8 caracteres" android:textSize="12sp"/>
-            <TextView android:id="@+id/reqMaiuscula" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 letra maiúscula" android:textSize="12sp"/>
-            <TextView android:id="@+id/reqMinuscula" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 letra minúscula" android:textSize="12sp"/>
-            <TextView android:id="@+id/reqNumero" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 número" android:textSize="12sp"/>
-            <TextView android:id="@+id/reqEspecial" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 caractere especial" android:textSize="12sp"/>
+            <TextView android:id="@+id/textoForcaSenha" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Segurança da Senha" android:textColor="@color/yarooms_gold_light" android:textSize="12sp" android:textStyle="bold" android:layout_marginTop="6dp"/>
+            <TextView android:id="@+id/reqMinimo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Mínimo 8 caracteres" android:textColor="@color/gray_text" android:textSize="12sp"/>
+            <TextView android:id="@+id/reqMaiuscula" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 letra maiúscula" android:textColor="@color/gray_text" android:textSize="12sp"/>
+            <TextView android:id="@+id/reqNumero" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 número" android:textColor="@color/gray_text" android:textSize="12sp"/>
+            <TextView android:id="@+id/reqEspecial" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 caractere especial" android:textColor="@color/gray_text" android:textSize="12sp"/>
         </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -78,12 +86,18 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             app:passwordToggleEnabled="true"
-            android:hint="Confirme a Nova Senha">
+            app:passwordToggleTint="@color/yarooms_gold"
+            android:textColorHint="@color/gray_text"
+            app:hintTextColor="@color/yarooms_gold"
+            app:boxStrokeColor="@color/yarooms_gold"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editConfirmarSenha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:hint="Confirme a Nova Senha"
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,17 +106,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="⚠️ Erro ao salvar senha"
-            android:textColor="#F44336"
+            android:textColor="#FF5252"
             android:visibility="gone"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:textStyle="bold"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/botaoSalvarSenha"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Salvar Nova Senha"
-            android:padding="12dp"
-            android:layout_marginTop="8dp"/>
+            android:layout_height="60dp"
+            android:text="SALVAR NOVA SENHA"
+            android:textColor="@color/yarooms_blue_dark"
+            android:textStyle="bold"
+            app:cornerRadius="8dp"
+            android:backgroundTint="@color/yarooms_gold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"/>
 
     </LinearLayout>
 </ScrollView>

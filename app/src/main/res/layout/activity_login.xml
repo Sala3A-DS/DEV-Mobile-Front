@@ -5,14 +5,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="32dp"
+    android:background="@color/yarooms_blue_dark"
     android:gravity="center">
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:src="@drawable/logo"
+        android:layout_marginBottom="24dp"
+        android:contentDescription="Logo YaRooms" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bem-vindo"
-        android:textSize="32sp"
+        android:text="BEM-VINDO"
+        android:textSize="24sp"
+        android:letterSpacing="0.1"
         android:textStyle="bold"
+        android:textColor="@color/yarooms_gold"
         android:layout_marginBottom="32dp"/>
 
     <TextView
@@ -20,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="⚠️ E-mail ou senha incorretos"
-        android:textColor="#F44336"
+        android:textColor="#FF5252"
         android:visibility="gone"
         android:layout_marginBottom="16dp"/>
 
@@ -29,13 +40,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:hint="E-mail">
+        android:textColorHint="@color/gray_text"
+        app:hintTextColor="@color/yarooms_gold"
+        app:boxStrokeColor="@color/yarooms_gold"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"/>
+            android:textColor="@color/white"
+            android:inputType="textEmailAddress"
+            android:hint="E-mail"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -43,13 +59,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:passwordToggleEnabled="true"
-        android:hint="Senha">
+        app:passwordToggleTint="@color/yarooms_gold"
+        android:textColorHint="@color/gray_text"
+        app:hintTextColor="@color/yarooms_gold"
+        app:boxStrokeColor="@color/yarooms_gold"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editSenha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"/>
+            android:textColor="@color/white"
+            android:inputType="textPassword"
+            android:hint="Senha"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -57,17 +79,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Esqueci minha senha"
-        android:textColor="#1976D2"
+        android:textColor="@color/yarooms_gold_light"
         android:layout_gravity="end"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp"
         android:padding="8dp"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/botaoEntrar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Entrar"
+        android:layout_height="60dp"
+        android:text="ENTRAR"
+        android:textColor="@color/yarooms_blue_dark"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        android:backgroundTint="@color/yarooms_gold"
         android:padding="12dp"/>
 
     <TextView
@@ -75,8 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Não tem uma conta? Cadastre-se"
-        android:textColor="#1976D2"
-        android:textStyle="bold"
+        android:textColor="@color/yarooms_gold"
         android:layout_marginTop="32dp"
         android:padding="8dp"/>
 

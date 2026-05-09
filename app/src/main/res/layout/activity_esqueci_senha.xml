@@ -5,37 +5,46 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="32dp"
+    android:background="@color/yarooms_blue_dark"
     android:gravity="center_horizontal">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Esqueci minha Senha"
-        android:textSize="26sp"
+        android:text="RECUPERAR ACESSO"
+        android:textSize="24sp"
+        android:letterSpacing="0.1"
         android:textStyle="bold"
+        android:textColor="@color/yarooms_gold"
         android:layout_marginTop="48dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="12dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Digite seu e-mail cadastrado para receber o código de recuperação."
+        android:text="Informe seu e-mail cadastrado para receber o código de verificação."
         android:textAlignment="center"
-        android:textSize="16sp"
-        android:layout_marginBottom="32dp"
-        android:textColor="#757575"/>
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="40dp"
+        android:textColor="@color/gray_text"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutEmailEsqueci"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Seu e-mail">
+        android:textColorHint="@color/gray_text"
+        app:hintTextColor="@color/yarooms_gold"
+        app:boxStrokeColor="@color/yarooms_gold"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editEmailEsqueci"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"/>
+            android:textColor="@color/white"
+            android:inputType="textEmailAddress"
+            android:hint="Seu e-mail"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -43,26 +52,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="⚠️ E-mail não encontrado"
-        android:textColor="#F44336"
+        android:textColor="#FF5252"
         android:visibility="gone"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="12dp"
+        android:textStyle="bold"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/botaoEnviarCodigo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enviar Código"
-        android:padding="12dp"
-        android:layout_marginTop="24dp"/>
+        android:layout_height="60dp"
+        android:text="ENVIAR CÓDIGO"
+        android:textColor="@color/yarooms_blue_dark"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        android:backgroundTint="@color/yarooms_gold"
+        android:layout_marginTop="32dp"/>
 
     <TextView
         android:id="@+id/textoVoltarEsqueci"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Voltar ao Login"
-        android:textColor="#1976D2"
+        android:textColor="@color/yarooms_gold_light"
         android:textStyle="bold"
         android:layout_marginTop="32dp"
-        android:padding="8dp"/>
+        android:padding="12dp"/>
 
 </LinearLayout>

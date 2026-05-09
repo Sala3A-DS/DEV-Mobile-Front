@@ -1,41 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="32dp"
+    android:background="@color/yarooms_blue_dark"
     android:gravity="center">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="✅"
-        android:textSize="72sp"
-        android:layout_marginBottom="24dp"/>
-
+        android:text="check_circle"
+        android:fontFamily="sans-serif-light"
+        android:textSize="100sp"
+        android:textColor="@color/yarooms_gold"
+        android:layout_marginBottom="24dp"
+        android:alpha="0.9"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Senha Alterada!"
-        android:textSize="28sp"
+        android:text="SENHA ALTERADA!"
+        android:textSize="24sp"
+        android:letterSpacing="0.1"
         android:textStyle="bold"
-        android:textColor="#388E3C"
+        android:textColor="@color/yarooms_gold"
         android:layout_marginBottom="16dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sua senha foi atualizada com sucesso. Você já pode acessar o aplicativo usando a nova senha."
+        android:text="Sua senha foi atualizada com sucesso.\nVocê já pode acessar o YaRooms usando suas novas credenciais."
         android:textAlignment="center"
-        android:textSize="16sp"
-        android:textColor="#757575"
+        android:lineSpacingExtra="4dp"
+        android:textSize="15sp"
+        android:textColor="@color/gray_text"
         android:layout_marginBottom="48dp"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/botaoVoltarLogin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ir para o Login"
+        android:layout_height="60dp"
+        android:text="IR PARA O LOGIN"
+        android:textColor="@color/yarooms_blue_dark"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        android:backgroundTint="@color/yarooms_gold"
         android:padding="12dp"/>
 
 </LinearLayout>

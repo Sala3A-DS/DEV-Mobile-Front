@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/yarooms_blue_dark"
     android:fillViewport="true">
 
     <LinearLayout
@@ -14,22 +15,30 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Criar Conta"
-            android:textSize="28sp"
+            android:text="CRIAR CONTA"
+            android:textSize="24sp"
+            android:letterSpacing="0.1"
             android:textStyle="bold"
+            android:textColor="@color/yarooms_gold"
             android:layout_gravity="center"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutNome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:hint="Nome Completo">
+            android:textColorHint="@color/gray_text"
+            app:hintTextColor="@color/yarooms_gold"
+            app:boxStrokeColor="@color/yarooms_gold"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editNome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:hint="Nome Completo"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -38,11 +47,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:hint="E-mail">
+            android:textColorHint="@color/gray_text"
+            app:hintTextColor="@color/yarooms_gold"
+            app:boxStrokeColor="@color/yarooms_gold"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editEmailCadastro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:hint="E-mail"
                 android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -50,12 +64,18 @@
             android:id="@+id/layoutSenhaCadastro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Senha"
-            app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/yarooms_gold"
+            android:textColorHint="@color/gray_text"
+            app:hintTextColor="@color/yarooms_gold"
+            app:boxStrokeColor="@color/yarooms_gold"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editSenhaCadastro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:hint="Senha"
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:visibility="gone"
             android:layout_marginBottom="16dp">
 
@@ -73,17 +93,25 @@
                 android:layout_height="6dp"
                 android:orientation="horizontal"
                 android:weightSum="4">
-                <View android:id="@+id/barra1" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#E0E0E0"/>
-                <View android:id="@+id/barra2" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#E0E0E0"/>
-                <View android:id="@+id/barra3" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#E0E0E0"/>
-                <View android:id="@+id/barra4" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="#E0E0E0"/>
+                <View android:id="@+id/barra1" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#44FFFFFF"/>
+                <View android:id="@+id/barra2" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#44FFFFFF"/>
+                <View android:id="@+id/barra3" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#44FFFFFF"/>
+                <View android:id="@+id/barra4" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="#44FFFFFF"/>
             </LinearLayout>
 
-            <TextView android:id="@+id/textoForcaSenha" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Força da senha" android:textSize="12sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
-            <TextView android:id="@+id/reqMinimo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Mínimo 8 caracteres" android:textSize="12sp"/>
-            <TextView android:id="@+id/reqNumero" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 número" android:textSize="12sp"/>
-            <TextView android:id="@+id/reqEspecial" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 caractere especial" android:textSize="12sp"/>
+            <TextView android:id="@+id/textoForcaSenha" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Força da senha" android:textColor="@color/yarooms_gold_light" android:textSize="12sp" android:textStyle="bold" android:layout_marginTop="6dp"/>
+            <TextView android:id="@+id/reqMinimo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Mínimo 8 caracteres" android:textColor="@color/gray_text" android:textSize="12sp"/>
+            <TextView android:id="@+id/reqNumero" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 número" android:textColor="@color/gray_text" android:textSize="12sp"/>
+            <TextView android:id="@+id/reqEspecial" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 caractere especial" android:textColor="@color/gray_text" android:textSize="12sp"/>
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eu sou:"
+            android:textColor="@color/yarooms_gold"
+            android:layout_marginTop="8dp"
+            android:textStyle="bold"/>
 
         <RadioGroup
             android:id="@+id/radioGrupoPerfil"
@@ -91,16 +119,32 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="24dp">
-            <RadioButton android:id="@+id/radioProfessor" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Professor" android:layout_weight="1"/>
-            <RadioButton android:id="@+id/radioDiretor" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Diretor" android:layout_weight="1"/>
+            <RadioButton android:id="@+id/radioProfessor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Professor"
+                android:textColor="@color/white"
+                android:buttonTint="@color/yarooms_gold"
+                android:layout_weight="1"/>
+            <RadioButton android:id="@+id/radioDiretor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Diretor"
+                android:textColor="@color/white"
+                android:buttonTint="@color/yarooms_gold"
+                android:layout_weight="1"/>
         </RadioGroup>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/botaoCadastrar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cadastrar"
-            android:layout_marginBottom="16dp"/>
+            android:layout_height="60dp"
+            android:text="CADASTRAR"
+            android:textColor="@color/yarooms_blue_dark"
+            android:textStyle="bold"
+            app:cornerRadius="8dp"
+            android:backgroundTint="@color/yarooms_gold"
+            android:layout_marginBottom="24dp"/>
 
         <TextView
             android:id="@+id/textoVoltarLogin"
@@ -108,8 +152,10 @@
             android:layout_height="wrap_content"
             android:text="Já tem conta? Faça Login"
             android:layout_gravity="center"
-            android:textColor="#1976D2"
-            android:textStyle="bold"/>
+            android:textColor="@color/yarooms_gold"
+            android:textStyle="bold"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp"/>
 
     </LinearLayout>
 </ScrollView>
