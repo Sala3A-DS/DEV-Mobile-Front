@@ -74,8 +74,12 @@
             </LinearLayout>
 
             <TextView android:id="@+id/textoForcaSenha" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Segurança da Senha" android:textColor="@color/yarooms_gold_light" android:textSize="12sp" android:textStyle="bold" android:layout_marginTop="6dp"/>
+
             <TextView android:id="@+id/reqMinimo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Mínimo 8 caracteres" android:textColor="@color/gray_text" android:textSize="12sp"/>
             <TextView android:id="@+id/reqMaiuscula" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 letra maiúscula" android:textColor="@color/gray_text" android:textSize="12sp"/>
+
+            <TextView android:id="@+id/reqMinuscula" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 letra minúscula" android:textColor="@color/gray_text" android:textSize="12sp"/>
+
             <TextView android:id="@+id/reqNumero" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 número" android:textColor="@color/gray_text" android:textSize="12sp"/>
             <TextView android:id="@+id/reqEspecial" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 caractere especial" android:textColor="@color/gray_text" android:textSize="12sp"/>
         </LinearLayout>
