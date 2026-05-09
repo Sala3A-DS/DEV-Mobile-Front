@@ -8,15 +8,14 @@ import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.agend.auth.RetrofitClient
-import com.example.agend.auth.BookingResponse // Vamos criar isso abaixo
+import com.example.agend.auth.BookingResponse
+import com.example.agend.auth.RetrofitClient // Certifique-se de que este import está correto
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class HomeActivity : AppCompatActivity() {
 
-    // Lista visual e o adaptador
     private lateinit var adapter: ArrayAdapter<String>
     private val agendamentosFormatados = mutableListOf<String>()
 
@@ -29,53 +28,58 @@ class HomeActivity : AppCompatActivity() {
         val lista = findViewById<ListView>(R.id.listaHomeAgendamentos)
         val botaoNovo = findViewById<Button>(R.id.botaoNovoAgendamento)
 
-        // 1. Pegar os dados reais que vieram da tela de Login (Back-end)
         val email = intent.getStringExtra("email") ?: ""
         val nome = intent.getStringExtra("nome") ?: "Usuário"
 
         textoBemVindo.text = "Bem-vindo, $nome!"
-        textoNome.text = "Professor(a)" // Você pode passar o cargo via Intent também, se quiser
+        textoNome.text = "Professor(a)"
 
-        // 2. Configurar o visual da lista vazia
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, agendamentosFormatados)
         lista.adapter = adapter
 
-        // 3. Botão de Novo Agendamento
         botaoNovo.setOnClickListener {
             val intent = Intent(this, AgendamentoActivity::class.java)
             intent.putExtra("email", email)
             intent.putExtra("nome", nome)
-            startActivity(intent) // Não precisamos mais do startActivityForResult!
+            startActivity(intent)
         }
     }
 
-    // O onResume é mágico: ele roda toda vez que a tela aparece para o usuário.
-    // Ou seja, quando ele voltar da tela de "Novo Agendamento", a lista se atualiza sozinha!
     override fun onResume() {
         super.onResume()
         carregarAgendamentosDoServidor()
     }
 
     private fun carregarAgendamentosDoServidor() {
-        // Pede os dados para o Back-end
+        // Pede os dados para o Back-end (O RetrofitClient enviará o Token automaticamente)
         RetrofitClient.api.listarAgendamentos().enqueue(object : Callback<List<BookingResponse>> {
 
             override fun onResponse(call: Call<List<BookingResponse>>, response: Response<List<BookingResponse>>) {
                 if (response.isSuccessful) {
                     val agendamentos = response.body() ?: emptyList()
 
-                    // Limpa a lista antiga e preenche com os novos dados
                     agendamentosFormatados.clear()
                     for (item in agendamentos) {
-                        // Monta o texto que vai aparecer em cada linha da lista
                         val linha = "Sala ID: ${item.spaceId}\nPor: ${item.nomeFuncionario}\nHora: ${item.dataHora}"
                         agendamentosFormatados.add(linha)
                     }
 
-                    // Avisa a tela que os dados mudaram
                     adapter.notifyDataSetChanged()
                 } else {
-                    Toast.makeText(this@HomeActivity, "Erro ao carregar lista", Toast.LENGTH_SHORT).show()
+                    // ATUALIZADO: Tratamento de expiração de sessão (Token inválido ou expirado)
+                    if (response.code() == 401 || response.code() == 403) {
+                        Toast.makeText(this@HomeActivity, "Sessão expirada. Por favor, faça login novamente.", Toast.LENGTH_LONG).show()
+
+                        // Limpa o token salvo para evitar problemas
+                        RetrofitClient.token = null
+
+                        // Manda de volta para o Login e fecha a tela atual
+                        val intent = Intent(this@HomeActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finishAffinity() // Fecha todas as telas abertas para o usuário não conseguir voltar clicando em "Voltar"
+                    } else {
+                        Toast.makeText(this@HomeActivity, "Erro ao carregar lista: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 

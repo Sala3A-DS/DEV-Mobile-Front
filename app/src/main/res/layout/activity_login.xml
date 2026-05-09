@@ -1,109 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1A237E">
+    android:orientation="vertical"
+    android:padding="32dp"
+    android:gravity="center">
 
-    <LinearLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bem-vindo"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="32dp"/>
+
+    <TextView
+        android:id="@+id/textoErroLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⚠️ E-mail ou senha incorretos"
+        android:textColor="#F44336"
+        android:visibility="gone"
+        android:layout_marginBottom="16dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="28dp">
+        android:layout_marginBottom="16dp"
+        android:hint="E-mail">
 
-        <ImageView
-            android:layout_width="180dp"
-            android:layout_height="120dp"
-            android:src="@drawable/logo"
-            android:scaleType="fitCenter"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp"/>
-
-        <TextView
-            android:id="@+id/tituloLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Agendamento de Sala"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:layout_gravity="center"
-            android:layout_marginTop="12dp"/>
-
-        <TextView
-            android:id="@+id/subtituloLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Faça login para continuar"
-            android:textSize="13sp"
-            android:textColor="#B0BEC5"
-            android:layout_gravity="center"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="32dp"/>
-
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:padding="12dp"
-            android:textSize="15sp"
-            android:background="#FFFFFF"
-            android:layout_marginBottom="12dp"/>
+            android:inputType="textEmailAddress"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutSenha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true"
+        android:hint="Senha">
+
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editSenha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Senha"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            android:textSize="15sp"
-            android:background="#FFFFFF"
-            android:layout_marginBottom="8dp"/>
+            android:inputType="textPassword"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/textoErroLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="#EF9A9A"
-            android:textSize="13sp"
-            android:layout_marginBottom="8dp"
-            android:visibility="gone"/>
+    <TextView
+        android:id="@+id/textoEsqueciSenha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Esqueci minha senha"
+        android:textColor="#1976D2"
+        android:layout_gravity="end"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp"
+        android:padding="8dp"/>
 
-        <Button
-            android:id="@+id/botaoEntrar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Entrar"
-            android:backgroundTint="#1565C0"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"/>
+    <Button
+        android:id="@+id/botaoEntrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Entrar"
+        android:padding="12dp"/>
 
-        <TextView
-            android:id="@+id/textoEsqueciSenha"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Esqueci minha senha"
-            android:textColor="#90CAF9"
-            android:textSize="13sp"
-            android:layout_gravity="center"
-            android:layout_marginTop="12dp"/>
+    <TextView
+        android:id="@+id/textoCadastro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Não tem uma conta? Cadastre-se"
+        android:textColor="#1976D2"
+        android:textStyle="bold"
+        android:layout_marginTop="32dp"
+        android:padding="8dp"/>
 
-        <TextView
-            android:id="@+id/textoCadastro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Não tem conta? Cadastre-se"
-            android:textColor="#90CAF9"
-            android:textSize="14sp"
-            android:layout_gravity="center"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="32dp"/>
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

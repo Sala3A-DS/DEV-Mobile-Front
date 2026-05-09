@@ -2,13 +2,15 @@ package com.example.agend
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.agend.auth.ForgotPasswordRequest
 import com.example.agend.auth.RetrofitClient
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,64 +21,58 @@ class EsqueciSenhaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_esqueci_senha)
 
-        val editEmail = findViewById<EditText>(R.id.editEmailEsqueci)
+        val layoutEmail    = findViewById<TextInputLayout>(R.id.layoutEmailEsqueci)
+        val editEmail      = findViewById<TextInputEditText>(R.id.editEmailEsqueci)
+        val botaoEnviar    = findViewById<Button>(R.id.botaoEnviarCodigo)
+        val textoErro      = findViewById<TextView>(R.id.textoErroEsqueci)
+        val textoVoltar    = findViewById<TextView>(R.id.textoVoltarEsqueci)
 
-        // NOVO: Precisamos capturar a nova senha que o usuário quer colocar!
-        // (Lembre-se de criar este EditText no seu activity_esqueci_senha.xml)
-        val editNovaSenha = findViewById<EditText>(R.id.editNovaSenhaEsqueci)
-
-        val botaoRedefinir = findViewById<Button>(R.id.botaoRedefinir)
-        val textoErro = findViewById<TextView>(R.id.textoErroEsqueci)
-        val textoSucesso = findViewById<TextView>(R.id.textoSucessoEsqueci)
-        val textoVoltar = findViewById<TextView>(R.id.textoVoltarEsqueci)
-
-        botaoRedefinir.setOnClickListener {
+        botaoEnviar.setOnClickListener {
             val email = editEmail.text.toString().trim()
-            val novaSenha = editNovaSenha.text.toString().trim()
-
             textoErro.visibility = View.GONE
-            textoSucesso.visibility = View.GONE
+            layoutEmail.error    = null
 
-            // 1. Validação
-            if (email.isEmpty() || novaSenha.isEmpty()) {
-                textoErro.text = "⚠️ Preencha o email e a nova senha!"
-                textoErro.visibility = View.VISIBLE
+            if (email.isEmpty()) {
+                layoutEmail.error = "Informe o e-mail"
+                return@setOnClickListener
+            }
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                layoutEmail.error = "Informe um e-mail válido (ex: nome@dominio.com)"
                 return@setOnClickListener
             }
 
-            // UI: Feedback visual de carregamento
-            botaoRedefinir.isEnabled = false
-            botaoRedefinir.text = "Aguarde..."
+            botaoEnviar.isEnabled = false
+            botaoEnviar.text = "Enviando..."
 
-            // 2. Monta o pacote de dados exigido pelo seu Back-end
-            val pedido = ForgotPasswordRequest(email, novaSenha)
-
-            // 3. Faz a requisição para a Nuvem/IntelliJ
-            RetrofitClient.api.resetPassword(pedido).enqueue(object : Callback<String> {
-
+            // ATUALIZADO: Usando o nome correto da função (forgotPassword) e passando só o E-mail
+            RetrofitClient.api.forgotPassword(ForgotPasswordRequest(email)).enqueue(object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
-                    botaoRedefinir.isEnabled = true
-                    botaoRedefinir.text = "Redefinir Senha"
+                    botaoEnviar.isEnabled = true
+                    botaoEnviar.text = "Enviar Código"
 
                     if (response.isSuccessful) {
-                        // O Spring Boot retornou "SUCESSO..."
-                        textoSucesso.text = "✅ Senha alterada com sucesso!"
-                        textoSucesso.visibility = View.VISIBLE
+                        val respostaServidor = response.body() ?: ""
 
-                        // Limpa os campos para não ficar visível
-                        editEmail.text.clear()
-                        editNovaSenha.text.clear()
+                        // ATUALIZADO: Verificando se o servidor conseguiu enviar o e-mail
+                        if (respostaServidor.contains("SUCESSO")) {
+                            // Passa o email para a próxima tela
+                            val intent = Intent(this@EsqueciSenhaActivity, ConfirmarCodigoActivity::class.java)
+                            intent.putExtra("email", email)
+                            startActivity(intent)
+                        } else {
+                            // O servidor devolve "ERRO: Usuário não encontrado"
+                            textoErro.text = "⚠️ $respostaServidor"
+                            textoErro.visibility = View.VISIBLE
+                        }
                     } else {
-                        // O Spring Boot retornou "ERRO: Não encontramos um usuário..." (Status 404)
-                        textoErro.text = "⚠️ Email não cadastrado no sistema!"
+                        textoErro.text = "⚠️ Erro no servidor: ${response.code()}"
                         textoErro.visibility = View.VISIBLE
                     }
                 }
 
                 override fun onFailure(call: Call<String>, t: Throwable) {
-                    botaoRedefinir.isEnabled = true
-                    botaoRedefinir.text = "Redefinir Senha"
-
+                    botaoEnviar.isEnabled = true
+                    botaoEnviar.text = "Enviar Código"
                     textoErro.text = "⚠️ Falha na conexão com o servidor."
                     textoErro.visibility = View.VISIBLE
                 }
@@ -84,8 +80,8 @@ class EsqueciSenhaActivity : AppCompatActivity() {
         }
 
         textoVoltar.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish() // Destrói a tela atual para não acumular na memória do celular
+            startActivity(Intent(this, MainActivity::class.java)) // MainActivity costuma ser o Login
+            finish()
         }
     }
 }

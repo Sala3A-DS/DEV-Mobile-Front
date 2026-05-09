@@ -23,7 +23,7 @@ data class ForgotPasswordRequest(val email: String) // Passo 1: Pede o código
 data class VerifyCodeRequest(val email: String, val codigo: String) // Passo 2: Digita o código
 data class ResetPasswordRequest(val email: String, val novaSenha: String) // Passo 3: Nova senha
 
-// --- AGENDAMENTOS (Mantido o seu original) ---
+// --- AGENDAMENTOS ---
 data class BookingRequest(
     val nomeFuncionario: String,
     val spaceId: Int,
@@ -31,7 +31,7 @@ data class BookingRequest(
 )
 
 data class BookingResponse(
-    val id: Int,
+    val id: String?, // ATUALIZADO: Ajustado para o padrão Firebase
     val nomeFuncionario: String,
     val spaceId: Int,
     val dataHora: String

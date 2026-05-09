@@ -3,11 +3,12 @@ package com.example.agend
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.agend.auth.BookingRequest
 import com.example.agend.auth.RetrofitClient
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,26 +16,24 @@ import java.util.Calendar
 
 class AgendamentoActivity : AppCompatActivity() {
 
-    // Variáveis para guardar as escolhas do usuário em formato de número
-    // Isso vai facilitar muito na hora de enviar para o Spring Boot!
-    private var selAno = 0
-    private var selMes = 0
-    private var selDia = 0
-    private var selHora = -1
+    private var selAno    = 0
+    private var selMes    = 0
+    private var selDia    = 0
+    private var selHora   = -1
     private var selMinuto = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agendamento)
 
-        val editSala = findViewById<EditText>(R.id.editSala)
-        val botaoData = findViewById<Button>(R.id.botaoData)
-        val textoData = findViewById<TextView>(R.id.textoDataSelecionada)
+        val layoutSala   = findViewById<TextInputLayout>(R.id.layoutSala)
+        val editSala     = findViewById<TextInputEditText>(R.id.editSala)
+        val botaoData    = findViewById<Button>(R.id.botaoData)
+        val textoData    = findViewById<TextView>(R.id.textoDataSelecionada)
         val botaoHorario = findViewById<Button>(R.id.botaoHorario)
         val textoHorario = findViewById<TextView>(R.id.textoHorarioSelecionado)
         val botaoAgendar = findViewById<Button>(R.id.botaoAgendar)
 
-        // Pega o nome do professor que veio da tela Home
         val nomeFuncionario = intent.getStringExtra("nome") ?: "Professor Desconhecido"
 
         botaoData.setOnClickListener {
@@ -43,7 +42,7 @@ class AgendamentoActivity : AppCompatActivity() {
                 this,
                 { _, ano, mes, dia ->
                     selAno = ano
-                    selMes = mes + 1 // O Android conta os meses do 0 ao 11, o Back-end do 1 ao 12
+                    selMes = mes + 1
                     selDia = dia
                     textoData.text = "📅 Data: ${String.format("%02d/%02d/%04d", dia, selMes, ano)}"
                 },
@@ -58,7 +57,7 @@ class AgendamentoActivity : AppCompatActivity() {
             TimePickerDialog(
                 this,
                 { _, hora, minuto ->
-                    selHora = hora
+                    selHora   = hora
                     selMinuto = minuto
                     textoHorario.text = "⏰ Horário: ${String.format("%02d:%02d", hora, minuto)}"
                 },
@@ -71,9 +70,10 @@ class AgendamentoActivity : AppCompatActivity() {
         botaoAgendar.setOnClickListener {
             val salaDigitada = editSala.text.toString().trim()
 
-            // 1. Validações Locais
+            layoutSala.error = null
+
             if (salaDigitada.isEmpty()) {
-                Toast.makeText(this, "⚠️ Digite o número ou ID da sala!", Toast.LENGTH_SHORT).show()
+                layoutSala.error = "Digite o nome ou ID da sala"
                 return@setOnClickListener
             }
             if (selAno == 0) {
@@ -85,37 +85,43 @@ class AgendamentoActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // O Back-end espera um número inteiro para o ID do espaço.
-            // Se o usuário digitar "Sala 1", vamos tentar pegar só o número. Se não conseguir, mandamos 1 por padrão.
             val spaceId = salaDigitada.toIntOrNull() ?: 1
+            val dataHoraFormatada = String.format(
+                "%04d-%02d-%02dT%02d:%02d:00",
+                selAno, selMes, selDia, selHora, selMinuto
+            )
 
-            // 2. Formata a DataHora para o padrão do Spring Boot (Ex: "2026-10-15T14:30:00")
-            val dataHoraFormatada = String.format("%04d-%02d-%02dT%02d:%02d:00", selAno, selMes, selDia, selHora, selMinuto)
-
-            // UI: Trava o botão
             botaoAgendar.isEnabled = false
             botaoAgendar.text = "Agendando..."
 
-            // 3. Monta o JSON para o Back-end
             val pedido = BookingRequest(
                 nomeFuncionario = nomeFuncionario,
-                spaceId = spaceId,
-                dataHora = dataHoraFormatada
+                spaceId         = spaceId,
+                dataHora        = dataHoraFormatada
             )
 
-            // 4. Envia para o IntelliJ/Nuvem
             RetrofitClient.api.makeBooking(pedido).enqueue(object : Callback<String> {
-
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     botaoAgendar.isEnabled = true
                     botaoAgendar.text = "Confirmar Agendamento"
 
-                    if (response.isSuccessful && response.body()?.contains("SUCESSO") == true) {
-                        Toast.makeText(this@AgendamentoActivity, "✅ Agendamento realizado!", Toast.LENGTH_LONG).show()
-                        finish() // Volta para a Home, que agora já vai atualizar a lista sozinha!
+                    if (response.isSuccessful) {
+                        if (response.body()?.contains("SUCESSO") == true) {
+                            Toast.makeText(this@AgendamentoActivity, "✅ Agendamento realizado!", Toast.LENGTH_LONG).show()
+                            finish()
+                        } else {
+                            Toast.makeText(this@AgendamentoActivity, "⚠️ Erro: Horário já ocupado.", Toast.LENGTH_LONG).show()
+                        }
                     } else {
-                        // Se o horário estiver ocupado, o Spring Boot avisa!
-                        Toast.makeText(this@AgendamentoActivity, "⚠️ Erro: Horário já ocupado.", Toast.LENGTH_LONG).show()
+                        // NOVO: Tratamento caso o Token seja inválido ou falte
+                        if (response.code() == 401 || response.code() == 403) {
+                            Toast.makeText(this@AgendamentoActivity, "Sessão expirada. Faça login novamente.", Toast.LENGTH_LONG).show()
+                            // Opcional: Redirecionar para o Login se a sessão cair
+                            // startActivity(Intent(this@AgendamentoActivity, LoginActivity::class.java))
+                            // finishAffinity()
+                        } else {
+                            Toast.makeText(this@AgendamentoActivity, "⚠️ Erro no servidor: ${response.code()}", Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
 

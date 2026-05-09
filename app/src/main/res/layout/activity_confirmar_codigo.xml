@@ -10,59 +10,79 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Esqueci minha Senha"
+        android:text="Confirme seu E-mail"
         android:textSize="26sp"
         android:textStyle="bold"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="32dp"
         android:layout_marginBottom="8dp"/>
 
     <TextView
+        android:id="@+id/textoEmailEnviado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Digite seu e-mail cadastrado para receber o código de recuperação."
+        android:text="Enviando código..."
         android:textAlignment="center"
         android:textSize="16sp"
-        android:layout_marginBottom="32dp"
-        android:textColor="#757575"/>
+        android:layout_marginBottom="32dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutEmailEsqueci"
+        android:id="@+id/layoutCodigo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Seu e-mail">
+        android:hint="Código de 6 dígitos">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editEmailEsqueci"
+            android:id="@+id/editCodigo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"/>
+            android:inputType="number"
+            android:maxLength="6"
+            android:textSize="24sp"
+            android:textAlignment="center"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/textoErroEsqueci"
+        android:id="@+id/textoErroCodigo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="⚠️ E-mail não encontrado"
+        android:text="⚠️ Código inválido"
         android:textColor="#F44336"
         android:visibility="gone"
         android:layout_marginTop="8dp"/>
 
     <Button
-        android:id="@+id/botaoEnviarCodigo"
+        android:id="@+id/botaoConfirmarCodigo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enviar Código"
+        android:text="Confirmar Código"
         android:padding="12dp"
         android:layout_marginTop="24dp"/>
+
+    <TextView
+        android:id="@+id/textoExpiracaoCodigo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⏱ O código expira em 10:00"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/botaoReenviarCodigo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reenviar Código"
+        android:textColor="#1976D2"
+        android:textStyle="bold"
+        android:layout_marginTop="32dp"
+        android:padding="8dp"/>
 
     <TextView
         android:id="@+id/textoVoltarEsqueci"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Voltar ao Login"
-        android:textColor="#1976D2"
-        android:textStyle="bold"
-        android:layout_marginTop="32dp"
+        android:textColor="#757575"
+        android:layout_marginTop="16dp"
         android:padding="8dp"/>
 
 </LinearLayout>

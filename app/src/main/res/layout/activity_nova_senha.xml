@@ -9,51 +9,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="32dp"
+        android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Criar Conta"
-            android:textSize="28sp"
+            android:text="Criar Nova Senha"
+            android:textSize="26sp"
             android:textStyle="bold"
-            android:layout_gravity="center"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crie uma nova senha forte para acessar sua conta."
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:layout_marginBottom="32dp"
+            android:textColor="#757575"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutNome"
+            android:id="@+id/layoutNovaSenha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Nome Completo">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editNome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            app:passwordToggleEnabled="true"
+            android:hint="Nova Senha">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutEmailCadastro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="E-mail">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editEmailCadastro"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutSenhaCadastro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Senha"
-            app:passwordToggleEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editSenhaCadastro"
+                android:id="@+id/editNovaSenha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"/>
@@ -81,35 +66,43 @@
 
             <TextView android:id="@+id/textoForcaSenha" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Força da senha" android:textSize="12sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
             <TextView android:id="@+id/reqMinimo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Mínimo 8 caracteres" android:textSize="12sp"/>
+            <TextView android:id="@+id/reqMaiuscula" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 letra maiúscula" android:textSize="12sp"/>
+            <TextView android:id="@+id/reqMinuscula" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 letra minúscula" android:textSize="12sp"/>
             <TextView android:id="@+id/reqNumero" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 número" android:textSize="12sp"/>
             <TextView android:id="@+id/reqEspecial" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✗ Pelo menos 1 caractere especial" android:textSize="12sp"/>
         </LinearLayout>
 
-        <RadioGroup
-            android:id="@+id/radioGrupoPerfil"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutConfirmarSenha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="24dp">
-            <RadioButton android:id="@+id/radioProfessor" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Professor" android:layout_weight="1"/>
-            <RadioButton android:id="@+id/radioDiretor" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Diretor" android:layout_weight="1"/>
-        </RadioGroup>
+            android:layout_marginBottom="8dp"
+            app:passwordToggleEnabled="true"
+            android:hint="Confirme a Nova Senha">
 
-        <Button
-            android:id="@+id/botaoCadastrar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cadastrar"
-            android:layout_marginBottom="16dp"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editConfirmarSenha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/textoVoltarLogin"
+            android:id="@+id/textoErroNovaSenha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Já tem conta? Faça Login"
-            android:layout_gravity="center"
-            android:textColor="#1976D2"
-            android:textStyle="bold"/>
+            android:text="⚠️ Erro ao salvar senha"
+            android:textColor="#F44336"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/botaoSalvarSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Salvar Nova Senha"
+            android:padding="12dp"
+            android:layout_marginTop="8dp"/>
 
     </LinearLayout>
 </ScrollView>
