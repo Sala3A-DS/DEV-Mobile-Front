@@ -3,6 +3,7 @@ package com.example.agend.auth
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object RetrofitClient {
 
@@ -23,6 +24,7 @@ object RetrofitClient {
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .client(httpClient) // Usando o cliente com Token
+        .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
