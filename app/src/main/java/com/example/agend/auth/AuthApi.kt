@@ -3,8 +3,10 @@ package com.example.agend.auth
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
-
+import retrofit2.http.Path
+import retrofit2.http.Query
 interface AuthApi {
 
     @POST("api/bookings")
@@ -31,7 +33,6 @@ interface AuthApi {
     fun resetPassword(@Body request: ResetPasswordRequest): Call<String>
 
     // --- ROTAS DE SALAS ---
-
     @POST("api/salas")
     fun cadastrarSala(@Body request: SalaRequest): Call<SalaResponse>
 
@@ -40,4 +41,24 @@ interface AuthApi {
 
     @GET("api/salas/minhas")
     fun listarMinhasSalas(): Call<List<SalaResponse>>
+
+    // --- ROTAS DE RESERVAS ---
+    @POST("api/reservas")
+    fun criarReserva(
+        @Body request: ReservaRequest
+    ): Call<ReservaResponse>
+
+    @GET("api/reservas/minhas")
+    fun listarMinhasReservas(): Call<List<ReservaResponse>>
+
+    @PATCH("api/reservas/{id}/cancelar")
+    fun cancelarReserva(
+        @Path("id") id: String
+    ): Call<ReservaResponse>
+
+    @GET("api/reservas/disponibilidade")
+    fun consultarDisponibilidade(
+        @Query("salaId") salaId: String,
+        @Query("data") data: String
+    ): Call<List<DisponibilidadeSalaResponse>>
 }

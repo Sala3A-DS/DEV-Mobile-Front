@@ -1,4 +1,4 @@
-package com.example.agend
+package com.example.agend.senha
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,11 +6,14 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.agend.R
+import com.example.agend.senha.SenhaSucessoActivity
 import com.example.agend.auth.ResetPasswordRequest
-import com.example.agend.auth.RetrofitClient // Certifique-se deste import
+import com.example.agend.auth.RetrofitClient
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
@@ -33,7 +36,7 @@ class NovaSenhaActivity : AppCompatActivity() {
         val botaoSalvar     = findViewById<Button>(R.id.botaoSalvarSenha)
         val textoErro       = findViewById<TextView>(R.id.textoErroNovaSenha)
 
-        val layoutForca  = findViewById<View>(R.id.layoutForcaSenha) as android.widget.LinearLayout
+        val layoutForca  = findViewById<View>(R.id.layoutForcaSenha) as LinearLayout
         val barra1       = findViewById<View>(R.id.barra1)
         val barra2       = findViewById<View>(R.id.barra2)
         val barra3       = findViewById<View>(R.id.barra3)
@@ -127,7 +130,12 @@ class NovaSenhaActivity : AppCompatActivity() {
 
                             // ATUALIZADO: Lendo se o servidor confirmou o SUCESSO
                             if (respostaServidor.contains("SUCESSO")) {
-                                startActivity(Intent(this@NovaSenhaActivity, SenhaSucessoActivity::class.java))
+                                startActivity(
+                                    Intent(
+                                        this@NovaSenhaActivity,
+                                        SenhaSucessoActivity::class.java
+                                    )
+                                )
                                 finish()
                             } else {
                                 textoErro.text = "⚠️ $respostaServidor"

@@ -1,4 +1,4 @@
-package com.example.agend
+package com.example.agend.senha
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,9 +8,12 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.agend.auth.VerifyCodeRequest
-import com.example.agend.auth.ForgotPasswordRequest // Importe correto
+import com.example.agend.MainActivity
+import com.example.agend.senha.NovaSenhaActivity
+import com.example.agend.R
+import com.example.agend.auth.ForgotPasswordRequest
 import com.example.agend.auth.RetrofitClient
+import com.example.agend.auth.VerifyCodeRequest
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
@@ -58,7 +61,8 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
             botaoConfirmar.isEnabled = false
             botaoConfirmar.text = "Verificando..."
 
-            RetrofitClient.api.verifyCode(VerifyCodeRequest(email, codigo)).enqueue(object : Callback<String> {
+            RetrofitClient.api.verifyCode(VerifyCodeRequest(email, codigo)).enqueue(object :
+                Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     botaoConfirmar.isEnabled = true
                     botaoConfirmar.text = "Confirmar Código"
@@ -69,7 +73,8 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
                         // ATUALIZAÇÃO: Checando se o Back-end validou o código
                         if (respostaServidor.contains("SUCESSO")) {
                             countDownTimer?.cancel()
-                            val intent = Intent(this@ConfirmarCodigoActivity, NovaSenhaActivity::class.java)
+                            val intent =
+                                Intent(this@ConfirmarCodigoActivity, NovaSenhaActivity::class.java)
                             intent.putExtra("email", email)
                             startActivity(intent)
                             finish()
@@ -98,7 +103,8 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
             botaoReenviar.text = "Reenviando..."
 
             // ATUALIZAÇÃO: Usando a rota correta e enviando apenas o e-mail
-            RetrofitClient.api.forgotPassword(ForgotPasswordRequest(email)).enqueue(object : Callback<String> {
+            RetrofitClient.api.forgotPassword(ForgotPasswordRequest(email)).enqueue(object :
+                Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     botaoReenviar.isEnabled = true
                     botaoReenviar.text = "Reenviar Código"

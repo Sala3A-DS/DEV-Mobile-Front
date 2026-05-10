@@ -164,7 +164,7 @@
             <RadioButton android:id="@+id/radioDiretor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Diretor"
+                android:text="Coordenador"
                 android:textColor="@color/white"
                 android:buttonTint="@color/yarooms_gold"
                 android:layout_weight="1"/>

@@ -56,3 +56,34 @@ data class SalaResponse(
     val ativa: Boolean,
     val criadoEm: String
 )
+
+// --- RESERVAS ---
+
+data class ReservaRequest(
+    val salaId: String,
+    val data: String,
+    val periodoAula: String
+)
+
+data class ReservaResponse(
+    val id: String?,
+    val salaId: String,
+    val salaNome: String,
+    val professorEmail: String,
+    val professorNome: String,
+    val data: String,
+    val periodoAula: String,
+    val horarioInicio: String,
+    val horarioFim: String,
+    val status: String,
+    val criadoEm: String
+)
+
+data class DisponibilidadeSalaResponse(
+    val periodoAula: String,
+    val horarioInicio: String,
+    val horarioFim: String,
+    val disponivel: Boolean,
+    val reservaId: String?,
+    val professorNome: String?
+)

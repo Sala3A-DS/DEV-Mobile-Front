@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.agend.auth.LoginRequest
 import com.example.agend.auth.LoginResponse // ATUALIZADO: Importando a resposta com Token
 import com.example.agend.auth.RetrofitClient // Certifique-se de importar o RetrofitClient
+import com.example.agend.diretor.DiretorHomeActivity
+import com.example.agend.professor.HomeActivity
+import com.example.agend.senha.EsqueciSenhaActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call

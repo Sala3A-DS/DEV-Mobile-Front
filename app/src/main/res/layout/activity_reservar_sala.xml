@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_yarooms_gradient"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reservar Sala"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="24dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Escolha uma sala, uma data e veja os horários disponíveis."
+            android:textColor="@color/yarooms_gold_light"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="28dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sala"
+            android:textColor="@color/yarooms_gold"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerSalas"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@color/yarooms_blue_light"
+            android:padding="8dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutDataReserva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Data da reserva"
+            android:layout_marginTop="18dp"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/yarooms_gold"
+            app:hintTextColor="@color/yarooms_gold_light">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editDataReserva"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none"
+                android:textColor="@color/white"
+                android:textColorHint="@color/yarooms_gold_light" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botaoConsultarDisponibilidade"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Consultar disponibilidade"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="@color/yarooms_blue_dark"
+            android:backgroundTint="@color/yarooms_gold"
+            app:cornerRadius="8dp"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/textoErroReserva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FF8080"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/textoTituloHorarios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Horários disponíveis"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="12dp" />
+
+        <ListView
+            android:id="@+id/listaHorariosDisponiveis"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:background="@color/yarooms_blue_light"
+            android:divider="@color/yarooms_blue_dark"
+            android:dividerHeight="1dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textoVoltarReserva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Voltar"
+            android:textColor="@color/yarooms_gold_light"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp" />
+
+    </LinearLayout>
+</ScrollView>

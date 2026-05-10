@@ -1,9 +1,12 @@
-package com.example.agend
+package com.example.agend.diretor
 
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.agend.R
 import com.example.agend.auth.RetrofitClient
 import com.example.agend.auth.SalaRequest
 import com.example.agend.auth.SalaResponse

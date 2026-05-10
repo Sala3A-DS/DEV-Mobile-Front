@@ -22,13 +22,17 @@
         </activity>
 
         <activity android:name=".CadastroActivity" />
-        <activity android:name=".AgendamentoActivity" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".CadastrarSalaActivity" />
-        <activity android:name=".DiretorHomeActivity" />
-
+        <activity android:name=".professor.AgendamentoActivity" />
+        <activity android:name=".professor.HomeActivity" />
+        <activity android:name=".professor.ReservarSalaActivity" />
+        <activity android:name=".professor.MinhasReservasActivity" />
+        <activity android:name=".diretor.CadastrarSalaActivity" />
+        <activity android:name=".diretor.DiretorHomeActivity" />
         <!-- Corrigido: faltava o ponto antes do nome -->
-        <activity android:name=".EsqueciSenhaActivity" />
+        <activity android:name=".senha.EsqueciSenhaActivity" />
+        <activity android:name=".senha.ConfirmarCodigoActivity" />
+        <activity android:name=".senha.NovaSenhaActivity" />
+        <activity android:name=".senha.SenhaSucessoActivity" />
 
     </application>
 

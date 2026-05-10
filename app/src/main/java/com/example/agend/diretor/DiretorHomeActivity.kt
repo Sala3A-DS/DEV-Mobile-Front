@@ -1,10 +1,13 @@
-package com.example.agend
+package com.example.agend.diretor
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.agend.diretor.CadastrarSalaActivity
+import com.example.agend.MainActivity
+import com.example.agend.R
 
 class DiretorHomeActivity : AppCompatActivity() {
 

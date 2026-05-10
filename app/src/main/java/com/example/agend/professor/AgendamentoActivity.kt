@@ -1,10 +1,13 @@
-package com.example.agend
+package com.example.agend.professor
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.agend.R
 import com.example.agend.auth.BookingRequest
 import com.example.agend.auth.RetrofitClient
 import com.google.android.material.textfield.TextInputEditText
@@ -57,7 +60,7 @@ class AgendamentoActivity : AppCompatActivity() {
             TimePickerDialog(
                 this,
                 { _, hora, minuto ->
-                    selHora   = hora
+                    selHora = hora
                     selMinuto = minuto
                     textoHorario.text = "⏰ Horário: ${String.format("%02d:%02d", hora, minuto)}"
                 },
@@ -96,8 +99,8 @@ class AgendamentoActivity : AppCompatActivity() {
 
             val pedido = BookingRequest(
                 nomeFuncionario = nomeFuncionario,
-                spaceId         = spaceId,
-                dataHora        = dataHoraFormatada
+                spaceId = spaceId,
+                dataHora = dataHoraFormatada
             )
 
             RetrofitClient.api.makeBooking(pedido).enqueue(object : Callback<String> {
