@@ -72,19 +72,36 @@ class MainActivity : AppCompatActivity() {
 
                     if (response.isSuccessful) {
                         val loginResponse = response.body()
-                        val usuario = loginResponse?.user // Extrai os dados do usuário
+                        val usuario = loginResponse?.user
 
-                        // PASSO MAIS IMPORTANTE: Salvar o Token para as próximas requisições!
+                        // Salva o token JWT para as próximas requisições protegidas.
                         RetrofitClient.token = loginResponse?.token
 
-                        val intent = Intent(this@MainActivity, HomeActivity::class.java)
-                        intent.putExtra("email", usuario?.email)
-                        intent.putExtra("nome", usuario?.nome)
+                        // Valida se a resposta veio completa.
+                        if (loginResponse?.token.isNullOrBlank() || usuario == null) {
+                            textoErro.text = "⚠️ Resposta inválida do servidor."
+                            textoErro.visibility = View.VISIBLE
+                            return
+                        }
+
+                        // Padroniza o cargo para evitar erro com letras minúsculas/maiúsculas.
+                        val cargo = usuario.cargo.trim().uppercase()
+
+                        // Se for ADM, abre a tela do diretor.
+                        // Caso contrário, abre a Home normal de professor/coordenador.
+                        val intent = if (cargo == "ADM") {
+                            Intent(this@MainActivity, DiretorHomeActivity::class.java)
+                        } else {
+                            Intent(this@MainActivity, HomeActivity::class.java)
+                        }
+
+                        // Envia dados básicos do usuário para a próxima tela.
+                        intent.putExtra("email", usuario.email)
+                        intent.putExtra("nome", usuario.nome)
+                        intent.putExtra("cargo", usuario.cargo)
+
                         startActivity(intent)
                         finish()
-                    } else {
-                        textoErro.text = "⚠️ E-mail ou senha incorretos."
-                        textoErro.visibility = View.VISIBLE
                     }
                 }
 

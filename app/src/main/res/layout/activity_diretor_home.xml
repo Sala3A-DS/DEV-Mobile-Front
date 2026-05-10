@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_yarooms_gradient"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/textoTituloDiretor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Painel do Diretor"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="32dp" />
+
+        <TextView
+            android:id="@+id/textoNomeDiretor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Olá, Diretor"
+            android:textColor="#E5C78B"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="32dp" />
+
+        <TextView
+            android:id="@+id/textoDescricaoDiretor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gerencie as salas disponíveis da escola."
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:layout_marginBottom="32dp" />
+
+        <Button
+            android:id="@+id/botaoCadastrarSala"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Cadastrar sala"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#0D2244"
+            android:backgroundTint="#C5A059" />
+
+        <Button
+            android:id="@+id/botaoMinhasSalas"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Minhas salas"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#0D2244"
+            android:backgroundTint="#E5C78B"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/botaoSairDiretor"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Sair"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#8B1E1E"
+            android:layout_marginTop="32dp" />
+
+    </LinearLayout>
+
+</ScrollView>

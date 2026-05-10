@@ -29,4 +29,15 @@ interface AuthApi {
 
     @POST("api/auth/reset-password")
     fun resetPassword(@Body request: ResetPasswordRequest): Call<String>
+
+    // --- ROTAS DE SALAS ---
+
+    @POST("api/salas")
+    fun cadastrarSala(@Body request: SalaRequest): Call<SalaResponse>
+
+    @GET("api/salas")
+    fun listarSalas(): Call<List<SalaResponse>>
+
+    @GET("api/salas/minhas")
+    fun listarMinhasSalas(): Call<List<SalaResponse>>
 }

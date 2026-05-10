@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Fundo em degradê inspirado na logo do YaRooms.
+        angle="270" faz o degradê ir de cima para baixo.
+    -->
+    <gradient
+        android:angle="270"
+        android:startColor="#132F55"
+        android:centerColor="#1F4376"
+        android:endColor="#2F5B99"
+        android:type="linear" />
+
+</shape>

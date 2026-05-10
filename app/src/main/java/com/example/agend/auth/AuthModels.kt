@@ -36,3 +36,23 @@ data class BookingResponse(
     val spaceId: Int,
     val dataHora: String
 )
+
+// --- SALAS ---
+
+data class SalaRequest(
+    val nome: String,
+    val bloco: String,
+    val capacidade: Int,
+    val recursos: List<String>
+)
+
+data class SalaResponse(
+    val id: String?,
+    val nome: String,
+    val bloco: String,
+    val capacidade: Int,
+    val recursos: List<String>,
+    val diretorEmail: String,
+    val ativa: Boolean,
+    val criadoEm: String
+)
