@@ -30,18 +30,19 @@ class CadastroActivity : AppCompatActivity() {
         val layoutNome = findViewById<TextInputLayout>(R.id.layoutNome)
         val layoutEmail = findViewById<TextInputLayout>(R.id.layoutEmailCadastro)
         val layoutSenha = findViewById<TextInputLayout>(R.id.layoutSenhaCadastro)
-
-        // NOVO: layout do campo "Confirmar senha".
-        // Esse ID precisa existir no activity_cadastro.xml.
         val layoutConfirmarSenha = findViewById<TextInputLayout>(R.id.layoutConfirmarSenhaCadastro)
+
+        // NOVO: campo de cargo personalizado.
+        // Esse campo só aparece quando o usuário seleciona "Outros".
+        val layoutCargoPersonalizado = findViewById<TextInputLayout>(R.id.layoutCargoPersonalizado)
 
         val editNome = findViewById<TextInputEditText>(R.id.editNome)
         val editEmail = findViewById<TextInputEditText>(R.id.editEmailCadastro)
         val editSenha = findViewById<TextInputEditText>(R.id.editSenhaCadastro)
-
-        // NOVO: campo de confirmar senha.
-        // Esse ID precisa existir no activity_cadastro.xml.
         val editConfirmarSenha = findViewById<TextInputEditText>(R.id.editConfirmarSenhaCadastro)
+
+        // NOVO: input onde o usuário digita o cargo caso selecione "Outros".
+        val editCargoPersonalizado = findViewById<TextInputEditText>(R.id.editCargoPersonalizado)
 
         val botaoCadastrar = findViewById<Button>(R.id.botaoCadastrar)
         val textoVoltarLogin = findViewById<TextView>(R.id.textoVoltarLogin)
@@ -56,12 +57,27 @@ class CadastroActivity : AppCompatActivity() {
         val textoForca = findViewById<TextView>(R.id.textoForcaSenha)
 
         // Requisitos visuais da senha.
-        // NOVO: agora também exigimos maiúscula e minúscula.
         val reqMaiuscula = findViewById<TextView>(R.id.reqMaiuscula)
         val reqMinuscula = findViewById<TextView>(R.id.reqMinuscula)
         val reqMinimo = findViewById<TextView>(R.id.reqMinimo)
         val reqNumero = findViewById<TextView>(R.id.reqNumero)
         val reqEspecial = findViewById<TextView>(R.id.reqEspecial)
+
+        // Garante que o campo de cargo personalizado comece invisível.
+        layoutCargoPersonalizado.visibility = View.GONE
+
+        // Monitora a seleção do perfil.
+        // Quando "Outros" for selecionado, o campo Cargo aparece.
+        // Quando qualquer outro perfil for selecionado, ele desaparece e limpa o texto.
+        radioGrupo.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId == R.id.radioOutros) {
+                layoutCargoPersonalizado.visibility = View.VISIBLE
+            } else {
+                layoutCargoPersonalizado.visibility = View.GONE
+                layoutCargoPersonalizado.error = null
+                editCargoPersonalizado.setText("")
+            }
+        }
 
         // Cores usadas na validação visual.
         val corOk = ContextCompat.getColor(this, android.R.color.holo_green_light)
@@ -200,11 +216,10 @@ class CadastroActivity : AppCompatActivity() {
 
         botaoCadastrar.setOnClickListener {
             val nome = editNome.text.toString().trim()
-            val email = editEmail.text.toString().trim()
+            val email = editEmail.text.toString().trim().lowercase()
             val senha = editSenha.text.toString().trim()
-
-            // NOVO: captura o valor digitado no campo confirmar senha.
             val confirmarSenha = editConfirmarSenha.text.toString().trim()
+            val cargoPersonalizado = editCargoPersonalizado.text.toString().trim()
 
             val perfilId = radioGrupo.checkedRadioButtonId
 
@@ -213,6 +228,7 @@ class CadastroActivity : AppCompatActivity() {
             layoutEmail.error = null
             layoutSenha.error = null
             layoutConfirmarSenha.error = null
+            layoutCargoPersonalizado.error = null
 
             // Validação do nome.
             if (nome.isEmpty()) {
@@ -237,13 +253,13 @@ class CadastroActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // NOVO: validação do campo confirmar senha.
+            // Validação do campo confirmar senha.
             if (confirmarSenha.isEmpty()) {
                 layoutConfirmarSenha.error = "Confirme sua senha"
                 return@setOnClickListener
             }
 
-            // NOVO: verifica se senha e confirmação são iguais.
+            // Verifica se senha e confirmação são iguais.
             if (senha != confirmarSenha) {
                 layoutConfirmarSenha.error = "As senhas não coincidem"
                 return@setOnClickListener
@@ -256,7 +272,7 @@ class CadastroActivity : AppCompatActivity() {
             val temNumero = senha.any { it.isDigit() }
             val temEspecial = senha.any { !it.isLetterOrDigit() }
 
-            // NOVO: agora a senha só passa se tiver maiúscula e minúscula também.
+            // A senha só passa se tiver todos os requisitos.
             if (!temMaiuscula || !temMinuscula || !temMinimo || !temNumero || !temEspecial) {
                 layoutSenha.error = "A senha não atende os requisitos mínimos"
                 Toast.makeText(
@@ -273,10 +289,19 @@ class CadastroActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // NOVO: se o usuário escolher "Outros", o campo Cargo se torna obrigatório.
+            if (perfilId == R.id.radioOutros && cargoPersonalizado.isEmpty()) {
+                layoutCargoPersonalizado.error = "Informe seu cargo"
+                return@setOnClickListener
+            }
+
             // Define o cargo enviado ao back-end.
+            // Professor, coordenador e diretor usam valores padronizados.
+            // Outros usa o cargo digitado pela pessoa, em letras maiúsculas.
             val cargo = when (perfilId) {
                 R.id.radioProfessor -> "PROFESSOR"
-                R.id.radioDiretor -> "ADM"
+                R.id.radioCoordenador -> "COORDENADOR"
+                R.id.radioOutros -> cargoPersonalizado.uppercase()
                 else -> ""
             }
 
@@ -284,10 +309,8 @@ class CadastroActivity : AppCompatActivity() {
             botaoCadastrar.isEnabled = false
             botaoCadastrar.text = "Cadastrando..."
 
-            // Mantive o RegisterRequest como estava:
-            // nome, email, senha e cargo.
-            // O confirmarSenha é validado no app e não precisa ser enviado ao back-end,
-            // a menos que você altere o DTO RegisterRequest no back-end também.
+            // Envia o cargo final para o back-end.
+            // O back-end já recebe apenas uma string "cargo".
             val pedido = RegisterRequest(nome, email, senha, cargo)
 
             RetrofitClient.api.register(pedido).enqueue(object : Callback<String> {
@@ -299,7 +322,6 @@ class CadastroActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val respostaServidor = response.body() ?: ""
 
-                        // Lê o texto real que o servidor devolveu.
                         if (respostaServidor.contains("SUCESSO", ignoreCase = true)) {
                             Toast.makeText(
                                 this@CadastroActivity,
@@ -329,9 +351,11 @@ class CadastroActivity : AppCompatActivity() {
                             ).show()
                         }
                     } else {
+                        val erroServidor = response.errorBody()?.string()
+
                         Toast.makeText(
                             this@CadastroActivity,
-                            "⚠️ Erro no servidor: ${response.code()}",
+                            erroServidor ?: "⚠️ Erro no servidor: ${response.code()}",
                             Toast.LENGTH_LONG
                         ).show()
                     }
