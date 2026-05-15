@@ -89,7 +89,7 @@
                 android:inputType="none"
                 android:textColor="@color/white"
                 android:textColorHint="@color/yarooms_gold_light"
-                android:hint="Toque para selecionar a data" />
+                android:hint="" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- CAMPO TURMA -->
@@ -111,7 +111,7 @@
                 android:maxLines="1"
                 android:textColor="@color/white"
                 android:textColorHint="@color/yarooms_gold_light"
-                android:hint="Ex: 3A - DS" />
+                android:hint="" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -150,11 +150,12 @@
         <ListView
             android:id="@+id/listaHorariosDisponiveis"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="720dp"
             android:background="@color/yarooms_blue_light"
             android:divider="@color/yarooms_blue_dark"
-            android:dividerHeight="8dp"
-            android:padding="8dp"
+            android:dividerHeight="12dp"
+            android:padding="4dp"
+            android:clipToPadding="false"
             android:visibility="gone" />
 
         <TextView

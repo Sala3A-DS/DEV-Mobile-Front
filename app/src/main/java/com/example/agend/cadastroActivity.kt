@@ -280,6 +280,22 @@ class CadastroActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // NOVO: se o usuário escolher "Outros", o campo Cargo se torna obrigatório.
+            if (perfilId == R.id.radioOutros && cargoPersonalizado.isEmpty()) {
+                layoutCargoPersonalizado.error = "Informe seu cargo"
+                return@setOnClickListener
+            }
+
+            // Define o cargo enviado ao back-end.
+            // Professor, coordenador e diretor usam valores padronizados.
+            // Outros usa o cargo digitado pela pessoa, em letras maiúsculas.
+            val cargo = when (perfilId) {
+                R.id.radioProfessor -> "PROFESSOR"
+                R.id.radioCoordenador -> "COORDENADOR"
+                R.id.radioOutros -> cargoPersonalizado.uppercase()
+                else -> ""
+            }
+
             // Validação da senha.
             if (senha.isEmpty()) {
                 layoutSenha.error = "Informe a senha"
@@ -320,22 +336,6 @@ class CadastroActivity : AppCompatActivity() {
             if (perfilId == -1) {
                 Toast.makeText(this, "⚠️ Selecione seu perfil!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
-            }
-
-            // NOVO: se o usuário escolher "Outros", o campo Cargo se torna obrigatório.
-            if (perfilId == R.id.radioOutros && cargoPersonalizado.isEmpty()) {
-                layoutCargoPersonalizado.error = "Informe seu cargo"
-                return@setOnClickListener
-            }
-
-            // Define o cargo enviado ao back-end.
-            // Professor, coordenador e diretor usam valores padronizados.
-            // Outros usa o cargo digitado pela pessoa, em letras maiúsculas.
-            val cargo = when (perfilId) {
-                R.id.radioProfessor -> "PROFESSOR"
-                R.id.radioCoordenador -> "COORDENADOR"
-                R.id.radioOutros -> cargoPersonalizado.uppercase()
-                else -> ""
             }
 
             // Bloqueia o botão para evitar vários cadastros ao mesmo tempo.

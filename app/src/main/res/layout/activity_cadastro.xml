@@ -61,6 +61,24 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutCargoPersonalizado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cargo"
+            android:visibility="gone"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/yarooms_gold"
+            app:hintTextColor="@color/yarooms_gold_light">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editCargoPersonalizado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textColorHint="@color/yarooms_gold_light" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutSenhaCadastro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -175,24 +193,6 @@
                 android:text="Outros"
                 android:textColor="@color/white" />
         </RadioGroup>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutCargoPersonalizado"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Cargo"
-            android:visibility="gone"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
-            app:hintTextColor="@color/yarooms_gold_light">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editCargoPersonalizado"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textColorHint="@color/yarooms_gold_light" />
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/botaoCadastrar"
