@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.agend.MainActivity
 import com.example.agend.R
 import com.example.agend.auth.RetrofitClient
+import com.example.agend.auth.SessionManager
 
 class HomeActivity : AppCompatActivity() {
 
@@ -29,7 +30,7 @@ class HomeActivity : AppCompatActivity() {
         val botaoMinhasReservas = findViewById<Button>(R.id.botaoMinhasReservas)
         val botaoSair = findViewById<Button>(R.id.botaoSairProfessor)
 
-        // Recebe os dados enviados pela tela de login.
+        // Recebe os dados enviados pela tela de login ou pela sessão salva.
         email = intent.getStringExtra("email") ?: ""
         nome = intent.getStringExtra("nome") ?: "Usuário"
         cargo = intent.getStringExtra("cargo") ?: "PROFESSOR"
@@ -42,7 +43,7 @@ class HomeActivity : AppCompatActivity() {
             else -> "Usuário"
         }
 
-        // Abre a futura tela de reserva de sala.
+        // Abre a tela de reserva de sala.
         botaoReservarSala.setOnClickListener {
             val intent = Intent(this, ReservarSalaActivity::class.java)
             intent.putExtra("email", email)
@@ -51,7 +52,7 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Abre a futura tela de reservas do professor.
+        // Abre a tela de reservas do professor.
         botaoMinhasReservas.setOnClickListener {
             val intent = Intent(this, MinhasReservasActivity::class.java)
             intent.putExtra("email", email)
@@ -60,9 +61,10 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Sai da conta e volta para o login.
+        // Sai da conta, limpa o token em memória e remove a sessão salva no celular.
         botaoSair.setOnClickListener {
             RetrofitClient.token = null
+            SessionManager(this).limparSessao()
 
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

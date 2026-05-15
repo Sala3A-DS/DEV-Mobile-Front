@@ -1,8 +1,12 @@
 package com.example.agend.diretor
 
+import android.content.Context
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,21 +22,46 @@ import retrofit2.Response
 
 class CadastrarSalaActivity : AppCompatActivity() {
 
+    // Fecha o teclado e remove o foco do campo quando o usuário toca fora de um EditText.
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            val viewAtual = currentFocus
+
+            if (viewAtual is EditText) {
+                val areaDoCampo = android.graphics.Rect()
+                viewAtual.getGlobalVisibleRect(areaDoCampo)
+
+                val tocouForaDoCampo = !areaDoCampo.contains(
+                    event.rawX.toInt(),
+                    event.rawY.toInt()
+                )
+
+                if (tocouForaDoCampo) {
+                    viewAtual.clearFocus()
+
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(viewAtual.windowToken, 0)
+                }
+            }
+        }
+
+        return super.dispatchTouchEvent(event)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Carrega o layout da tela de cadastro de salas.
+        // Carrega o layout da tela de cadastro de espaços/salas.
         setContentView(R.layout.activity_cadastrar_sala)
 
+        // Campos do formulário.
         val layoutNome = findViewById<TextInputLayout>(R.id.layoutNomeSala)
-        val layoutBloco = findViewById<TextInputLayout>(R.id.layoutBlocoSala)
-        val layoutCapacidade = findViewById<TextInputLayout>(R.id.layoutCapacidadeSala)
-        val layoutRecursos = findViewById<TextInputLayout>(R.id.layoutRecursosSala)
+        val layoutLocalizacao = findViewById<TextInputLayout>(R.id.layoutBlocoSala)
+        val layoutNumeroSala = findViewById<TextInputLayout>(R.id.layoutCapacidadeSala)
 
         val editNome = findViewById<TextInputEditText>(R.id.editNomeSala)
-        val editBloco = findViewById<TextInputEditText>(R.id.editBlocoSala)
-        val editCapacidade = findViewById<TextInputEditText>(R.id.editCapacidadeSala)
-        val editRecursos = findViewById<TextInputEditText>(R.id.editRecursosSala)
+        val editLocalizacao = findViewById<TextInputEditText>(R.id.editBlocoSala)
+        val editNumeroSala = findViewById<TextInputEditText>(R.id.editCapacidadeSala)
 
         val botaoSalvar = findViewById<Button>(R.id.botaoSalvarSala)
         val textoErro = findViewById<TextView>(R.id.textoErroSala)
@@ -41,51 +70,44 @@ class CadastrarSalaActivity : AppCompatActivity() {
         botaoSalvar.setOnClickListener {
             textoErro.visibility = View.GONE
 
+            // Limpa erros anteriores.
             layoutNome.error = null
-            layoutBloco.error = null
-            layoutCapacidade.error = null
-            layoutRecursos.error = null
+            layoutLocalizacao.error = null
+            layoutNumeroSala.error = null
 
-            val nome = editNome.text.toString().trim()
-            val bloco = editBloco.text.toString().trim()
-            val capacidadeTexto = editCapacidade.text.toString().trim()
-            val recursosTexto = editRecursos.text.toString().trim()
+            val nomeEspaco = editNome.text.toString().trim()
+            val localizacao = editLocalizacao.text.toString().trim()
+            val numeroSalaTexto = editNumeroSala.text.toString().trim()
 
-            if (nome.isEmpty()) {
-                layoutNome.error = "Informe o nome da sala"
+            // Validação do nome do espaço.
+            if (nomeEspaco.isEmpty()) {
+                layoutNome.error = "Informe o nome do espaço"
                 return@setOnClickListener
             }
 
-            if (bloco.isEmpty()) {
-                layoutBloco.error = "Informe o bloco ou localização"
+            // Validação da localização.
+            if (localizacao.isEmpty()) {
+                layoutLocalizacao.error = "Informe a localização"
                 return@setOnClickListener
             }
 
-            if (capacidadeTexto.isEmpty()) {
-                layoutCapacidade.error = "Informe a capacidade"
+            // Validação do número da sala.
+            if (numeroSalaTexto.isEmpty()) {
+                layoutNumeroSala.error = "Informe o número da sala"
                 return@setOnClickListener
             }
 
-            val capacidade = capacidadeTexto.toIntOrNull()
+            val numeroSala = numeroSalaTexto.toIntOrNull()
 
-            if (capacidade == null || capacidade <= 0) {
-                layoutCapacidade.error = "Informe uma capacidade válida"
+            if (numeroSala == null || numeroSala <= 0) {
+                layoutNumeroSala.error = "Informe um número de sala válido"
                 return@setOnClickListener
-            }
-
-            val recursos = if (recursosTexto.isEmpty()) {
-                emptyList()
-            } else {
-                recursosTexto.split(",")
-                    .map { it.trim() }
-                    .filter { it.isNotEmpty() }
             }
 
             val request = SalaRequest(
-                nome = nome,
-                bloco = bloco,
-                capacidade = capacidade,
-                recursos = recursos
+                nomeEspaco = nomeEspaco,
+                localizacao = localizacao,
+                numeroSala = numeroSala
             )
 
             botaoSalvar.isEnabled = false
@@ -97,12 +119,12 @@ class CadastrarSalaActivity : AppCompatActivity() {
                     response: Response<SalaResponse>
                 ) {
                     botaoSalvar.isEnabled = true
-                    botaoSalvar.text = "Salvar sala"
+                    botaoSalvar.text = "Salvar espaço"
 
                     if (response.isSuccessful) {
                         Toast.makeText(
                             this@CadastrarSalaActivity,
-                            "Sala cadastrada com sucesso!",
+                            "Espaço cadastrado com sucesso!",
                             Toast.LENGTH_LONG
                         ).show()
 
@@ -110,14 +132,14 @@ class CadastrarSalaActivity : AppCompatActivity() {
                     } else {
                         val erro = response.errorBody()?.string()
 
-                        textoErro.text = erro ?: "Erro ao cadastrar sala: ${response.code()}"
+                        textoErro.text = erro ?: "Erro ao cadastrar espaço: ${response.code()}"
                         textoErro.visibility = View.VISIBLE
                     }
                 }
 
                 override fun onFailure(call: Call<SalaResponse>, t: Throwable) {
                     botaoSalvar.isEnabled = true
-                    botaoSalvar.text = "Salvar sala"
+                    botaoSalvar.text = "Salvar espaço"
 
                     textoErro.text = "Falha na conexão com o servidor."
                     textoErro.visibility = View.VISIBLE

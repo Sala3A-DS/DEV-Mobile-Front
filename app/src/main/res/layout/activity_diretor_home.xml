@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_yarooms_gradient"
     android:fillViewport="true">
 
@@ -65,15 +66,29 @@
             android:layout_marginTop="16dp" />
 
         <Button
-            android:id="@+id/botaoSairDiretor"
+            android:id="@+id/botaoAgendamentosGerais"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Sair"
+            android:text="Agendamentos gerais"
             android:textAllCaps="false"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            android:textColor="#0D2244"
+            android:backgroundTint="#C5A059"
+            android:layout_marginTop="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botaoSairDiretor"
+            android:layout_width="180dp"
+            android:layout_height="48dp"
+            android:text="Sair"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="24dp"
             android:backgroundTint="#8B1E1E"
-            android:layout_marginTop="32dp" />
+            app:cornerRadius="8dp" />
 
     </LinearLayout>
 

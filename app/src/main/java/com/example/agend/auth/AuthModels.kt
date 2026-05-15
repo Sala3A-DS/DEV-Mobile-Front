@@ -40,18 +40,16 @@ data class BookingResponse(
 // --- SALAS ---
 
 data class SalaRequest(
-    val nome: String,
-    val bloco: String,
-    val capacidade: Int,
-    val recursos: List<String>
+    val nomeEspaco: String,
+    val localizacao: String,
+    val numeroSala: Int
 )
 
 data class SalaResponse(
     val id: String?,
-    val nome: String,
-    val bloco: String,
-    val capacidade: Int,
-    val recursos: List<String>,
+    val nomeEspaco: String,
+    val localizacao: String,
+    val numeroSala: Int,
     val diretorEmail: String,
     val ativa: Boolean,
     val criadoEm: String
@@ -62,7 +60,8 @@ data class SalaResponse(
 data class ReservaRequest(
     val salaId: String,
     val data: String,
-    val periodoAula: String
+    val periodoAula: String,
+    val turma: String
 )
 
 data class ReservaResponse(
@@ -75,6 +74,7 @@ data class ReservaResponse(
     val periodoAula: String,
     val horarioInicio: String,
     val horarioFim: String,
+    val turma: String,
     val status: String,
     val criadoEm: String
 )

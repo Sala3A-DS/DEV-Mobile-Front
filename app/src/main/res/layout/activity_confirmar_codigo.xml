@@ -17,40 +17,104 @@
         android:textStyle="bold"
         android:textColor="@color/yarooms_gold"
         android:layout_marginTop="32dp"
-        android:layout_marginBottom="12dp"/>
+        android:layout_marginBottom="12dp" />
 
     <TextView
         android:id="@+id/textoEmailEnviado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enviando código..."
+        android:text="Enviamos um código para seu e-mail"
         android:textAlignment="center"
         android:textSize="15sp"
         android:textColor="@color/gray_text"
-        android:layout_marginBottom="40dp"/>
+        android:layout_marginBottom="40dp" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutCodigo"
+    <LinearLayout
+        android:id="@+id/layoutCamposCodigo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/gray_text"
-        app:hintTextColor="@color/yarooms_gold"
-        app:boxStrokeColor="@color/yarooms_gold"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="12dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editCodigo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <EditText
+            android:id="@+id/editCodigo1"
+            android:layout_width="46dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="6dp"
+            android:gravity="center"
             android:inputType="number"
-            android:maxLength="6"
-            android:textSize="28sp"
-            android:textStyle="bold"
+            android:maxLength="1"
             android:textColor="@color/white"
-            android:letterSpacing="0.5"
-            android:textAlignment="center"
-            android:hint="000000"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_codigo_box" />
+
+        <EditText
+            android:id="@+id/editCodigo2"
+            android:layout_width="46dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="6dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_codigo_box" />
+
+        <EditText
+            android:id="@+id/editCodigo3"
+            android:layout_width="46dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="6dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_codigo_box" />
+
+        <EditText
+            android:id="@+id/editCodigo4"
+            android:layout_width="46dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="6dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_codigo_box" />
+
+        <EditText
+            android:id="@+id/editCodigo5"
+            android:layout_width="46dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="6dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_codigo_box" />
+
+        <EditText
+            android:id="@+id/editCodigo6"
+            android:layout_width="46dp"
+            android:layout_height="56dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_codigo_box" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textoErroCodigo"
@@ -60,7 +124,7 @@
         android:textColor="#FF5252"
         android:visibility="gone"
         android:layout_marginTop="12dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/botaoConfirmarCodigo"
@@ -71,17 +135,17 @@
         android:textStyle="bold"
         app:cornerRadius="8dp"
         android:backgroundTint="@color/yarooms_gold"
-        android:layout_marginTop="32dp"/>
+        android:layout_marginTop="32dp" />
 
     <TextView
         android:id="@+id/textoExpiracaoCodigo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="⏱ O código expira em 10:00"
+        android:text="⏱ O código expira em 01:00"
         android:textColor="@color/gray_text"
         android:layout_marginTop="24dp"
         android:textSize="14sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/botaoReenviarCodigo"
@@ -91,15 +155,6 @@
         android:textColor="@color/yarooms_gold"
         android:textStyle="bold"
         android:layout_marginTop="32dp"
-        android:padding="8dp"/>
-
-    <TextView
-        android:id="@+id/textoVoltarEsqueci"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Voltar ao Login"
-        android:textColor="@color/yarooms_gold_light"
-        android:layout_marginTop="16dp"
-        android:padding="8dp"/>
+        android:padding="8dp" />
 
 </LinearLayout>

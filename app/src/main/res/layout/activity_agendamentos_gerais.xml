@@ -16,9 +16,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Minhas Reservas"
+            android:text="Agendamentos Gerais"
             android:textColor="@color/white"
-            android:textSize="28sp"
+            android:textSize="26sp"
             android:textStyle="bold"
             android:gravity="center"
             android:layout_marginTop="24dp" />
@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Consulte e cancele suas reservas de salas."
+            android:text="Acompanhe todas as reservas feitas pelos professores."
             android:textColor="@color/yarooms_gold_light"
             android:textSize="14sp"
             android:gravity="center"
@@ -34,7 +34,7 @@
             android:layout_marginBottom="28dp" />
 
         <TextView
-            android:id="@+id/textoErroMinhasReservas"
+            android:id="@+id/textoErroAgendamentosGerais"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#FF8080"
@@ -43,9 +43,9 @@
             android:layout_marginBottom="12dp" />
 
         <ListView
-            android:id="@+id/listaMinhasReservas"
+            android:id="@+id/listaAgendamentosGerais"
             android:layout_width="match_parent"
-            android:layout_height="420dp"
+            android:layout_height="440dp"
             android:background="@android:color/transparent"
             android:divider="@android:color/transparent"
             android:dividerHeight="12dp"
@@ -53,9 +53,9 @@
             android:clipToPadding="false" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/botaoAtualizarReservas"
+            android:id="@+id/botaoAtualizarAgendamentosGerais"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="52dp"
             android:text="Atualizar"
             android:textAllCaps="false"
             android:textStyle="bold"
@@ -65,7 +65,7 @@
             android:layout_marginTop="20dp" />
 
         <TextView
-            android:id="@+id/textoVoltarMinhasReservas"
+            android:id="@+id/textoVoltarAgendamentosGerais"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Voltar"

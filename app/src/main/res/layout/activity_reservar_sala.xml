@@ -26,38 +26,59 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Escolha uma sala, uma data e veja os horários disponíveis."
+            android:text="Selecione o espaço, informe a turma e escolha um horário disponível."
             android:textColor="@color/yarooms_gold_light"
             android:textSize="14sp"
             android:gravity="center"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="28dp" />
 
-        <TextView
+        <!-- CARD DE SELEÇÃO DE ESPAÇO -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sala"
-            android:textColor="@color/yarooms_gold"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp" />
+            app:cardBackgroundColor="@color/yarooms_blue_light"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="4dp"
+            app:strokeColor="@color/yarooms_gold"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="18dp">
 
-        <Spinner
-            android:id="@+id/spinnerSalas"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:background="@color/yarooms_blue_light"
-            android:padding="8dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Espaço disponível"
+                    android:textColor="@color/yarooms_gold"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinnerSalas"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@color/yarooms_blue_dark"
+                    android:padding="10dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- CAMPO DATA -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutDataReserva"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Data da reserva"
-            android:layout_marginTop="18dp"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/yarooms_gold"
-            app:hintTextColor="@color/yarooms_gold_light">
+            app:hintTextColor="@color/yarooms_gold_light"
+            android:layout_marginBottom="18dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editDataReserva"
@@ -67,20 +88,43 @@
                 android:clickable="true"
                 android:inputType="none"
                 android:textColor="@color/white"
-                android:textColorHint="@color/yarooms_gold_light" />
+                android:textColorHint="@color/yarooms_gold_light"
+                android:hint="Toque para selecionar a data" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- CAMPO TURMA -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutTurmaReserva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Turma que usará o espaço"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/yarooms_gold"
+            app:hintTextColor="@color/yarooms_gold_light"
+            android:layout_marginBottom="18dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTurmaReserva"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:textColorHint="@color/yarooms_gold_light"
+                android:hint="Ex: 3A - DS" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/botaoConsultarDisponibilidade"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Consultar disponibilidade"
+            android:layout_height="52dp"
+            android:text="Atualizar disponibilidade"
             android:textAllCaps="false"
             android:textStyle="bold"
             android:textColor="@color/yarooms_blue_dark"
             android:backgroundTint="@color/yarooms_gold"
             app:cornerRadius="8dp"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="4dp" />
 
         <TextView
             android:id="@+id/textoErroReserva"
@@ -109,7 +153,8 @@
             android:layout_height="320dp"
             android:background="@color/yarooms_blue_light"
             android:divider="@color/yarooms_blue_dark"
-            android:dividerHeight="1dp"
+            android:dividerHeight="8dp"
+            android:padding="8dp"
             android:visibility="gone" />
 
         <TextView

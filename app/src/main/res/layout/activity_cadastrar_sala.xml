@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cadastrar Sala"
+            android:text="Cadastrar Espaço"
             android:textColor="#FFFFFF"
             android:textSize="28sp"
             android:textStyle="bold"
@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cadastre as salas disponíveis da escola"
+            android:text="Cadastre os espaços disponíveis da escola"
             android:textColor="#E5C78B"
             android:textSize="14sp"
             android:gravity="center"
@@ -36,7 +36,7 @@
             android:id="@+id/layoutNomeSala"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nome da sala"
+            android:hint="Nome do espaço"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="#C5A059"
             app:hintTextColor="#E5C78B">
@@ -53,7 +53,7 @@
             android:id="@+id/layoutBlocoSala"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Bloco ou localização"
+            android:hint="Localização"
             android:layout_marginTop="16dp"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="#C5A059"
@@ -71,7 +71,7 @@
             android:id="@+id/layoutCapacidadeSala"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Capacidade"
+            android:hint="Número da sala"
             android:layout_marginTop="16dp"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="#C5A059"
@@ -82,26 +82,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#E5C78B" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutRecursosSala"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Recursos separados por vírgula"
-            android:layout_marginTop="16dp"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="#C5A059"
-            app:hintTextColor="#E5C78B">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editRecursosSala"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minLines="2"
-                android:gravity="top"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#E5C78B" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -119,7 +99,7 @@
             android:id="@+id/botaoSalvarSala"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:text="Salvar sala"
+            android:text="Salvar espaço"
             android:textAllCaps="false"
             android:textColor="#0D2244"
             android:textStyle="bold"

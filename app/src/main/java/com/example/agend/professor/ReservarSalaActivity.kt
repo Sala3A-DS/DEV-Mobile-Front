@@ -17,12 +17,22 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.Calendar
 import com.example.agend.R
+import android.content.Context
+import android.content.Intent
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import com.example.agend.MainActivity
+import com.example.agend.auth.SessionManager
+import com.example.agend.professor.adapter.HorarioReservaAdapter
 
 class ReservarSalaActivity : AppCompatActivity() {
 
     private lateinit var spinnerSalas: Spinner
     private lateinit var layoutDataReserva: TextInputLayout
     private lateinit var editDataReserva: TextInputEditText
+    private lateinit var layoutTurmaReserva: TextInputLayout
+    private lateinit var editTurmaReserva: TextInputEditText
     private lateinit var botaoConsultar: Button
     private lateinit var textoErro: TextView
     private lateinit var textoTituloHorarios: TextView
@@ -33,13 +43,40 @@ class ReservarSalaActivity : AppCompatActivity() {
     private val nomesSalas = mutableListOf<String>()
 
     private val disponibilidades = mutableListOf<DisponibilidadeSalaResponse>()
-    private val horariosFormatados = mutableListOf<String>()
 
     private lateinit var salasAdapter: ArrayAdapter<String>
-    private lateinit var horariosAdapter: ArrayAdapter<String>
 
     private var salaSelecionada: SalaResponse? = null
     private var dataSelecionada: String = ""
+
+    //Sair da funcao do teclado
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            val viewAtual = currentFocus
+
+            // Se o foco atual estiver em um campo de texto, verifica se o toque foi fora dele.
+            if (viewAtual is EditText) {
+                val areaDoCampo = android.graphics.Rect()
+                viewAtual.getGlobalVisibleRect(areaDoCampo)
+
+                val tocouForaDoCampo = !areaDoCampo.contains(
+                    event.rawX.toInt(),
+                    event.rawY.toInt()
+                )
+
+                if (tocouForaDoCampo) {
+                    // Remove o foco do campo.
+                    viewAtual.clearFocus()
+
+                    // Esconde o teclado.
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(viewAtual.windowToken, 0)
+                }
+            }
+        }
+
+        return super.dispatchTouchEvent(event)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +86,8 @@ class ReservarSalaActivity : AppCompatActivity() {
         spinnerSalas = findViewById(R.id.spinnerSalas)
         layoutDataReserva = findViewById(R.id.layoutDataReserva)
         editDataReserva = findViewById(R.id.editDataReserva)
+        layoutTurmaReserva = findViewById(R.id.layoutTurmaReserva)
+        editTurmaReserva = findViewById(R.id.editTurmaReserva)
         botaoConsultar = findViewById(R.id.botaoConsultarDisponibilidade)
         textoErro = findViewById(R.id.textoErroReserva)
         textoTituloHorarios = findViewById(R.id.textoTituloHorarios)
@@ -68,13 +107,6 @@ class ReservarSalaActivity : AppCompatActivity() {
         )
         salasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerSalas.adapter = salasAdapter
-
-        horariosAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_list_item_1,
-            horariosFormatados
-        )
-        listaHorarios.adapter = horariosAdapter
     }
 
     private fun configurarEventos() {
@@ -89,6 +121,12 @@ class ReservarSalaActivity : AppCompatActivity() {
 
                 // Quando muda a sala, limpamos os horários antigos.
                 limparHorarios()
+
+                // Se já tiver uma data selecionada, consulta automaticamente
+                // a disponibilidade da nova sala para essa mesma data.
+                if (dataSelecionada.isNotBlank()) {
+                    consultarDisponibilidade()
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -137,11 +175,31 @@ class ReservarSalaActivity : AppCompatActivity() {
                 val mesFormatado = (mesSelecionado + 1).toString().padStart(2, '0')
                 val diaFormatado = diaSelecionado.toString().padStart(2, '0')
 
-                // Formato esperado pelo back-end: yyyy-MM-dd
                 dataSelecionada = "$anoSelecionado-$mesFormatado-$diaFormatado"
                 editDataReserva.setText(dataSelecionada)
 
+                // Verifica se a data escolhida é sábado ou domingo antes de consultar.
+                val calendarioSelecionado = Calendar.getInstance()
+                calendarioSelecionado.set(anoSelecionado, mesSelecionado, diaSelecionado)
+
+                val diaSemana = calendarioSelecionado.get(Calendar.DAY_OF_WEEK)
+
+                if (
+                    diaSemana == Calendar.SATURDAY ||
+                    diaSemana == Calendar.SUNDAY
+                ) {
+                    limparHorarios()
+                    mostrarErro("Não é permitido reservar salas aos finais de semana.")
+                    return@DatePickerDialog
+                }
+
                 limparHorarios()
+
+                val sala = salaSelecionada
+
+                if (sala != null && !sala.id.isNullOrBlank()) {
+                    consultarDisponibilidade()
+                }
             },
             ano,
             mes,
@@ -177,7 +235,7 @@ class ReservarSalaActivity : AppCompatActivity() {
                     } else {
                         nomesSalas.addAll(
                             salas.map {
-                                "${it.nome} - ${it.bloco} (${it.capacidade} lugares)"
+                                "${it.nomeEspaco} - ${it.localizacao} (Sala ${it.numeroSala})"
                             }
                         )
 
@@ -226,31 +284,22 @@ class ReservarSalaActivity : AppCompatActivity() {
                 response: Response<List<DisponibilidadeSalaResponse>>
             ) {
                 botaoConsultar.isEnabled = true
-                botaoConsultar.text = "Consultar disponibilidade"
+                botaoConsultar.text = "Atualizar disponibilidade"
 
                 if (response.isSuccessful) {
                     val resposta = response.body() ?: emptyList()
 
                     disponibilidades.clear()
-                    horariosFormatados.clear()
-
                     disponibilidades.addAll(resposta)
 
-                    horariosFormatados.addAll(
-                        resposta.map { item ->
-                            val status = if (item.disponivel) {
-                                "Disponível"
-                            } else {
-                                "Ocupado por ${item.professorNome ?: "outro professor"}"
-                            }
-
-                            "${item.periodoAula}ª aula - ${item.horarioInicio} às ${item.horarioFim}\n$status"
-                        }
+// Usa adapter customizado para mostrar os horários em cards.
+                    listaHorarios.adapter = HorarioReservaAdapter(
+                        this@ReservarSalaActivity,
+                        disponibilidades
                     )
 
                     textoTituloHorarios.visibility = View.VISIBLE
                     listaHorarios.visibility = View.VISIBLE
-                    horariosAdapter.notifyDataSetChanged()
                 } else {
                     tratarErroSessaoOuServidor(response.code(), response.errorBody()?.string())
                 }
@@ -258,7 +307,7 @@ class ReservarSalaActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<List<DisponibilidadeSalaResponse>>, t: Throwable) {
                 botaoConsultar.isEnabled = true
-                botaoConsultar.text = "Consultar disponibilidade"
+                botaoConsultar.text = "Atualizar disponibilidade"
                 mostrarErro("Falha na conexão ao consultar disponibilidade.")
             }
         })
@@ -272,10 +321,25 @@ class ReservarSalaActivity : AppCompatActivity() {
             return
         }
 
+        // Lê a turma informada pelo professor.
+        // Exemplo: 3A - DS.
+        val turma = editTurmaReserva.text.toString().trim()
+
+        // Limpa erro antigo do campo turma.
+        layoutTurmaReserva.error = null
+
+        // A turma é obrigatória para identificar qual classe usará o espaço.
+        if (turma.isBlank()) {
+            layoutTurmaReserva.error = "Informe a turma que usará o espaço"
+            mostrarErro("Informe a turma antes de reservar.")
+            return
+        }
+
         val request = ReservaRequest(
             salaId = sala.id,
             data = dataSelecionada,
-            periodoAula = disponibilidade.periodoAula
+            periodoAula = disponibilidade.periodoAula,
+            turma = turma
         )
 
         RetrofitClient.api.criarReserva(request).enqueue(object : Callback<ReservaResponse> {
@@ -293,20 +357,44 @@ class ReservarSalaActivity : AppCompatActivity() {
                     // Atualiza a lista para mostrar o horário como ocupado.
                     consultarDisponibilidade()
                 } else {
-                    tratarErroSessaoOuServidor(response.code(), response.errorBody()?.string())
+                    val erroServidor = response.errorBody()?.string()
+
+                    // Caso específico: outra pessoa já reservou essa sala nesse horário.
+                    // O back-end deve retornar 409 Conflict nesse cenário.
+                    if (response.code() == 409) {
+                        val mensagem = erroServidor
+                            ?: "ERRO: Esta sala já está reservada neste dia e horário."
+
+                        mostrarErro(mensagem)
+
+                        Toast.makeText(
+                            this@ReservarSalaActivity,
+                            "Esta sala já está reservada neste horário.",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                        // Atualiza a disponibilidade para mostrar o horário como ocupado.
+                        consultarDisponibilidade()
+                        return
+                    }
+
+                    // Outros erros continuam sendo tratados pelo método geral.
+                    tratarErroSessaoOuServidor(response.code(), erroServidor)
                 }
             }
 
             override fun onFailure(call: Call<ReservaResponse>, t: Throwable) {
+                // onFailure só deve acontecer quando não houve resposta do servidor:
+                // sem internet, timeout, servidor fora, etc.
                 mostrarErro("Falha na conexão ao criar reserva.")
             }
         })
     }
-
     private fun limparHorarios() {
         disponibilidades.clear()
-        horariosFormatados.clear()
-        horariosAdapter.notifyDataSetChanged()
+
+        // Remove os cards antigos da lista.
+        listaHorarios.adapter = null
 
         textoTituloHorarios.visibility = View.GONE
         listaHorarios.visibility = View.GONE
@@ -330,8 +418,18 @@ class ReservarSalaActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
 
+            // Limpa o token em memória.
             RetrofitClient.token = null
+
+            // Limpa a sessão salva no celular.
+            SessionManager(this).limparSessao()
+
+            // Volta para a tela de login e impede o usuário de voltar para telas protegidas.
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
             finish()
+
         } else {
             mostrarErro(erro ?: "Erro no servidor: $codigo")
         }

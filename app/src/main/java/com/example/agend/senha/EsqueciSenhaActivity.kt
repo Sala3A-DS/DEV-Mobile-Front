@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.agend.senha.ConfirmarCodigoActivity
 import com.example.agend.MainActivity
 import com.example.agend.R
 import com.example.agend.auth.ForgotPasswordRequest
@@ -18,8 +17,41 @@ import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.content.Context
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 
 class EsqueciSenhaActivity : AppCompatActivity() {
+
+    //Sair da funcao do teclado
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            val viewAtual = currentFocus
+
+            // Se o foco atual estiver em um campo de texto, verifica se o toque foi fora dele.
+            if (viewAtual is EditText) {
+                val areaDoCampo = android.graphics.Rect()
+                viewAtual.getGlobalVisibleRect(areaDoCampo)
+
+                val tocouForaDoCampo = !areaDoCampo.contains(
+                    event.rawX.toInt(),
+                    event.rawY.toInt()
+                )
+
+                if (tocouForaDoCampo) {
+                    // Remove o foco do campo.
+                    viewAtual.clearFocus()
+
+                    // Esconde o teclado.
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(viewAtual.windowToken, 0)
+                }
+            }
+        }
+
+        return super.dispatchTouchEvent(event)
+    }
 
     // TAG usada para filtrar os logs no Logcat.
     private val TAG = "ESQUECI_SENHA"

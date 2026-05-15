@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardMinhaReserva"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/yarooms_blue_light"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="4dp"
+    app:strokeColor="@color/yarooms_gold"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textoSalaReserva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Laboratório de Informática"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textoTurmaReserva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Turma: 3A - DS"
+            android:textColor="@color/yarooms_gold_light"
+            android:textSize="14sp"
+            android:layout_marginTop="6dp" />
+
+        <TextView
+            android:id="@+id/textoDataReserva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Data: 2026-05-20"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_marginTop="6dp" />
+
+        <TextView
+            android:id="@+id/textoHorarioReserva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Horário: 1ª aula - 07:00 às 07:50"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_marginTop="6dp" />
+
+        <TextView
+            android:id="@+id/textoStatusReserva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status: CONFIRMADA"
+            android:textColor="@color/yarooms_gold"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botaoCancelarReserva"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:text="Cancelar"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:backgroundTint="#8B1E1E"
+            app:cornerRadius="8dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="14dp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

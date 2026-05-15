@@ -5,9 +5,10 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.agend.diretor.CadastrarSalaActivity
 import com.example.agend.MainActivity
 import com.example.agend.R
+import com.example.agend.auth.RetrofitClient
+import com.example.agend.auth.SessionManager
 
 class DiretorHomeActivity : AppCompatActivity() {
 
@@ -20,26 +21,34 @@ class DiretorHomeActivity : AppCompatActivity() {
         val textoNomeDiretor = findViewById<TextView>(R.id.textoNomeDiretor)
         val botaoCadastrarSala = findViewById<Button>(R.id.botaoCadastrarSala)
         val botaoMinhasSalas = findViewById<Button>(R.id.botaoMinhasSalas)
+        val botaoAgendamentosGerais = findViewById<Button>(R.id.botaoAgendamentosGerais)
         val botaoSairDiretor = findViewById<Button>(R.id.botaoSairDiretor)
 
-        // Recebe dados enviados pela tela de login.
+        // Recebe dados enviados pela tela de login ou pela sessão salva.
         val nome = intent.getStringExtra("nome") ?: "Diretor"
 
         textoNomeDiretor.text = "Olá, $nome"
 
-        // Abre a tela de cadastro de sala.
+        // Abre a tela de cadastro de espaço/sala.
         botaoCadastrarSala.setOnClickListener {
             startActivity(Intent(this, CadastrarSalaActivity::class.java))
         }
 
-        // Por enquanto, esse botão pode ficar preparado para a próxima etapa.
-        // Depois criaremos uma tela para listar as salas cadastradas pelo diretor.
+        // Abre a tela com as salas cadastradas pelo diretor.
         botaoMinhasSalas.setOnClickListener {
-            // Futuramente: startActivity(Intent(this, MinhasSalasActivity::class.java))
+            startActivity(Intent(this, MinhasSalasActivity::class.java))
         }
 
-        // Sai da área do diretor e volta para o login.
+        // Abre a tela com todos os agendamentos feitos.
+        botaoAgendamentosGerais.setOnClickListener {
+            startActivity(Intent(this, AgendamentosGeraisActivity::class.java))
+        }
+
+        // Sai da conta, limpa o token em memória e remove a sessão salva no celular.
         botaoSairDiretor.setOnClickListener {
+            RetrofitClient.token = null
+            SessionManager(this).limparSessao()
+
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

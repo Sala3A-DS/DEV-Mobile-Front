@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Minhas Reservas"
+            android:text="Minhas Salas"
             android:textColor="@color/white"
             android:textSize="28sp"
             android:textStyle="bold"
@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Consulte e cancele suas reservas de salas."
+            android:text="Veja os espaços cadastrados por você."
             android:textColor="@color/yarooms_gold_light"
             android:textSize="14sp"
             android:gravity="center"
@@ -34,7 +34,7 @@
             android:layout_marginBottom="28dp" />
 
         <TextView
-            android:id="@+id/textoErroMinhasReservas"
+            android:id="@+id/textoErroMinhasSalas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#FF8080"
@@ -43,7 +43,7 @@
             android:layout_marginBottom="12dp" />
 
         <ListView
-            android:id="@+id/listaMinhasReservas"
+            android:id="@+id/listaMinhasSalas"
             android:layout_width="match_parent"
             android:layout_height="420dp"
             android:background="@android:color/transparent"
@@ -53,9 +53,9 @@
             android:clipToPadding="false" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/botaoAtualizarReservas"
+            android:id="@+id/botaoAtualizarMinhasSalas"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="52dp"
             android:text="Atualizar"
             android:textAllCaps="false"
             android:textStyle="bold"
@@ -65,7 +65,7 @@
             android:layout_marginTop="20dp" />
 
         <TextView
-            android:id="@+id/textoVoltarMinhasReservas"
+            android:id="@+id/textoVoltarMinhasSalas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Voltar"

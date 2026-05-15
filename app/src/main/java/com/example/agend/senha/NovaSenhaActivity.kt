@@ -1,5 +1,6 @@
 package com.example.agend.senha
 
+import com.example.agend.MainActivity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -11,7 +12,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.agend.R
-import com.example.agend.senha.SenhaSucessoActivity
 import com.example.agend.auth.ResetPasswordRequest
 import com.example.agend.auth.RetrofitClient
 import com.google.android.material.textfield.TextInputEditText
@@ -19,8 +19,41 @@ import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.content.Context
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 
 class NovaSenhaActivity : AppCompatActivity() {
+
+    //Sair da funcao do teclado
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            val viewAtual = currentFocus
+
+            // Se o foco atual estiver em um campo de texto, verifica se o toque foi fora dele.
+            if (viewAtual is EditText) {
+                val areaDoCampo = android.graphics.Rect()
+                viewAtual.getGlobalVisibleRect(areaDoCampo)
+
+                val tocouForaDoCampo = !areaDoCampo.contains(
+                    event.rawX.toInt(),
+                    event.rawY.toInt()
+                )
+
+                if (tocouForaDoCampo) {
+                    // Remove o foco do campo.
+                    viewAtual.clearFocus()
+
+                    // Esconde o teclado.
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(viewAtual.windowToken, 0)
+                }
+            }
+        }
+
+        return super.dispatchTouchEvent(event)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,13 +162,12 @@ class NovaSenhaActivity : AppCompatActivity() {
                             val respostaServidor = response.body() ?: ""
 
                             // ATUALIZADO: Lendo se o servidor confirmou o SUCESSO
-                            if (respostaServidor.contains("SUCESSO")) {
-                                startActivity(
-                                    Intent(
-                                        this@NovaSenhaActivity,
-                                        SenhaSucessoActivity::class.java
-                                    )
-                                )
+                            if (respostaServidor.contains("SUCESSO", ignoreCase = true)) {
+                                // Após redefinir a senha com sucesso, volta direto para o login.
+                                // As flags limpam o histórico para impedir voltar para as telas de recuperação.
+                                val intent = Intent(this@NovaSenhaActivity, MainActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                startActivity(intent)
                                 finish()
                             } else {
                                 textoErro.text = "⚠️ $respostaServidor"

@@ -9,9 +9,11 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 interface AuthApi {
 
+    @GET("api/reservas/geral")
+    fun listarReservasGerais(): Call<List<ReservaResponse>>
+
     @POST("api/bookings")
     fun makeBooking(@Body booking: BookingRequest): Call<String>
-
     @GET("api/bookings")
     fun listarAgendamentos(): Call<List<BookingResponse>>
 
