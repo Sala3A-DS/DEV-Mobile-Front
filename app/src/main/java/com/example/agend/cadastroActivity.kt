@@ -53,6 +53,37 @@ class CadastroActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(event)
     }
 
+    private fun configurarLimpezaErro(
+        editText: TextInputEditText,
+        layout: TextInputLayout
+    ) {
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+                // Não é necessário tratar antes da mudança.
+            }
+
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                // Remove o erro visual quando o usuário começa a corrigir o campo.
+                // Isso faz o label voltar para a cor normal.
+                layout.error = null
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Não é necessário tratar depois da mudança.
+            }
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -76,6 +107,12 @@ class CadastroActivity : AppCompatActivity() {
 
         // NOVO: input onde o usuário digita o cargo caso selecione "Outros".
         val editCargoPersonalizado = findViewById<TextInputEditText>(R.id.editCargoPersonalizado)
+        // Limpa automaticamente os erros dos campos quando o usuário digita.
+        // Isso evita que o label continue vermelho depois que o texto foi corrigido.
+        configurarLimpezaErro(editNome, layoutNome)
+        configurarLimpezaErro(editEmail, layoutEmail)
+        configurarLimpezaErro(editConfirmarSenha, layoutConfirmarSenha)
+        configurarLimpezaErro(editCargoPersonalizado, layoutCargoPersonalizado)
 
         val botaoCadastrar = findViewById<Button>(R.id.botaoCadastrar)
         val textoVoltarLogin = findViewById<TextView>(R.id.textoVoltarLogin)
@@ -138,7 +175,8 @@ class CadastroActivity : AppCompatActivity() {
                 before: Int,
                 count: Int
             ) {
-                // Não é necessário fazer nada durante a alteração.
+                // Remove o erro visual da senha quando o usuário começa a corrigir.
+                layoutSenha.error = null
             }
 
             override fun afterTextChanged(s: Editable?) {

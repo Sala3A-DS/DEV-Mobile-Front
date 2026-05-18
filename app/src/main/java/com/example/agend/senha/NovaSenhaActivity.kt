@@ -55,6 +55,39 @@ class NovaSenhaActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(event)
     }
 
+    private fun configurarLimpezaErro(
+        editText: TextInputEditText,
+        layout: TextInputLayout,
+        textoErro: TextView
+    ) {
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+                // Não é necessário tratar antes da mudança.
+            }
+
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                // Remove o erro visual quando o usuário começa a corrigir o campo.
+                // Isso faz o label voltar para a cor normal.
+                layout.error = null
+                textoErro.visibility = View.GONE
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Não é necessário tratar depois da mudança.
+            }
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nova_senha)
@@ -68,6 +101,11 @@ class NovaSenhaActivity : AppCompatActivity() {
         val editConfirmar   = findViewById<TextInputEditText>(R.id.editConfirmarSenha)
         val botaoSalvar     = findViewById<Button>(R.id.botaoSalvarSenha)
         val textoErro       = findViewById<TextView>(R.id.textoErroNovaSenha)
+
+        // Limpa automaticamente os erros dos campos quando o usuário digita.
+        // Isso evita que o label continue vermelho depois que o texto foi corrigido.
+        configurarLimpezaErro(editNova, layoutNova, textoErro)
+        configurarLimpezaErro(editConfirmar, layoutConfirmar, textoErro)
 
         val layoutForca  = findViewById<View>(R.id.layoutForcaSenha) as LinearLayout
         val barra1       = findViewById<View>(R.id.barra1)
@@ -88,7 +126,11 @@ class NovaSenhaActivity : AppCompatActivity() {
 
         editNova.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Remove o erro visual da nova senha enquanto o usuário corrige.
+                layoutNova.error = null
+                textoErro.visibility = View.GONE
+            }
             override fun afterTextChanged(s: Editable?) {
                 val senha = s.toString()
                 if (senha.isEmpty()) { layoutForca.visibility = View.GONE; return }

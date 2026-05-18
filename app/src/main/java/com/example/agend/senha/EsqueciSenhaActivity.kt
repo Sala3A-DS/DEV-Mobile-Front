@@ -21,6 +21,8 @@ import android.content.Context
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.text.Editable
+import android.text.TextWatcher
 
 class EsqueciSenhaActivity : AppCompatActivity() {
 
@@ -65,6 +67,33 @@ class EsqueciSenhaActivity : AppCompatActivity() {
         val botaoEnviar = findViewById<Button>(R.id.botaoEnviarCodigo)
         val textoErro = findViewById<TextView>(R.id.textoErroEsqueci)
         val textoVoltar = findViewById<TextView>(R.id.textoVoltarEsqueci)
+
+        // Limpa automaticamente o erro quando o usuário começa a corrigir o e-mail.
+        // Isso faz o label voltar para a cor normal.
+        editEmail.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+                // Não é necessário tratar antes da mudança.
+            }
+
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                layoutEmail.error = null
+                textoErro.visibility = View.GONE
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Não é necessário tratar depois da mudança.
+            }
+        })
 
         botaoEnviar.setOnClickListener {
             val email = editEmail.text.toString().trim()

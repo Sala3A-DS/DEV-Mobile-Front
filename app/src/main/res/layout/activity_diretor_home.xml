@@ -90,6 +90,18 @@
             android:backgroundTint="#8B1E1E"
             app:cornerRadius="8dp" />
 
+        <TextView
+            android:id="@+id/botaoInfoApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ⓘ"
+            android:textSize="26sp"
+            android:textColor="@color/yarooms_gold_light"
+            android:layout_gravity="center"
+            android:padding="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp" />
+
     </LinearLayout>
 
 </ScrollView>

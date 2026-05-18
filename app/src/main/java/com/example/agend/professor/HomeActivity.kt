@@ -9,6 +9,7 @@ import com.example.agend.MainActivity
 import com.example.agend.R
 import com.example.agend.auth.RetrofitClient
 import com.example.agend.auth.SessionManager
+import com.example.agend.utils.AppInfoDialog
 
 class HomeActivity : AppCompatActivity() {
 
@@ -70,6 +71,13 @@ class HomeActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
+        }
+
+        // Icone de Info
+        val botaoInfoApp = findViewById<TextView>(R.id.botaoInfoApp)
+
+        botaoInfoApp.setOnClickListener {
+            AppInfoDialog.mostrar(this)
         }
     }
 }

@@ -25,6 +25,8 @@ import android.widget.EditText
 import com.example.agend.MainActivity
 import com.example.agend.auth.SessionManager
 import com.example.agend.professor.adapter.HorarioReservaAdapter
+import android.text.Editable
+import android.text.TextWatcher
 
 class ReservarSalaActivity : AppCompatActivity() {
 
@@ -78,6 +80,38 @@ class ReservarSalaActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(event)
     }
 
+    private fun configurarLimpezaErro(
+        editText: TextInputEditText,
+        layout: TextInputLayout
+    ) {
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+                // Não é necessário tratar antes da mudança.
+            }
+
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                // Remove o erro visual quando o usuário começa a corrigir o campo.
+                // Isso faz o label voltar para a cor normal.
+                layout.error = null
+                mostrarErro(null)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Não é necessário tratar depois da mudança.
+            }
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -94,18 +128,27 @@ class ReservarSalaActivity : AppCompatActivity() {
         listaHorarios = findViewById(R.id.listaHorariosDisponiveis)
         textoVoltar = findViewById(R.id.textoVoltarReserva)
 
+        // Limpa automaticamente os erros dos campos quando o usuário altera o conteúdo.
+        // Isso evita que o label continue vermelho depois que o campo foi corrigido.
+        configurarLimpezaErro(editDataReserva, layoutDataReserva)
+        configurarLimpezaErro(editTurmaReserva, layoutTurmaReserva)
+
         configurarAdapters()
         configurarEventos()
         carregarSalas()
     }
 
     private fun configurarAdapters() {
+        // Usa layout próprio para impedir que o Android use texto preto no Spinner.
         salasAdapter = ArrayAdapter(
             this,
-            android.R.layout.simple_spinner_item,
+            R.layout.item_spinner_sala,
             nomesSalas
         )
-        salasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        // Layout próprio também na lista aberta do Spinner.
+        salasAdapter.setDropDownViewResource(R.layout.item_spinner_sala_dropdown)
+
         spinnerSalas.adapter = salasAdapter
     }
 
@@ -177,6 +220,10 @@ class ReservarSalaActivity : AppCompatActivity() {
 
                 dataSelecionada = "$anoSelecionado-$mesFormatado-$diaFormatado"
                 editDataReserva.setText(dataSelecionada)
+
+                // Remove erro visual da data depois que o usuário escolhe uma data válida.
+                layoutDataReserva.error = null
+                mostrarErro(null)
 
                 // Verifica se a data escolhida é sábado ou domingo antes de consultar.
                 val calendarioSelecionado = Calendar.getInstance()
@@ -292,7 +339,7 @@ class ReservarSalaActivity : AppCompatActivity() {
                     disponibilidades.clear()
                     disponibilidades.addAll(resposta)
 
-// Usa adapter customizado para mostrar os horários em cards.
+                    // Usa adapter customizado para mostrar os horários em cards.
                     listaHorarios.adapter = HorarioReservaAdapter(
                         this@ReservarSalaActivity,
                         disponibilidades

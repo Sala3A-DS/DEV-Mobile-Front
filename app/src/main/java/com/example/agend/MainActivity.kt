@@ -23,6 +23,8 @@ import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.text.Editable
+import android.text.TextWatcher
 
 class MainActivity : AppCompatActivity() {
 
@@ -77,6 +79,32 @@ class MainActivity : AppCompatActivity() {
         val textoCadastro = findViewById<TextView>(R.id.textoCadastro)
         val textoErro = findViewById<TextView>(R.id.textoErroLogin)
         val textoEsqueci = findViewById<TextView>(R.id.textoEsqueciSenha)
+
+        // Remove erro visual do e-mail quando o usuário começa a digitar novamente.
+        // Isso faz o label voltar para a cor normal.
+        editEmail.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                layoutEmail.error = null
+                textoErro.visibility = View.GONE
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        // Remove erro visual da senha quando o usuário começa a digitar novamente.
+        // Isso evita o campo continuar vermelho depois de corrigido.
+        editSenha.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                layoutSenha.error = null
+                textoErro.visibility = View.GONE
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         botaoEntrar.setOnClickListener {
             val email = editEmail.text.toString().trim().lowercase()
