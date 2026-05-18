@@ -6,4 +6,5 @@
     <color name="yarooms_gold_light">#E5C78B</color>
     <color name="white">#FFFFFF</color>
     <color name="gray_text">#BDBDBD</color>
+    <color name="yarooms_error">#FF5252</color>
 </resources>

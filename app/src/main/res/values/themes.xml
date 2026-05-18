@@ -2,6 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Agend" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <!-- Cor padrão de erro usada pelos TextInputLayout -->
+        <item name="colorError">@color/yarooms_error</item>
     </style>
 
     <style name="Theme.Agend" parent="Base.Theme.Agend" />
