@@ -65,10 +65,6 @@ class MainActivity : AppCompatActivity() {
         // Ele salva e recupera token, e-mail, nome e cargo do usuário.
         sessionManager = SessionManager(this)
 
-        // Se já existir uma sessão salva, redireciona direto para a tela correta.
-        // Isso evita pedir login toda vez que o usuário abrir o app.
-        verificarSessaoSalva()
-
         setContentView(R.layout.activity_login)
 
         val layoutEmail = findViewById<TextInputLayout>(R.id.layoutEmail)
@@ -199,30 +195,6 @@ class MainActivity : AppCompatActivity() {
         textoEsqueci.setOnClickListener {
             startActivity(Intent(this, EsqueciSenhaActivity::class.java))
         }
-    }
-
-    private fun verificarSessaoSalva() {
-        // Se não existe token salvo, continua na tela de login.
-        if (!sessionManager.estaLogado()) {
-            return
-        }
-
-        val token = sessionManager.getToken()
-
-        if (token.isNullOrBlank()) {
-            sessionManager.limparSessao()
-            return
-        }
-
-        // Restaura o token no RetrofitClient.
-        // Assim as próximas requisições já saem com Authorization Bearer.
-        RetrofitClient.token = token
-
-        abrirTelaPrincipal(
-            email = sessionManager.getEmail(),
-            nome = sessionManager.getNome(),
-            cargo = sessionManager.getCargo()
-        )
     }
 
     private fun abrirTelaPrincipal(

@@ -128,6 +128,13 @@ class ReservarSalaActivity : AppCompatActivity() {
         listaHorarios = findViewById(R.id.listaHorariosDisponiveis)
         textoVoltar = findViewById(R.id.textoVoltarReserva)
 
+        // Permite rolar a lista de horários sem rolar a tela inteira.
+        // Isso evita que o ScrollView "roube" o toque da ListView.
+        listaHorarios.setOnTouchListener { view, _ ->
+            view.parent.requestDisallowInterceptTouchEvent(true)
+            false
+        }
+
         // Limpa automaticamente os erros dos campos quando o usuário altera o conteúdo.
         // Isso evita que o label continue vermelho depois que o campo foi corrigido.
         configurarLimpezaErro(editDataReserva, layoutDataReserva)

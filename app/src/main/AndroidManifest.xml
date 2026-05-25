@@ -12,26 +12,37 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Agend">
 
+        <!-- SplashScreen: agora é a primeira tela aberta ao iniciar o app -->
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
+        <!-- Login: agora NÃO é mais a tela inicial direta -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
 
         <activity android:name=".CadastroActivity" />
 
+        <!-- Telas do professor -->
         <activity android:name=".professor.HomeActivity" />
         <activity android:name=".professor.ReservarSalaActivity" />
         <activity android:name=".professor.MinhasReservasActivity" />
 
+        <!-- Telas do diretor -->
         <activity android:name=".diretor.DiretorHomeActivity" />
         <activity android:name=".diretor.AgendamentosGeraisActivity" />
         <activity android:name=".diretor.CadastrarSalaActivity" />
         <activity android:name=".diretor.MinhasSalasActivity" />
 
+        <!-- Telas de recuperação de senha -->
         <activity android:name=".senha.EsqueciSenhaActivity" />
         <activity android:name=".senha.ConfirmarCodigoActivity" />
         <activity android:name=".senha.NovaSenhaActivity" />
