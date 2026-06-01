@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardPeriodoAula"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/yarooms_blue_light"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp"
+    app:strokeColor="@color/yarooms_gold"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textoNumeroPeriodoAula"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1ª aula"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textoHorarioPeriodoAula"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="07:00 às 07:50"
+            android:textColor="@color/yarooms_gold_light"
+            android:textSize="14sp"
+            android:layout_marginTop="6dp" />
+
+        <TextView
+            android:id="@+id/textoStatusPeriodoAula"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status: ativo"
+            android:textColor="@color/yarooms_gold"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/botaoAlterarStatusPeriodoAula"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Desativar"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="@color/yarooms_blue_dark"
+            android:backgroundTint="@color/yarooms_gold"
+            android:layout_marginTop="12dp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

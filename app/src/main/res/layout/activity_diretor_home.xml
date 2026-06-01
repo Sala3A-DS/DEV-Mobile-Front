@@ -76,6 +76,39 @@
             android:backgroundTint="#C5A059"
             android:layout_marginTop="16dp" />
 
+        <Button
+            android:id="@+id/botaoOpcoesUso"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Opções de uso"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#0D2244"
+            android:backgroundTint="#C5A059"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/botaoPeriodosAula"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Períodos de aula"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#0D2244"
+            android:backgroundTint="#E5C78B"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/botaoSabadoLetivo"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Sábado letivo: carregando..."
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#0D2244"
+            android:backgroundTint="#E5C78B"
+            android:layout_marginTop="16dp" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/botaoSairDiretor"
             android:layout_width="180dp"

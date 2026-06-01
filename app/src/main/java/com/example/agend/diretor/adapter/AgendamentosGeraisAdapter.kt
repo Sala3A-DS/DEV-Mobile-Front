@@ -33,21 +33,29 @@ class AgendamentosGeraisAdapter(
         val textoSala = view.findViewById<TextView>(R.id.textoSalaAgendamentoGeral)
         val textoProfessor = view.findViewById<TextView>(R.id.textoProfessorAgendamentoGeral)
         val textoTurma = view.findViewById<TextView>(R.id.textoTurmaAgendamentoGeral)
+        val textoFinalidade = view.findViewById<TextView>(R.id.textoFinalidadeAgendamentoGeral)
         val textoData = view.findViewById<TextView>(R.id.textoDataAgendamentoGeral)
         val textoHorario = view.findViewById<TextView>(R.id.textoHorarioAgendamentoGeral)
         val textoStatus = view.findViewById<TextView>(R.id.textoStatusAgendamentoGeral)
 
         val reserva = reservas[position]
 
-        val turma = if (reserva.turma.isBlank()) {
+        val turma = if (reserva.turma.isNullOrBlank()) {
             "Não informada"
         } else {
             reserva.turma
         }
 
+        val finalidade = if (reserva.opcaoUsoNome.isNullOrBlank()) {
+            "Não informada"
+        } else {
+            reserva.opcaoUsoNome
+        }
+
         textoSala.text = reserva.salaNome
         textoProfessor.text = "Professor: ${reserva.professorNome}"
         textoTurma.text = "Turma: $turma"
+        textoFinalidade.text = "Finalidade: $finalidade"
         textoData.text = "Data: ${reserva.data}"
         textoHorario.text =
             "Horário: ${reserva.periodoAula}ª aula - ${reserva.horarioInicio} às ${reserva.horarioFim}"

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/yarooms_blue_light"
+    app:cardCornerRadius="10dp"
+    app:strokeColor="@color/yarooms_gold"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textoNomeOpcaoUso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aula prática"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textoStatusOpcaoUso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status: ativa"
+            android:textColor="@color/yarooms_gold_light"
+            android:textSize="14sp"
+            android:layout_marginTop="6dp" />
+
+        <Button
+            android:id="@+id/botaoAlterarStatusOpcaoUso"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Desativar"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="@color/yarooms_blue_dark"
+            android:backgroundTint="@color/yarooms_gold"
+            android:layout_marginTop="12dp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -27,10 +27,12 @@ import com.example.agend.auth.SessionManager
 import com.example.agend.professor.adapter.HorarioReservaAdapter
 import android.text.Editable
 import android.text.TextWatcher
+import com.example.agend.auth.OpcaoUsoResponse
 
 class ReservarSalaActivity : AppCompatActivity() {
 
     private lateinit var spinnerSalas: Spinner
+    private lateinit var spinnerOpcoesUso: Spinner
     private lateinit var layoutDataReserva: TextInputLayout
     private lateinit var editDataReserva: TextInputEditText
     private lateinit var layoutTurmaReserva: TextInputLayout
@@ -43,12 +45,16 @@ class ReservarSalaActivity : AppCompatActivity() {
 
     private val salas = mutableListOf<SalaResponse>()
     private val nomesSalas = mutableListOf<String>()
+    private val opcoesUso = mutableListOf<OpcaoUsoResponse>()
+    private val nomesOpcoesUso = mutableListOf<String>()
 
     private val disponibilidades = mutableListOf<DisponibilidadeSalaResponse>()
 
     private lateinit var salasAdapter: ArrayAdapter<String>
+    private lateinit var opcoesUsoAdapter: ArrayAdapter<String>
 
     private var salaSelecionada: SalaResponse? = null
+    private var opcaoUsoSelecionada: OpcaoUsoResponse? = null
     private var dataSelecionada: String = ""
 
     //Sair da funcao do teclado
@@ -118,6 +124,7 @@ class ReservarSalaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_reservar_sala)
 
         spinnerSalas = findViewById(R.id.spinnerSalas)
+        spinnerOpcoesUso = findViewById(R.id.spinnerOpcoesUso)
         layoutDataReserva = findViewById(R.id.layoutDataReserva)
         editDataReserva = findViewById(R.id.editDataReserva)
         layoutTurmaReserva = findViewById(R.id.layoutTurmaReserva)
@@ -143,20 +150,76 @@ class ReservarSalaActivity : AppCompatActivity() {
         configurarAdapters()
         configurarEventos()
         carregarSalas()
+        carregarOpcoesUso()
     }
 
     private fun configurarAdapters() {
-        // Usa layout próprio para impedir que o Android use texto preto no Spinner.
+        // Adapter das salas disponíveis.
         salasAdapter = ArrayAdapter(
             this,
             R.layout.item_spinner_sala,
             nomesSalas
         )
 
-        // Layout próprio também na lista aberta do Spinner.
         salasAdapter.setDropDownViewResource(R.layout.item_spinner_sala_dropdown)
-
         spinnerSalas.adapter = salasAdapter
+
+        // Adapter das finalidades de uso cadastradas pelo admin.
+        opcoesUsoAdapter = ArrayAdapter(
+            this,
+            R.layout.item_spinner_sala,
+            nomesOpcoesUso
+        )
+
+        opcoesUsoAdapter.setDropDownViewResource(R.layout.item_spinner_sala_dropdown)
+        spinnerOpcoesUso.adapter = opcoesUsoAdapter
+    }
+
+    private fun carregarOpcoesUso() {
+        mostrarErro(null)
+
+        RetrofitClient.api.listarOpcoesUsoAtivas()
+            .enqueue(object : Callback<List<OpcaoUsoResponse>> {
+
+                override fun onResponse(
+                    call: Call<List<OpcaoUsoResponse>>,
+                    response: Response<List<OpcaoUsoResponse>>
+                ) {
+                    if (response.isSuccessful) {
+                        val resposta = response.body() ?: emptyList()
+
+                        opcoesUso.clear()
+                        nomesOpcoesUso.clear()
+
+                        opcoesUso.addAll(resposta)
+
+                        if (opcoesUso.isEmpty()) {
+                            nomesOpcoesUso.add("Nenhuma opção cadastrada")
+                            spinnerOpcoesUso.isEnabled = false
+                            botaoConsultar.isEnabled = false
+                        } else {
+                            nomesOpcoesUso.addAll(
+                                opcoesUso.map { it.nome }
+                            )
+
+                            opcaoUsoSelecionada = opcoesUso.firstOrNull()
+                            spinnerOpcoesUso.isEnabled = true
+                            botaoConsultar.isEnabled = true
+                        }
+
+                        opcoesUsoAdapter.notifyDataSetChanged()
+                    } else {
+                        tratarErroSessaoOuServidor(
+                            response.code(),
+                            response.errorBody()?.string()
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call<List<OpcaoUsoResponse>>, t: Throwable) {
+                    mostrarErro("Falha na conexão ao carregar opções de uso.")
+                }
+            })
     }
 
     private fun configurarEventos() {
@@ -181,6 +244,22 @@ class ReservarSalaActivity : AppCompatActivity() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 salaSelecionada = null
+            }
+        }
+
+        spinnerOpcoesUso.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                // Guarda a finalidade selecionada pelo professor.
+                opcaoUsoSelecionada = opcoesUso.getOrNull(position)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                opcaoUsoSelecionada = null
             }
         }
 
@@ -238,12 +317,11 @@ class ReservarSalaActivity : AppCompatActivity() {
 
                 val diaSemana = calendarioSelecionado.get(Calendar.DAY_OF_WEEK)
 
-                if (
-                    diaSemana == Calendar.SATURDAY ||
-                    diaSemana == Calendar.SUNDAY
-                ) {
+                // Domingo continua bloqueado direto no app.
+                // Sábado será validado pelo back-end, porque pode ser letivo se o admin ativar.
+                if (diaSemana == Calendar.SUNDAY) {
                     limparHorarios()
-                    mostrarErro("Não é permitido reservar salas aos finais de semana.")
+                    mostrarErro("Não é permitido reservar salas aos domingos.")
                     return@DatePickerDialog
                 }
 
@@ -375,6 +453,13 @@ class ReservarSalaActivity : AppCompatActivity() {
             return
         }
 
+        val opcaoUso = opcaoUsoSelecionada
+
+        if (opcaoUso == null || opcaoUso.id.isNullOrBlank()) {
+            mostrarErro("Selecione a finalidade de uso do espaço.")
+            return
+        }
+
         // Lê a turma informada pelo professor.
         // Exemplo: 3A - DS.
         val turma = editTurmaReserva.text.toString().trim()
@@ -393,7 +478,8 @@ class ReservarSalaActivity : AppCompatActivity() {
             salaId = sala.id,
             data = dataSelecionada,
             periodoAula = disponibilidade.periodoAula,
-            turma = turma
+            turma = turma,
+            opcaoUsoId = opcaoUso.id
         )
 
         RetrofitClient.api.criarReserva(request).enqueue(object : Callback<ReservaResponse> {

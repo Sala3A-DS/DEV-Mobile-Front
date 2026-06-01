@@ -41,6 +41,8 @@
         <activity android:name=".diretor.AgendamentosGeraisActivity" />
         <activity android:name=".diretor.CadastrarSalaActivity" />
         <activity android:name=".diretor.MinhasSalasActivity" />
+        <activity android:name=".diretor.GerenciarOpcoesUsoActivity" />
+        <activity android:name=".diretor.GerenciarPeriodosAulaActivity" />
 
         <!-- Telas de recuperação de senha -->
         <activity android:name=".senha.EsqueciSenhaActivity" />

@@ -8,9 +8,10 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 interface AuthApi {
-
     @GET("api/reservas/geral")
-    fun listarReservasGerais(): Call<List<ReservaResponse>>
+    fun listarReservasGerais(
+        @Query("data") data: String? = null
+    ): Call<List<ReservaResponse>>
 
     @POST("api/bookings")
     fun makeBooking(@Body booking: BookingRequest): Call<String>
@@ -50,6 +51,14 @@ interface AuthApi {
         @Body request: ReservaRequest
     ): Call<ReservaResponse>
 
+    @GET("api/configuracoes")
+    fun buscarConfiguracaoSistema(): Call<ConfiguracaoSistemaResponse>
+
+    @PATCH("api/configuracoes/sabado-letivo")
+    fun atualizarSabadoLetivo(
+        @Body request: SabadoLetivoRequest
+    ): Call<ConfiguracaoSistemaResponse>
+
     @GET("api/reservas/minhas")
     fun listarMinhasReservas(): Call<List<ReservaResponse>>
 
@@ -63,4 +72,43 @@ interface AuthApi {
         @Query("salaId") salaId: String,
         @Query("data") data: String
     ): Call<List<DisponibilidadeSalaResponse>>
+
+    // --- ROTAS DE OPÇÕES DE USO ---
+    @POST("api/opcoes-uso")
+    fun cadastrarOpcaoUso(
+        @Body request: OpcaoUsoRequest
+    ): Call<OpcaoUsoResponse>
+
+    @GET("api/opcoes-uso/admin")
+    fun listarOpcoesUsoAdmin(): Call<List<OpcaoUsoResponse>>
+
+    @PATCH("api/opcoes-uso/{id}/status")
+    fun alterarStatusOpcaoUso(
+        @Path("id") id: String,
+        @Body request: OpcaoUsoStatusRequest
+    ): Call<OpcaoUsoResponse>
+
+    @GET("api/opcoes-uso")
+    fun listarOpcoesUsoAtivas(): Call<List<OpcaoUsoResponse>>
+
+    // --- ROTAS DE PERÍODOS DE AULA ---
+
+    @POST("api/periodos-aula")
+    fun cadastrarPeriodoAula(
+        @Body request: PeriodoAulaRequest
+    ): Call<PeriodoAulaResponse>
+
+    @GET("api/periodos-aula/admin")
+    fun listarPeriodosAulaAdmin(): Call<List<PeriodoAulaResponse>>
+
+    @PATCH("api/periodos-aula/{id}/status")
+    fun alterarStatusPeriodoAula(
+        @Path("id") id: String,
+        @Body request: PeriodoAulaStatusRequest
+    ): Call<PeriodoAulaResponse>
+
+    @POST("api/periodos-aula/gerar")
+    fun gerarPeriodosAula(
+        @Body request: GerarPeriodosRequest
+    ): Call<List<PeriodoAulaResponse>>
 }

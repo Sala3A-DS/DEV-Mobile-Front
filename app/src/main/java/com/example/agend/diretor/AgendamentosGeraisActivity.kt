@@ -18,6 +18,10 @@ import com.example.agend.auth.SessionManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.app.DatePickerDialog
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import java.util.Calendar
 
 class AgendamentosGeraisActivity : AppCompatActivity() {
 
@@ -25,6 +29,11 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
     private lateinit var textoErro: TextView
     private lateinit var botaoAtualizar: Button
     private lateinit var textoVoltar: TextView
+
+    private lateinit var layoutData: TextInputLayout
+    private lateinit var editData: TextInputEditText
+
+    private var dataSelecionada: String = ""
 
     // Lista com todas as reservas retornadas pelo back-end.
     private val reservas = mutableListOf<ReservaResponse>()
@@ -39,9 +48,19 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
         textoErro = findViewById(R.id.textoErroAgendamentosGerais)
         botaoAtualizar = findViewById(R.id.botaoAtualizarAgendamentosGerais)
         textoVoltar = findViewById(R.id.textoVoltarAgendamentosGerais)
+        layoutData = findViewById(R.id.layoutDataAgendamentosGerais)
+        editData = findViewById(R.id.editDataAgendamentosGerais)
 
-        // Atualiza manualmente a lista.
+        editData.setOnClickListener {
+            abrirDatePicker()
+        }
+
         botaoAtualizar.setOnClickListener {
+            if (dataSelecionada.isBlank()) {
+                layoutData.error = "Selecione uma data"
+                return@setOnClickListener
+            }
+
             carregarAgendamentosGerais()
         }
 
@@ -50,7 +69,51 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
             finish()
         }
 
+        // Define a data de hoje automaticamente.
+        definirDataHoje()
+
+        // Carrega os agendamentos do dia atual.
         carregarAgendamentosGerais()
+    }
+
+    private fun definirDataHoje() {
+        val calendario = Calendar.getInstance()
+
+        val ano = calendario.get(Calendar.YEAR)
+        val mes = (calendario.get(Calendar.MONTH) + 1).toString().padStart(2, '0')
+        val dia = calendario.get(Calendar.DAY_OF_MONTH).toString().padStart(2, '0')
+
+        dataSelecionada = "$ano-$mes-$dia"
+        editData.setText(dataSelecionada)
+    }
+
+    private fun abrirDatePicker() {
+        val calendario = Calendar.getInstance()
+
+        val ano = calendario.get(Calendar.YEAR)
+        val mes = calendario.get(Calendar.MONTH)
+        val dia = calendario.get(Calendar.DAY_OF_MONTH)
+
+        val dialog = DatePickerDialog(
+            this,
+            { _, anoSelecionado, mesSelecionado, diaSelecionado ->
+                val mesFormatado = (mesSelecionado + 1).toString().padStart(2, '0')
+                val diaFormatado = diaSelecionado.toString().padStart(2, '0')
+
+                dataSelecionada = "$anoSelecionado-$mesFormatado-$diaFormatado"
+                editData.setText(dataSelecionada)
+
+                layoutData.error = null
+                mostrarErro(null)
+
+                carregarAgendamentosGerais()
+            },
+            ano,
+            mes,
+            dia
+        )
+
+        dialog.show()
     }
 
     private fun carregarAgendamentosGerais() {
@@ -59,7 +122,7 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
         botaoAtualizar.isEnabled = false
         botaoAtualizar.text = "Carregando..."
 
-        RetrofitClient.api.listarReservasGerais()
+        RetrofitClient.api.listarReservasGerais(dataSelecionada)
             .enqueue(object : Callback<List<ReservaResponse>> {
 
                 override fun onResponse(

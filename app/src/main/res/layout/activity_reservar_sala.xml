@@ -85,6 +85,58 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- CARD DE FINALIDADE DE USO -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/yarooms_blue_light"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="4dp"
+            app:strokeColor="@color/yarooms_gold"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="18dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Finalidade de uso"
+                    android:textColor="@color/yarooms_gold"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@color/yarooms_blue_dark">
+
+                    <Spinner
+                        android:id="@+id/spinnerOpcoesUso"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="48dp"
+                        android:background="@android:color/transparent"
+                        android:popupBackground="@color/yarooms_blue_light" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_down"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="16dp" />
+
+                </FrameLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- CAMPO DATA -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutDataReserva"
