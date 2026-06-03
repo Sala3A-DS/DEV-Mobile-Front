@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.agend.MainActivity
 import com.example.agend.R
 import com.example.agend.auth.ForgotPasswordRequest
 import com.example.agend.auth.RetrofitClient
@@ -23,6 +22,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.LinearLayout
 
 class EsqueciSenhaActivity : AppCompatActivity() {
 
@@ -60,7 +60,16 @@ class EsqueciSenhaActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //Carrega pagina
         setContentView(R.layout.activity_esqueci_senha)
+
+        //Botao voltar
+        val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
+
+        layoutVoltarTopo.setOnClickListener {
+            finish()
+        }
 
         val layoutEmail = findViewById<TextInputLayout>(R.id.layoutEmailEsqueci)
         val editEmail = findViewById<TextInputEditText>(R.id.editEmailEsqueci)

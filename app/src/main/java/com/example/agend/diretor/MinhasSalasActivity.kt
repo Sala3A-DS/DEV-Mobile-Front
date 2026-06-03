@@ -32,15 +32,15 @@ class MinhasSalasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Carrega a tela de salas cadastradas pelo diretor.
+        setContentView(R.layout.activity_minhas_salas)
+
         //Botao voltar
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
-
-        // Carrega a tela de salas cadastradas pelo diretor.
-        setContentView(R.layout.activity_minhas_salas)
 
         listaMinhasSalas = findViewById(R.id.listaMinhasSalas)
         textoErro = findViewById(R.id.textoErroMinhasSalas)

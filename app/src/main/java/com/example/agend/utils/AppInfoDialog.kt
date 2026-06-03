@@ -10,7 +10,7 @@ object AppInfoDialog {
             .setTitle("Sobre o YaRooms")
             .setMessage(
                 """
-                Versão: 1.0.0
+                Versão: 4.5.3
                 
                 O YaRooms é um aplicativo para agendamento de espaços escolares.
                 

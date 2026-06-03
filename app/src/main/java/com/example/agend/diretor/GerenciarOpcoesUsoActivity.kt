@@ -37,15 +37,15 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Carrega a tela de gerenciamento de opções de uso.
+        setContentView(R.layout.activity_gerenciar_opcoes_uso)
+
         //Botao voltar
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
-
-        // Carrega a tela de gerenciamento de opções de uso.
-        setContentView(R.layout.activity_gerenciar_opcoes_uso)
 
         layoutNome = findViewById(R.id.layoutNomeOpcaoUso)
         editNome = findViewById(R.id.editNomeOpcaoUso)

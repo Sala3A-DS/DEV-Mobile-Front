@@ -41,15 +41,15 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Carrega a tela de agendamentos gerais do diretor.
+        setContentView(R.layout.activity_agendamentos_gerais)
+
         //Botao voltar
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
-
-        // Carrega a tela de agendamentos gerais do diretor.
-        setContentView(R.layout.activity_agendamentos_gerais)
 
         listaAgendamentos = findViewById(R.id.listaAgendamentosGerais)
         textoErro = findViewById(R.id.textoErroAgendamentosGerais)

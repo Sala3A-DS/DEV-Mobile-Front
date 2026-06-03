@@ -54,15 +54,15 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Carrega a tela onde o admin cadastra e gerencia os períodos de aula.
+        setContentView(R.layout.activity_gerenciar_periodos_aula)
+
         //Botao voltar
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
-
-        // Carrega a tela onde o admin cadastra e gerencia os períodos de aula.
-        setContentView(R.layout.activity_gerenciar_periodos_aula)
 
         listaPeriodos = findViewById(R.id.listaPeriodosAula)
         textoErro = findViewById(R.id.textoErroPeriodosAula)

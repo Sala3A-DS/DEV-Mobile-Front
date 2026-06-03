@@ -33,15 +33,15 @@ class MinhasReservasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Carrega a tela de minhas reservas.
+        setContentView(R.layout.activity_minhas_reservas)
+
         //Botao voltar
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
-
-        // Carrega a tela de minhas reservas.
-        setContentView(R.layout.activity_minhas_reservas)
 
         listaReservas = findViewById(R.id.listaMinhasReservas)
         textoErro = findViewById(R.id.textoErroMinhasReservas)

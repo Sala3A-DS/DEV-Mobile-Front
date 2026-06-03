@@ -124,14 +124,15 @@ class ReservarSalaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //Carrega pagina
+        setContentView(R.layout.activity_reservar_sala)
+
         //Botao voltar
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
-
-        setContentView(R.layout.activity_reservar_sala)
 
         spinnerSalas = findViewById(R.id.spinnerSalas)
         spinnerTurnoReserva = findViewById(R.id.spinnerTurnoReserva)

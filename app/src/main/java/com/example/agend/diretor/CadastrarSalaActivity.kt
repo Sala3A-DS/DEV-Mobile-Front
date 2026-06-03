@@ -87,15 +87,15 @@ class CadastrarSalaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Carrega o layout da tela de cadastro de espaços/salas.
+        setContentView(R.layout.activity_cadastrar_sala)
+
         //Botao voltar
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
-
-        // Carrega o layout da tela de cadastro de espaços/salas.
-        setContentView(R.layout.activity_cadastrar_sala)
 
         // Campos do formulário.
         val layoutNome = findViewById<TextInputLayout>(R.id.layoutNomeSala)

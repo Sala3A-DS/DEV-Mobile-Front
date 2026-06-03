@@ -88,15 +88,15 @@ class CadastroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Define o layout da tela de cadastro.
+        setContentView(R.layout.activity_cadastro)
+
         //Botao voltar
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
-
-        // Define o layout da tela de cadastro.
-        setContentView(R.layout.activity_cadastro)
 
         // Campos principais do formulário.
         val layoutNome = findViewById<TextInputLayout>(R.id.layoutNome)
