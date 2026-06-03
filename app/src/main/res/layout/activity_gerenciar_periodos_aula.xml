@@ -115,7 +115,7 @@
                 android:id="@+id/editHorarioInicialGeracao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Ex: 07:00"
+                app:helperText="Ex: 07:00"
                 android:inputType="time"
                 android:maxLines="1"
                 android:textColor="@color/white"
@@ -138,7 +138,7 @@
                 android:id="@+id/editDuracaoAula"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Ex: 50"
+                app:helperText="Ex: 50"
                 android:inputType="number"
                 android:maxLines="1"
                 android:textColor="@color/white"
@@ -161,7 +161,7 @@
                 android:id="@+id/editIntervaloAposAula"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Ex: 3"
+                app:helperText="Ex: 3"
                 android:inputType="number"
                 android:maxLines="1"
                 android:textColor="@color/white"
@@ -184,7 +184,7 @@
                 android:id="@+id/editDuracaoIntervalo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Ex: 20"
+                app:helperText="Ex: 20"
                 android:inputType="number"
                 android:maxLines="1"
                 android:textColor="@color/white"
@@ -211,6 +211,59 @@
             android:visibility="gone"
             android:layout_marginTop="14dp"
             android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Horários cadastrados"
+            android:textColor="@color/yarooms_gold"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <Button
+                android:id="@+id/botaoFiltroManha"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="Manhã"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="@color/yarooms_blue_dark"
+                android:backgroundTint="@color/yarooms_gold" />
+
+            <Button
+                android:id="@+id/botaoFiltroTarde"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="Tarde"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="@color/yarooms_blue_dark"
+                android:backgroundTint="@color/yarooms_gold_light"
+                android:layout_marginStart="8dp" />
+
+            <Button
+                android:id="@+id/botaoFiltroNoite"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="Noite"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="@color/yarooms_blue_dark"
+                android:backgroundTint="@color/yarooms_gold_light"
+                android:layout_marginStart="8dp" />
+
+        </LinearLayout>
 
         <ListView
             android:id="@+id/listaPeriodosAula"

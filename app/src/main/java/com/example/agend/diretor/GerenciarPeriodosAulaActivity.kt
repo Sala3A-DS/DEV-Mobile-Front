@@ -49,6 +49,12 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
 
     private lateinit var spinnerTurnoGeracao: Spinner
     private lateinit var turnoSelecionado: String
+
+    private lateinit var botaoFiltroManha: Button
+    private lateinit var botaoFiltroTarde: Button
+    private lateinit var botaoFiltroNoite: Button
+
+    private var turnoFiltroSelecionado: String = "MANHA"
     private val periodos = mutableListOf<PeriodoAulaResponse>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,14 +91,37 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
         editIntervaloAposAula = findViewById(R.id.editIntervaloAposAula)
         editDuracaoIntervalo = findViewById(R.id.editDuracaoIntervalo)
 
-        botaoGerarPeriodos = findViewById(R.id.botaoGerarPeriodosAula)
-
         // Limpa automaticamente os erros dos campos de geração automática.
         configurarLimpezaErro(editQuantidade, layoutQuantidade)
         configurarLimpezaErro(editHorarioInicialGeracao, layoutHorarioInicialGeracao)
         configurarLimpezaErro(editDuracaoAula, layoutDuracaoAula)
         configurarLimpezaErro(editIntervaloAposAula, layoutIntervaloAposAula)
         configurarLimpezaErro(editDuracaoIntervalo, layoutDuracaoIntervalo)
+
+        botaoGerarPeriodos = findViewById(R.id.botaoGerarPeriodosAula)
+
+        botaoFiltroManha = findViewById(R.id.botaoFiltroManha)
+        botaoFiltroTarde = findViewById(R.id.botaoFiltroTarde)
+        botaoFiltroNoite = findViewById(R.id.botaoFiltroNoite)
+
+        //Opcao de turnos na lista de periodos gerados
+        botaoFiltroManha.setOnClickListener {
+            turnoFiltroSelecionado = "MANHA"
+            atualizarBotoesFiltro()
+            atualizarLista()
+        }
+
+        botaoFiltroTarde.setOnClickListener {
+            turnoFiltroSelecionado = "TARDE"
+            atualizarBotoesFiltro()
+            atualizarLista()
+        }
+
+        botaoFiltroNoite.setOnClickListener {
+            turnoFiltroSelecionado = "NOITE"
+            atualizarBotoesFiltro()
+            atualizarLista()
+        }
 
         spinnerTurnoGeracao = findViewById(R.id.spinnerTurnoGeracao)
 
@@ -129,6 +158,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
             gerarPeriodosAutomaticamente()
         }
 
+        atualizarBotoesFiltro()
         carregarPeriodos()
     }
 
@@ -164,6 +194,35 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
         })
     }
 
+    private fun atualizarBotoesFiltro() {
+        botaoFiltroManha.setBackgroundColor(
+            getColor(
+                if (turnoFiltroSelecionado == "MANHA")
+                    R.color.yarooms_gold
+                else
+                    R.color.yarooms_gold_light
+            )
+        )
+
+        botaoFiltroTarde.setBackgroundColor(
+            getColor(
+                if (turnoFiltroSelecionado == "TARDE")
+                    R.color.yarooms_gold
+                else
+                    R.color.yarooms_gold_light
+            )
+        )
+
+        botaoFiltroNoite.setBackgroundColor(
+            getColor(
+                if (turnoFiltroSelecionado == "NOITE")
+                    R.color.yarooms_gold
+                else
+                    R.color.yarooms_gold_light
+            )
+        )
+    }
+
     private fun carregarPeriodos() {
         mostrarErro(null)
 
@@ -196,18 +255,29 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
     }
 
     private fun atualizarLista() {
-        if (periodos.isEmpty()) {
+        val periodosFiltrados = periodos.filter {
+            it.turno.equals(turnoFiltroSelecionado, ignoreCase = true)
+        }
+
+        if (periodosFiltrados.isEmpty()) {
+            val nomeTurno = when (turnoFiltroSelecionado) {
+                "MANHA" -> "manhã"
+                "TARDE" -> "tarde"
+                "NOITE" -> "noite"
+                else -> "selecionado"
+            }
+
             listaPeriodos.adapter = ArrayAdapter(
                 this,
                 android.R.layout.simple_list_item_1,
-                listOf("Nenhum período cadastrado.")
+                listOf("Nenhum período cadastrado para $nomeTurno.")
             )
             return
         }
 
         listaPeriodos.adapter = PeriodoAulaAdapter(
             context = this,
-            periodos = periodos
+            periodos = periodosFiltrados
         ) { periodo ->
             alterarStatus(periodo)
         }

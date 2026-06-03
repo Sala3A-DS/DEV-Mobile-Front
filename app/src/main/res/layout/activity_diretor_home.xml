@@ -44,59 +44,75 @@
             android:gravity="center"
             android:layout_marginBottom="32dp" />
 
-        <Button
-            android:id="@+id/botaoCadastrarSala"
+        <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Cadastrar sala"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:textColor="#0D2244"
-            android:backgroundTint="#C5A059" />
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="3"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="20dp">
 
-        <Button
-            android:id="@+id/botaoMinhasSalas"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Minhas salas"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:textColor="#0D2244"
-            android:backgroundTint="#E5C78B"
-            android:layout_marginTop="16dp" />
+            <Button
+                android:id="@+id/botaoCadastrarSala"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="6dp"
+                android:text="Cadastrar\nsala"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="#0D2244"
+                android:backgroundTint="#C5A059" />
 
-        <Button
-            android:id="@+id/botaoAgendamentosGerais"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Agendamentos gerais"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:textColor="#0D2244"
-            android:backgroundTint="#C5A059"
-            android:layout_marginTop="16dp" />
+            <Button
+                android:id="@+id/botaoMinhasSalas"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="6dp"
+                android:text="Minhas\nsalas"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="#0D2244"
+                android:backgroundTint="#E5C78B" />
 
-        <Button
-            android:id="@+id/botaoOpcoesUso"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Opções de uso"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:textColor="#0D2244"
-            android:backgroundTint="#C5A059"
-            android:layout_marginTop="16dp" />
+            <Button
+                android:id="@+id/botaoAgendamentosGerais"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="6dp"
+                android:text="Agendamentos\ngerais"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="#0D2244"
+                android:backgroundTint="#C5A059" />
 
-        <Button
-            android:id="@+id/botaoPeriodosAula"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Períodos de aula"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:textColor="#0D2244"
-            android:backgroundTint="#E5C78B"
-            android:layout_marginTop="16dp" />
+            <Button
+                android:id="@+id/botaoOpcoesUso"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="6dp"
+                android:text="Opções\nde uso"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="#0D2244"
+                android:backgroundTint="#E5C78B" />
+
+            <Button
+                android:id="@+id/botaoPeriodosAula"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="6dp"
+                android:text="Períodos\nde aula"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="#0D2244"
+                android:backgroundTint="#C5A059" />
+
+        </GridLayout>
 
         <Button
             android:id="@+id/botaoSabadoLetivo"
@@ -107,7 +123,7 @@
             android:textStyle="bold"
             android:textColor="#0D2244"
             android:backgroundTint="#E5C78B"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="8dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/botaoSairDiretor"
