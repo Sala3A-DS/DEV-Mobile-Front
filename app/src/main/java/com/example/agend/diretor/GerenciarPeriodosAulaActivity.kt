@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.agend.MainActivity
 import com.example.agend.R
-import com.example.agend.auth.PeriodoAulaRequest
 import com.example.agend.auth.PeriodoAulaResponse
 import com.example.agend.auth.PeriodoAulaStatusRequest
 import com.example.agend.auth.RetrofitClient
@@ -23,21 +22,16 @@ import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.Spinner
+import android.widget.AdapterView
+import android.widget.LinearLayout
 
 class GerenciarPeriodosAulaActivity : AppCompatActivity() {
 
-    private lateinit var layoutNumero: TextInputLayout
-    private lateinit var layoutInicio: TextInputLayout
-    private lateinit var layoutFim: TextInputLayout
-
-    private lateinit var editNumero: TextInputEditText
-    private lateinit var editInicio: TextInputEditText
-    private lateinit var editFim: TextInputEditText
-
-    private lateinit var botaoCadastrar: Button
     private lateinit var listaPeriodos: ListView
     private lateinit var textoErro: TextView
-    private lateinit var textoVoltar: TextView
 
     private lateinit var layoutQuantidade: TextInputLayout
     private lateinit var layoutHorarioInicialGeracao: TextInputLayout
@@ -53,26 +47,31 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
 
     private lateinit var botaoGerarPeriodos: Button
 
+    private lateinit var spinnerTurnoGeracao: Spinner
+    private lateinit var turnoSelecionado: String
     private val periodos = mutableListOf<PeriodoAulaResponse>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //Botao voltar
+        val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
+
+        layoutVoltarTopo.setOnClickListener {
+            finish()
+        }
+
         // Carrega a tela onde o admin cadastra e gerencia os períodos de aula.
         setContentView(R.layout.activity_gerenciar_periodos_aula)
 
-        layoutNumero = findViewById(R.id.layoutNumeroPeriodoAula)
-        layoutInicio = findViewById(R.id.layoutInicioPeriodoAula)
-        layoutFim = findViewById(R.id.layoutFimPeriodoAula)
-
-        editNumero = findViewById(R.id.editNumeroPeriodoAula)
-        editInicio = findViewById(R.id.editInicioPeriodoAula)
-        editFim = findViewById(R.id.editFimPeriodoAula)
-
-        botaoCadastrar = findViewById(R.id.botaoCadastrarPeriodoAula)
         listaPeriodos = findViewById(R.id.listaPeriodosAula)
         textoErro = findViewById(R.id.textoErroPeriodosAula)
-        textoVoltar = findViewById(R.id.textoVoltarPeriodosAula)
+
+        // Permite rolar a lista de períodos sem rolar a tela inteira.
+        listaPeriodos.setOnTouchListener { view, _ ->
+            view.parent.requestDisallowInterceptTouchEvent(true)
+            false
+        }
 
         layoutQuantidade = findViewById(R.id.layoutQuantidadeAulas)
         layoutHorarioInicialGeracao = findViewById(R.id.layoutHorarioInicialGeracao)
@@ -88,97 +87,81 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
 
         botaoGerarPeriodos = findViewById(R.id.botaoGerarPeriodosAula)
 
-        botaoCadastrar.setOnClickListener {
-            cadastrarPeriodo()
+        // Limpa automaticamente os erros dos campos de geração automática.
+        configurarLimpezaErro(editQuantidade, layoutQuantidade)
+        configurarLimpezaErro(editHorarioInicialGeracao, layoutHorarioInicialGeracao)
+        configurarLimpezaErro(editDuracaoAula, layoutDuracaoAula)
+        configurarLimpezaErro(editIntervaloAposAula, layoutIntervaloAposAula)
+        configurarLimpezaErro(editDuracaoIntervalo, layoutDuracaoIntervalo)
+
+        spinnerTurnoGeracao = findViewById(R.id.spinnerTurnoGeracao)
+
+        val nomesTurnos = listOf("Manhã", "Tarde", "Noite")
+        val valoresTurnos = listOf("MANHA", "TARDE", "NOITE")
+
+        val turnoAdapter = ArrayAdapter(
+            this,
+            R.layout.item_spinner_sala,
+            nomesTurnos
+        )
+
+        turnoAdapter.setDropDownViewResource(R.layout.item_spinner_sala_dropdown)
+        spinnerTurnoGeracao.adapter = turnoAdapter
+
+        turnoSelecionado = valoresTurnos.first()
+
+        spinnerTurnoGeracao.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                turnoSelecionado = valoresTurnos[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                turnoSelecionado = "MANHA"
+            }
         }
 
         botaoGerarPeriodos.setOnClickListener {
             gerarPeriodosAutomaticamente()
         }
 
-        textoVoltar.setOnClickListener {
-            finish()
-        }
-
         carregarPeriodos()
     }
 
-    private fun cadastrarPeriodo() {
-        mostrarErro(null)
-        limparErrosCampos()
+    private fun configurarLimpezaErro(
+        editText: TextInputEditText,
+        layout: TextInputLayout
+    ) {
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+                // Não é necessário tratar antes da mudança.
+            }
 
-        val numeroTexto = editNumero.text.toString().trim()
-        val horarioInicio = editInicio.text.toString().trim()
-        val horarioFim = editFim.text.toString().trim()
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                // Remove o erro visual quando o usuário começa a corrigir o campo.
+                // Isso faz o label voltar para a cor normal.
+                layout.error = null
+                mostrarErro(null)
+            }
 
-        if (numeroTexto.isBlank()) {
-            layoutNumero.error = "Informe o número da aula"
-            return
-        }
-
-        val numero = numeroTexto.toIntOrNull()
-
-        if (numero == null || numero <= 0) {
-            layoutNumero.error = "Número inválido"
-            return
-        }
-
-        if (!horarioInicio.matches(Regex("^\\d{2}:\\d{2}$"))) {
-            layoutInicio.error = "Use o formato HH:mm"
-            return
-        }
-
-        if (!horarioFim.matches(Regex("^\\d{2}:\\d{2}$"))) {
-            layoutFim.error = "Use o formato HH:mm"
-            return
-        }
-
-        botaoCadastrar.isEnabled = false
-        botaoCadastrar.text = "Cadastrando..."
-
-        val request = PeriodoAulaRequest(
-            numero = numero,
-            horarioInicio = horarioInicio,
-            horarioFim = horarioFim
-        )
-
-        RetrofitClient.api.cadastrarPeriodoAula(request)
-            .enqueue(object : Callback<PeriodoAulaResponse> {
-
-                override fun onResponse(
-                    call: Call<PeriodoAulaResponse>,
-                    response: Response<PeriodoAulaResponse>
-                ) {
-                    botaoCadastrar.isEnabled = true
-                    botaoCadastrar.text = "Cadastrar período"
-
-                    if (response.isSuccessful) {
-                        editNumero.setText("")
-                        editInicio.setText("")
-                        editFim.setText("")
-
-                        Toast.makeText(
-                            this@GerenciarPeriodosAulaActivity,
-                            "Período cadastrado com sucesso.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                        carregarPeriodos()
-                    } else {
-                        tratarErroSessaoOuServidor(
-                            response.code(),
-                            response.errorBody()?.string()
-                        )
-                    }
-                }
-
-                override fun onFailure(call: Call<PeriodoAulaResponse>, t: Throwable) {
-                    botaoCadastrar.isEnabled = true
-                    botaoCadastrar.text = "Cadastrar período"
-
-                    mostrarErro("Falha na conexão ao cadastrar período.")
-                }
-            })
+            override fun afterTextChanged(s: Editable?) {
+                // Não é necessário tratar depois da mudança.
+            }
+        })
     }
 
     private fun carregarPeriodos() {
@@ -232,7 +215,6 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
 
     private fun gerarPeriodosAutomaticamente() {
         mostrarErro(null)
-        limparErrosCampos()
         limparErrosGeracao()
 
         val quantidadeTexto = editQuantidade.text.toString().trim()
@@ -263,6 +245,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
         val duracaoIntervalo = duracaoIntervaloTexto.toIntOrNull()
 
         val request = GerarPeriodosRequest(
+            turno = turnoSelecionado,
             quantidadeAulas = quantidade,
             horarioInicio = horarioInicial,
             duracaoMinutos = duracaoAula,
@@ -351,11 +334,6 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
         layoutDuracaoIntervalo.error = null
     }
 
-    private fun limparErrosCampos() {
-        layoutNumero.error = null
-        layoutInicio.error = null
-        layoutFim.error = null
-    }
 
     private fun mostrarErro(mensagem: String?) {
         if (mensagem.isNullOrBlank()) {

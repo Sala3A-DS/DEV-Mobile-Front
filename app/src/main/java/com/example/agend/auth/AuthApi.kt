@@ -70,7 +70,8 @@ interface AuthApi {
     @GET("api/reservas/disponibilidade")
     fun consultarDisponibilidade(
         @Query("salaId") salaId: String,
-        @Query("data") data: String
+        @Query("data") data: String,
+        @Query("turno") turno: String
     ): Call<List<DisponibilidadeSalaResponse>>
 
     // --- ROTAS DE OPÇÕES DE USO ---
@@ -92,11 +93,6 @@ interface AuthApi {
     fun listarOpcoesUsoAtivas(): Call<List<OpcaoUsoResponse>>
 
     // --- ROTAS DE PERÍODOS DE AULA ---
-
-    @POST("api/periodos-aula")
-    fun cadastrarPeriodoAula(
-        @Body request: PeriodoAulaRequest
-    ): Call<PeriodoAulaResponse>
 
     @GET("api/periodos-aula/admin")
     fun listarPeriodosAulaAdmin(): Call<List<PeriodoAulaResponse>>

@@ -28,10 +28,12 @@ import com.example.agend.professor.adapter.HorarioReservaAdapter
 import android.text.Editable
 import android.text.TextWatcher
 import com.example.agend.auth.OpcaoUsoResponse
+import android.widget.LinearLayout
 
 class ReservarSalaActivity : AppCompatActivity() {
 
     private lateinit var spinnerSalas: Spinner
+    private lateinit var spinnerTurnoReserva: Spinner
     private lateinit var spinnerOpcoesUso: Spinner
     private lateinit var layoutDataReserva: TextInputLayout
     private lateinit var editDataReserva: TextInputEditText
@@ -41,7 +43,6 @@ class ReservarSalaActivity : AppCompatActivity() {
     private lateinit var textoErro: TextView
     private lateinit var textoTituloHorarios: TextView
     private lateinit var listaHorarios: ListView
-    private lateinit var textoVoltar: TextView
 
     private val salas = mutableListOf<SalaResponse>()
     private val nomesSalas = mutableListOf<String>()
@@ -52,9 +53,11 @@ class ReservarSalaActivity : AppCompatActivity() {
 
     private lateinit var salasAdapter: ArrayAdapter<String>
     private lateinit var opcoesUsoAdapter: ArrayAdapter<String>
+    private lateinit var turnoAdapter: ArrayAdapter<String>
 
     private var salaSelecionada: SalaResponse? = null
     private var opcaoUsoSelecionada: OpcaoUsoResponse? = null
+    private var turnoSelecionado: String = "MANHA"
     private var dataSelecionada: String = ""
 
     //Sair da funcao do teclado
@@ -121,9 +124,17 @@ class ReservarSalaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //Botao voltar
+        val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
+
+        layoutVoltarTopo.setOnClickListener {
+            finish()
+        }
+
         setContentView(R.layout.activity_reservar_sala)
 
         spinnerSalas = findViewById(R.id.spinnerSalas)
+        spinnerTurnoReserva = findViewById(R.id.spinnerTurnoReserva)
         spinnerOpcoesUso = findViewById(R.id.spinnerOpcoesUso)
         layoutDataReserva = findViewById(R.id.layoutDataReserva)
         editDataReserva = findViewById(R.id.editDataReserva)
@@ -133,7 +144,6 @@ class ReservarSalaActivity : AppCompatActivity() {
         textoErro = findViewById(R.id.textoErroReserva)
         textoTituloHorarios = findViewById(R.id.textoTituloHorarios)
         listaHorarios = findViewById(R.id.listaHorariosDisponiveis)
-        textoVoltar = findViewById(R.id.textoVoltarReserva)
 
         // Permite rolar a lista de horários sem rolar a tela inteira.
         // Isso evita que o ScrollView "roube" o toque da ListView.
@@ -163,6 +173,16 @@ class ReservarSalaActivity : AppCompatActivity() {
 
         salasAdapter.setDropDownViewResource(R.layout.item_spinner_sala_dropdown)
         spinnerSalas.adapter = salasAdapter
+
+        // Adapter dos turnos disponíveis para reserva.
+        turnoAdapter = ArrayAdapter(
+            this,
+            R.layout.item_spinner_sala,
+            listOf("Manhã", "Tarde", "Noite")
+        )
+
+        turnoAdapter.setDropDownViewResource(R.layout.item_spinner_sala_dropdown)
+        spinnerTurnoReserva.adapter = turnoAdapter
 
         // Adapter das finalidades de uso cadastradas pelo admin.
         opcoesUsoAdapter = ArrayAdapter(
@@ -247,6 +267,34 @@ class ReservarSalaActivity : AppCompatActivity() {
             }
         }
 
+        spinnerTurnoReserva.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                turnoSelecionado = when (position) {
+                    0 -> "MANHA"
+                    1 -> "TARDE"
+                    2 -> "NOITE"
+                    else -> "MANHA"
+                }
+
+                // Ao trocar o turno, limpa os horários antigos.
+                limparHorarios()
+
+                // Se já existe data e sala selecionadas, consulta automaticamente o novo turno.
+                if (dataSelecionada.isNotBlank()) {
+                    consultarDisponibilidade()
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                turnoSelecionado = "MANHA"
+            }
+        }
+
         spinnerOpcoesUso.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -284,10 +332,6 @@ class ReservarSalaActivity : AppCompatActivity() {
             }
 
             criarReserva(disponibilidade)
-        }
-
-        textoVoltar.setOnClickListener {
-            finish()
         }
     }
 
@@ -409,7 +453,8 @@ class ReservarSalaActivity : AppCompatActivity() {
 
         RetrofitClient.api.consultarDisponibilidade(
             salaId = sala.id,
-            data = dataSelecionada
+            data = dataSelecionada,
+            turno = turnoSelecionado
         ).enqueue(object : Callback<List<DisponibilidadeSalaResponse>> {
             override fun onResponse(
                 call: Call<List<DisponibilidadeSalaResponse>>,

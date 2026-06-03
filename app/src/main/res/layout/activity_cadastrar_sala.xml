@@ -12,6 +12,8 @@
         android:orientation="vertical"
         android:padding="24dp">
 
+        <include layout="@layout/include_botao_voltar_topo" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -105,16 +107,6 @@
             android:textStyle="bold"
             android:layout_marginTop="24dp"
             android:backgroundTint="#C5A059" />
-
-        <TextView
-            android:id="@+id/textoVoltarSala"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Voltar"
-            android:textColor="#E5C78B"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:layout_marginTop="24dp" />
 
     </LinearLayout>
 

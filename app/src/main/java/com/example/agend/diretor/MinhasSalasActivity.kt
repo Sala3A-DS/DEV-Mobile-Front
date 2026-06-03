@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -24,7 +25,6 @@ class MinhasSalasActivity : AppCompatActivity() {
     private lateinit var listaMinhasSalas: ListView
     private lateinit var textoErro: TextView
     private lateinit var botaoAtualizar: Button
-    private lateinit var textoVoltar: TextView
 
     // Lista com as salas retornadas pelo back-end.
     private val salas = mutableListOf<SalaResponse>()
@@ -32,22 +32,23 @@ class MinhasSalasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //Botao voltar
+        val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
+
+        layoutVoltarTopo.setOnClickListener {
+            finish()
+        }
+
         // Carrega a tela de salas cadastradas pelo diretor.
         setContentView(R.layout.activity_minhas_salas)
 
         listaMinhasSalas = findViewById(R.id.listaMinhasSalas)
         textoErro = findViewById(R.id.textoErroMinhasSalas)
         botaoAtualizar = findViewById(R.id.botaoAtualizarMinhasSalas)
-        textoVoltar = findViewById(R.id.textoVoltarMinhasSalas)
 
         // Atualiza manualmente a lista de salas.
         botaoAtualizar.setOnClickListener {
             carregarMinhasSalas()
-        }
-
-        // Volta para a tela anterior.
-        textoVoltar.setOnClickListener {
-            finish()
         }
 
         carregarMinhasSalas()

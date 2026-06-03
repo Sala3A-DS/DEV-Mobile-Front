@@ -21,6 +21,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.LinearLayout
 
 class CadastrarSalaActivity : AppCompatActivity() {
 
@@ -86,6 +87,13 @@ class CadastrarSalaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //Botao voltar
+        val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
+
+        layoutVoltarTopo.setOnClickListener {
+            finish()
+        }
+
         // Carrega o layout da tela de cadastro de espaços/salas.
         setContentView(R.layout.activity_cadastrar_sala)
 
@@ -100,7 +108,6 @@ class CadastrarSalaActivity : AppCompatActivity() {
 
         val botaoSalvar = findViewById<Button>(R.id.botaoSalvarSala)
         val textoErro = findViewById<TextView>(R.id.textoErroSala)
-        val textoVoltar = findViewById<TextView>(R.id.textoVoltarSala)
 
         // Limpa automaticamente os erros dos campos quando o usuário digita.
         // Isso evita que o label continue vermelho depois que o texto foi corrigido.
@@ -186,10 +193,6 @@ class CadastrarSalaActivity : AppCompatActivity() {
                     textoErro.visibility = View.VISIBLE
                 }
             })
-        }
-
-        textoVoltar.setOnClickListener {
-            finish()
         }
     }
 }

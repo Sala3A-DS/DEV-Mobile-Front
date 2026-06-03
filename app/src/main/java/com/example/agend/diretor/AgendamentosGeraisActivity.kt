@@ -22,13 +22,13 @@ import android.app.DatePickerDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.util.Calendar
+import android.widget.LinearLayout
 
 class AgendamentosGeraisActivity : AppCompatActivity() {
 
     private lateinit var listaAgendamentos: ListView
     private lateinit var textoErro: TextView
     private lateinit var botaoAtualizar: Button
-    private lateinit var textoVoltar: TextView
 
     private lateinit var layoutData: TextInputLayout
     private lateinit var editData: TextInputEditText
@@ -41,13 +41,19 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //Botao voltar
+        val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
+
+        layoutVoltarTopo.setOnClickListener {
+            finish()
+        }
+
         // Carrega a tela de agendamentos gerais do diretor.
         setContentView(R.layout.activity_agendamentos_gerais)
 
         listaAgendamentos = findViewById(R.id.listaAgendamentosGerais)
         textoErro = findViewById(R.id.textoErroAgendamentosGerais)
         botaoAtualizar = findViewById(R.id.botaoAtualizarAgendamentosGerais)
-        textoVoltar = findViewById(R.id.textoVoltarAgendamentosGerais)
         layoutData = findViewById(R.id.layoutDataAgendamentosGerais)
         editData = findViewById(R.id.editDataAgendamentosGerais)
 
@@ -62,11 +68,6 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
             }
 
             carregarAgendamentosGerais()
-        }
-
-        // Volta para o painel do diretor.
-        textoVoltar.setOnClickListener {
-            finish()
         }
 
         // Define a data de hoje automaticamente.

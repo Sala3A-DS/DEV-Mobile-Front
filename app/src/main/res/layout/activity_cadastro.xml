@@ -12,6 +12,8 @@
         android:orientation="vertical"
         android:padding="24dp">
 
+        <include layout="@layout/include_botao_voltar_topo" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -204,17 +206,6 @@
             app:cornerRadius="8dp"
             android:backgroundTint="@color/yarooms_gold"
             android:layout_marginBottom="24dp"/>
-
-        <TextView
-            android:id="@+id/textoVoltarLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Já tem conta? Faça Login"
-            android:layout_gravity="center"
-            android:textColor="@color/yarooms_gold"
-            android:textStyle="bold"
-            android:padding="8dp"
-            android:layout_marginBottom="16dp"/>
 
     </LinearLayout>
 </ScrollView>

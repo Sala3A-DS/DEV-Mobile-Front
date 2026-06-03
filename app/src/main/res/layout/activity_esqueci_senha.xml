@@ -8,6 +8,8 @@
     android:background="@drawable/bg_yarooms_gradient"
     android:gravity="center_horizontal">
 
+    <include layout="@layout/include_botao_voltar_topo" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -67,15 +69,5 @@
         app:cornerRadius="8dp"
         android:backgroundTint="@color/yarooms_gold"
         android:layout_marginTop="32dp"/>
-
-    <TextView
-        android:id="@+id/textoVoltarEsqueci"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Voltar ao Login"
-        android:textColor="@color/yarooms_gold_light"
-        android:textStyle="bold"
-        android:layout_marginTop="32dp"
-        android:padding="12dp"/>
 
 </LinearLayout>

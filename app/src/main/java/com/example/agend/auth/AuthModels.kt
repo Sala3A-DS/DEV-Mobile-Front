@@ -127,19 +127,13 @@ data class OpcaoUsoStatusRequest(
 // Exemplo: 1ª aula - 07:00 às 07:50.
 data class PeriodoAulaResponse(
     val id: String?,
+    val turno: String?,
     val numero: Int,
     val horarioInicio: String,
     val horarioFim: String,
     val ativo: Boolean,
     val criadoPor: String?,
     val criadoEm: String?
-)
-
-// Request usado para cadastrar um novo período de aula.
-data class PeriodoAulaRequest(
-    val numero: Int,
-    val horarioInicio: String,
-    val horarioFim: String
 )
 
 // Request usado para ativar ou desativar um período de aula.
@@ -150,6 +144,7 @@ data class PeriodoAulaStatusRequest(
 // Request usado para gerar automaticamente os períodos de aula.
 // Exemplo: 6 aulas, começando 07:00, com 50 minutos cada.
 data class GerarPeriodosRequest(
+    val turno: String,
     val quantidadeAulas: Int,
     val horarioInicio: String,
     val duracaoMinutos: Int,

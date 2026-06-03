@@ -21,6 +21,7 @@ import android.content.Context
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.LinearLayout
 
 class CadastroActivity : AppCompatActivity() {
 
@@ -87,6 +88,13 @@ class CadastroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //Botao voltar
+        val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
+
+        layoutVoltarTopo.setOnClickListener {
+            finish()
+        }
+
         // Define o layout da tela de cadastro.
         setContentView(R.layout.activity_cadastro)
 
@@ -115,7 +123,6 @@ class CadastroActivity : AppCompatActivity() {
         configurarLimpezaErro(editCargoPersonalizado, layoutCargoPersonalizado)
 
         val botaoCadastrar = findViewById<Button>(R.id.botaoCadastrar)
-        val textoVoltarLogin = findViewById<TextView>(R.id.textoVoltarLogin)
         val radioGrupo = findViewById<RadioGroup>(R.id.radioGrupoPerfil)
 
         // Views do indicador de força da senha.
@@ -446,12 +453,6 @@ class CadastroActivity : AppCompatActivity() {
                     ).show()
                 }
             })
-        }
-
-        // Botão/texto para voltar para a tela de login.
-        textoVoltarLogin.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
         }
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -30,12 +31,18 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
     private lateinit var botaoCadastrar: Button
     private lateinit var listaOpcoes: ListView
     private lateinit var textoErro: TextView
-    private lateinit var textoVoltar: TextView
 
     private val opcoes = mutableListOf<OpcaoUsoResponse>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //Botao voltar
+        val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
+
+        layoutVoltarTopo.setOnClickListener {
+            finish()
+        }
 
         // Carrega a tela de gerenciamento de opções de uso.
         setContentView(R.layout.activity_gerenciar_opcoes_uso)
@@ -45,16 +52,17 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
         botaoCadastrar = findViewById(R.id.botaoCadastrarOpcaoUso)
         listaOpcoes = findViewById(R.id.listaOpcoesUso)
         textoErro = findViewById(R.id.textoErroOpcoesUso)
-        textoVoltar = findViewById(R.id.textoVoltarOpcoesUso)
 
         // Cadastra uma nova opção informada pelo admin.
         botaoCadastrar.setOnClickListener {
             cadastrarOpcao()
         }
 
-        // Fecha a tela e volta para o painel do diretor.
-        textoVoltar.setOnClickListener {
-            finish()
+        // Permite rolar a lista de opções sem rolar a tela inteira.
+        // Isso evita que o ScrollView "roube" o toque do ListView.
+        listaOpcoes.setOnTouchListener { view, _ ->
+            view.parent.requestDisallowInterceptTouchEvent(true)
+            false
         }
 
         carregarOpcoes()

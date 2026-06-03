@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -25,7 +26,6 @@ class MinhasReservasActivity : AppCompatActivity() {
     private lateinit var listaReservas: ListView
     private lateinit var textoErro: TextView
     private lateinit var botaoAtualizar: Button
-    private lateinit var textoVoltar: TextView
 
     // Lista com as reservas retornadas pelo back-end.
     private val reservas = mutableListOf<ReservaResponse>()
@@ -33,22 +33,23 @@ class MinhasReservasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //Botao voltar
+        val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
+
+        layoutVoltarTopo.setOnClickListener {
+            finish()
+        }
+
         // Carrega a tela de minhas reservas.
         setContentView(R.layout.activity_minhas_reservas)
 
         listaReservas = findViewById(R.id.listaMinhasReservas)
         textoErro = findViewById(R.id.textoErroMinhasReservas)
         botaoAtualizar = findViewById(R.id.botaoAtualizarReservas)
-        textoVoltar = findViewById(R.id.textoVoltarMinhasReservas)
 
         // Atualiza manualmente a lista de reservas.
         botaoAtualizar.setOnClickListener {
             carregarMinhasReservas()
-        }
-
-        // Volta para a tela anterior.
-        textoVoltar.setOnClickListener {
-            finish()
         }
 
         carregarMinhasReservas()

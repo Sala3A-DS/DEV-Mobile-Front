@@ -13,6 +13,8 @@
         android:orientation="vertical"
         android:padding="24dp">
 
+        <include layout="@layout/include_botao_voltar_topo" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,6 +43,39 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Turno"
+            android:textColor="@color/yarooms_gold"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:background="@color/yarooms_blue_dark">
+
+            <Spinner
+                android:id="@+id/spinnerTurnoGeracao"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="0dp"
+                android:paddingEnd="48dp"
+                android:background="@android:color/transparent"
+                android:popupBackground="@color/yarooms_blue_light" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_down"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="16dp" />
+
+        </FrameLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutQuantidadeAulas"
@@ -168,96 +203,6 @@
             android:layout_marginBottom="24dp" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cadastrar período manualmente"
-            android:textColor="@color/yarooms_gold"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutNumeroPeriodoAula"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Número da aula"
-            android:layout_marginBottom="12dp"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
-            app:boxStrokeErrorColor="@color/yarooms_error"
-            app:errorTextColor="@color/yarooms_error"
-            app:hintTextColor="@color/yarooms_gold_light">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editNumeroPeriodoAula"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:maxLines="1"
-                android:textColor="@color/white"
-                android:textColorHint="@color/yarooms_gold_light" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutInicioPeriodoAula"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Horário inicial"
-            android:layout_marginBottom="12dp"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
-            app:boxStrokeErrorColor="@color/yarooms_error"
-            app:errorTextColor="@color/yarooms_error"
-            app:hintTextColor="@color/yarooms_gold_light">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editInicioPeriodoAula"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ex: 07:00"
-                android:inputType="time"
-                android:maxLines="1"
-                android:textColor="@color/white"
-                android:textColorHint="@color/yarooms_gold_light" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutFimPeriodoAula"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Horário final"
-            android:layout_marginBottom="12dp"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
-            app:boxStrokeErrorColor="@color/yarooms_error"
-            app:errorTextColor="@color/yarooms_error"
-            app:hintTextColor="@color/yarooms_gold_light">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editFimPeriodoAula"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ex: 07:50"
-                android:inputType="time"
-                android:maxLines="1"
-                android:textColor="@color/white"
-                android:textColorHint="@color/yarooms_gold_light" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/botaoCadastrarPeriodoAula"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:text="Cadastrar período"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:textColor="@color/yarooms_blue_dark"
-            android:backgroundTint="@color/yarooms_gold" />
-
-        <TextView
             android:id="@+id/textoErroPeriodosAula"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -276,18 +221,8 @@
             android:dividerHeight="12dp"
             android:padding="4dp"
             android:clipToPadding="false"
+            android:scrollbarStyle="insideInset"
             android:layout_marginTop="16dp" />
-
-        <TextView
-            android:id="@+id/textoVoltarPeriodosAula"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Voltar"
-            android:textColor="@color/yarooms_gold_light"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp" />
 
     </LinearLayout>
 

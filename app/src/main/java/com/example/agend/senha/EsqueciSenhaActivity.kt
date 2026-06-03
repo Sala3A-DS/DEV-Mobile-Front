@@ -66,7 +66,6 @@ class EsqueciSenhaActivity : AppCompatActivity() {
         val editEmail = findViewById<TextInputEditText>(R.id.editEmailEsqueci)
         val botaoEnviar = findViewById<Button>(R.id.botaoEnviarCodigo)
         val textoErro = findViewById<TextView>(R.id.textoErroEsqueci)
-        val textoVoltar = findViewById<TextView>(R.id.textoVoltarEsqueci)
 
         // Limpa automaticamente o erro quando o usuário começa a corrigir o e-mail.
         // Isso faz o label voltar para a cor normal.
@@ -184,11 +183,6 @@ class EsqueciSenhaActivity : AppCompatActivity() {
                         textoErro.visibility = View.VISIBLE
                     }
                 })
-        }
-
-        textoVoltar.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
         }
     }
 }
