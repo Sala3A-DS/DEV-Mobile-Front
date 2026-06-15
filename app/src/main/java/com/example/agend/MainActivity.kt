@@ -179,10 +179,17 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+
                     botaoEntrar.isEnabled = true
                     botaoEntrar.text = "Entrar"
 
-                    textoErro.text = "⚠️ Falha na conexão com o servidor."
+                    textoErro.text =
+                        if (t is java.net.SocketTimeoutException) {
+                            "⚠️ O servidor demorou para responder. Tente novamente."
+                        } else {
+                            "⚠️ Falha na conexão com o servidor."
+                        }
+
                     textoErro.visibility = View.VISIBLE
                 }
             })

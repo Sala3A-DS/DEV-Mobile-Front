@@ -17,14 +17,14 @@ object RetrofitClient {
 
         // Aumenta o tempo para conectar no servidor.
         // Ajuda quando o Render demora para acordar.
-        .connectTimeout(60, TimeUnit.SECONDS)
+        .connectTimeout(5, TimeUnit.SECONDS)
 
         // Aumenta o tempo para esperar resposta do servidor.
         // Ajuda no forgot-password, porque ele ainda envia e-mail.
-        .readTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(5, TimeUnit.SECONDS)
 
         // Aumenta o tempo para enviar dados ao servidor.
-        .writeTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(5, TimeUnit.SECONDS)
 
         .addInterceptor { chain ->
 
