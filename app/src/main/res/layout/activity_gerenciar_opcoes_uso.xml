@@ -42,7 +42,8 @@
             android:hint="Nome da opção"
             android:layout_marginBottom="12dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
             app:boxStrokeErrorColor="@color/yarooms_error"
             app:errorTextColor="@color/yarooms_error"
             app:hintTextColor="@color/yarooms_gold_light">

@@ -411,9 +411,7 @@ class ReservarSalaActivity : AppCompatActivity() {
                         botaoConsultar.isEnabled = false
                     } else {
                         nomesSalas.addAll(
-                            salas.map {
-                                "${it.nomeEspaco} - ${it.localizacao} (Sala ${it.numeroSala})"
-                            }
+                            salas.map { it.descricaoParaSpinner() }
                         )
 
                         spinnerSalas.isEnabled = true
@@ -474,7 +472,9 @@ class ReservarSalaActivity : AppCompatActivity() {
                     listaHorarios.adapter = HorarioReservaAdapter(
                         this@ReservarSalaActivity,
                         disponibilidades
-                    )
+                    ) { disponibilidade ->
+                        criarReserva(disponibilidade)
+                    }
 
                     textoTituloHorarios.visibility = View.VISIBLE
                     listaHorarios.visibility = View.VISIBLE
@@ -528,11 +528,17 @@ class ReservarSalaActivity : AppCompatActivity() {
             opcaoUsoId = opcaoUso.id
         )
 
+        botaoConsultar.isEnabled = false
+        botaoConsultar.text = "Reservando..."
+
         RetrofitClient.api.criarReserva(request).enqueue(object : Callback<ReservaResponse> {
             override fun onResponse(
                 call: Call<ReservaResponse>,
                 response: Response<ReservaResponse>
             ) {
+                botaoConsultar.isEnabled = true
+                botaoConsultar.text = "Atualizar disponibilidade"
+
                 if (response.isSuccessful) {
                     Toast.makeText(
                         this@ReservarSalaActivity,
@@ -570,8 +576,8 @@ class ReservarSalaActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ReservaResponse>, t: Throwable) {
-                // onFailure só deve acontecer quando não houve resposta do servidor:
-                // sem internet, timeout, servidor fora, etc.
+                botaoConsultar.isEnabled = true
+                botaoConsultar.text = "Atualizar disponibilidade"
                 mostrarErro("Falha na conexão ao criar reserva.")
             }
         })

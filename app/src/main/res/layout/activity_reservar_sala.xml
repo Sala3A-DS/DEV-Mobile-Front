@@ -39,10 +39,10 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/yarooms_blue_light"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="4dp"
-            app:strokeColor="@color/yarooms_gold"
+            app:cardBackgroundColor="@color/yarooms_surface"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/yarooms_card_stroke"
             app:strokeWidth="1dp"
             android:layout_marginBottom="18dp">
 
@@ -64,7 +64,7 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:background="@color/yarooms_blue_dark">
+                    android:background="@drawable/bg_dropdown_modern">
 
                     <Spinner
                         android:id="@+id/spinnerSalas"
@@ -73,7 +73,7 @@
                         android:paddingStart="0dp"
                         android:paddingEnd="48dp"
                         android:background="@android:color/transparent"
-                        android:popupBackground="@color/yarooms_blue_light" />
+                        android:popupBackground="@color/yarooms_surface" />
 
                     <ImageView
                         android:layout_width="24dp"
@@ -91,10 +91,10 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/yarooms_blue_light"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="4dp"
-            app:strokeColor="@color/yarooms_gold"
+            app:cardBackgroundColor="@color/yarooms_surface"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/yarooms_card_stroke"
             app:strokeWidth="1dp"
             android:layout_marginBottom="18dp">
 
@@ -116,7 +116,7 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:background="@color/yarooms_blue_dark">
+                    android:background="@drawable/bg_dropdown_modern">
 
                     <Spinner
                         android:id="@+id/spinnerTurnoReserva"
@@ -125,7 +125,7 @@
                         android:paddingStart="0dp"
                         android:paddingEnd="48dp"
                         android:background="@android:color/transparent"
-                        android:popupBackground="@color/yarooms_blue_light" />
+                        android:popupBackground="@color/yarooms_surface" />
 
                     <ImageView
                         android:layout_width="24dp"
@@ -143,10 +143,10 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/yarooms_blue_light"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="4dp"
-            app:strokeColor="@color/yarooms_gold"
+            app:cardBackgroundColor="@color/yarooms_surface"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/yarooms_card_stroke"
             app:strokeWidth="1dp"
             android:layout_marginBottom="18dp">
 
@@ -168,7 +168,7 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:background="@color/yarooms_blue_dark">
+                    android:background="@drawable/bg_dropdown_modern">
 
                     <Spinner
                         android:id="@+id/spinnerOpcoesUso"
@@ -177,7 +177,7 @@
                         android:paddingStart="0dp"
                         android:paddingEnd="48dp"
                         android:background="@android:color/transparent"
-                        android:popupBackground="@color/yarooms_blue_light" />
+                        android:popupBackground="@color/yarooms_surface" />
 
                     <ImageView
                         android:layout_width="24dp"
@@ -198,7 +198,8 @@
             android:layout_height="wrap_content"
             android:hint="Data da reserva"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
             app:hintTextColor="@color/yarooms_gold_light"
             android:layout_marginBottom="18dp">
 
@@ -221,7 +222,8 @@
             android:layout_height="wrap_content"
             android:hint="Turma que usará o espaço"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
             app:hintTextColor="@color/yarooms_gold_light"
             android:layout_marginBottom="18dp">
 
@@ -245,14 +247,14 @@
             android:textStyle="bold"
             android:textColor="@color/yarooms_blue_dark"
             android:backgroundTint="@color/yarooms_gold"
-            app:cornerRadius="8dp"
+            app:cornerRadius="14dp"
             android:layout_marginTop="4dp" />
 
         <TextView
             android:id="@+id/textoErroReserva"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FF8080"
+            android:textColor="@color/yarooms_error"
             android:textSize="14sp"
             android:visibility="gone"
             android:layout_marginTop="16dp" />

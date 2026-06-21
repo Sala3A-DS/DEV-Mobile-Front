@@ -42,7 +42,8 @@
             android:hint="Data dos agendamentos"
             android:layout_marginBottom="16dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
             app:boxStrokeErrorColor="@color/yarooms_error"
             app:errorTextColor="@color/yarooms_error"
             app:hintTextColor="@color/yarooms_gold_light">
@@ -62,7 +63,7 @@
             android:id="@+id/textoErroAgendamentosGerais"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FF8080"
+            android:textColor="@color/yarooms_error"
             android:textSize="14sp"
             android:visibility="gone"
             android:layout_marginBottom="12dp" />
@@ -86,7 +87,7 @@
             android:textStyle="bold"
             android:textColor="@color/yarooms_blue_dark"
             android:backgroundTint="@color/yarooms_gold"
-            app:cornerRadius="8dp"
+            app:cornerRadius="14dp"
             android:layout_marginTop="20dp" />
 
     </LinearLayout>

@@ -37,7 +37,8 @@
         android:layout_height="wrap_content"
         android:textColorHint="@color/gray_text"
         app:hintTextColor="@color/yarooms_gold"
-        app:boxStrokeColor="@color/yarooms_gold"
+        app:boxStrokeColor="@color/yarooms_input_stroke"
+        app:boxBackgroundColor="@color/yarooms_input"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -54,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="⚠️ E-mail não encontrado"
-        android:textColor="#FF5252"
+        android:textColor="@color/yarooms_error"
         android:visibility="gone"
         android:layout_marginTop="12dp"
         android:textStyle="bold"/>
@@ -66,7 +67,7 @@
         android:text="ENVIAR CÓDIGO"
         android:textColor="@color/yarooms_blue_dark"
         android:textStyle="bold"
-        app:cornerRadius="8dp"
+        app:cornerRadius="14dp"
         android:backgroundTint="@color/yarooms_gold"
         android:layout_marginTop="32dp"/>
 

@@ -39,7 +39,7 @@
             android:id="@+id/textoErroMinhasReservas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FF8080"
+            android:textColor="@color/yarooms_error"
             android:textSize="14sp"
             android:visibility="gone"
             android:layout_marginBottom="12dp" />
@@ -63,7 +63,7 @@
             android:textStyle="bold"
             android:textColor="@color/yarooms_blue_dark"
             android:backgroundTint="@color/yarooms_gold"
-            app:cornerRadius="8dp"
+            app:cornerRadius="14dp"
             android:layout_marginTop="20dp" />
 
     </LinearLayout>

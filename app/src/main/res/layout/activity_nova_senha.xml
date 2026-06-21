@@ -41,7 +41,8 @@
             app:passwordToggleTint="@color/yarooms_gold"
             android:textColorHint="@color/gray_text"
             app:hintTextColor="@color/yarooms_gold"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
+            app:boxBackgroundColor="@color/yarooms_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -93,7 +94,8 @@
             app:passwordToggleTint="@color/yarooms_gold"
             android:textColorHint="@color/gray_text"
             app:hintTextColor="@color/yarooms_gold"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
+            app:boxBackgroundColor="@color/yarooms_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -110,7 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="⚠️ Erro ao salvar senha"
-            android:textColor="#FF5252"
+            android:textColor="@color/yarooms_error"
             android:visibility="gone"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
@@ -123,7 +125,7 @@
             android:text="SALVAR NOVA SENHA"
             android:textColor="@color/yarooms_blue_dark"
             android:textStyle="bold"
-            app:cornerRadius="8dp"
+            app:cornerRadius="14dp"
             android:backgroundTint="@color/yarooms_gold"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="16dp"/>

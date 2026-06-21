@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    private const val BASE_URL = "https://dev-mobile-back.onrender.com/"
+    private const val BASE_URL = "http://191.252.92.187:3000/"
 
     // Guarda o token JWT quando o usuário faz login.
     var token: String? = null
@@ -17,14 +17,14 @@ object RetrofitClient {
 
         // Aumenta o tempo para conectar no servidor.
         // Ajuda quando o Render demora para acordar.
-        .connectTimeout(5, TimeUnit.SECONDS)
+        .connectTimeout(15, TimeUnit.SECONDS)
 
         // Aumenta o tempo para esperar resposta do servidor.
         // Ajuda no forgot-password, porque ele ainda envia e-mail.
-        .readTimeout(5, TimeUnit.SECONDS)
+        .readTimeout(15, TimeUnit.SECONDS)
 
         // Aumenta o tempo para enviar dados ao servidor.
-        .writeTimeout(5, TimeUnit.SECONDS)
+        .writeTimeout(15, TimeUnit.SECONDS)
 
         .addInterceptor { chain ->
 

@@ -33,7 +33,8 @@
             android:layout_marginBottom="16dp"
             android:textColorHint="@color/gray_text"
             app:hintTextColor="@color/yarooms_gold"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
+            app:boxBackgroundColor="@color/yarooms_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editNome"
@@ -51,7 +52,8 @@
             android:layout_marginBottom="16dp"
             android:textColorHint="@color/gray_text"
             app:hintTextColor="@color/yarooms_gold"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
+            app:boxBackgroundColor="@color/yarooms_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editEmailCadastro"
@@ -69,7 +71,8 @@
             android:hint="Cargo"
             android:visibility="gone"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
             app:hintTextColor="@color/yarooms_gold_light">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -88,7 +91,8 @@
             app:passwordToggleTint="@color/yarooms_gold"
             android:textColorHint="@color/gray_text"
             app:hintTextColor="@color/yarooms_gold"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
+            app:boxBackgroundColor="@color/yarooms_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editSenhaCadastro"
@@ -104,8 +108,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Confirmar senha"
-            app:boxStrokeColor="#C5A059"
-            app:hintTextColor="#E5C78B"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:hintTextColor="@color/yarooms_gold_light"
             app:passwordToggleEnabled="true"
             app:boxBackgroundMode="outline">
 
@@ -115,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#E5C78B" />
+                android:textColorHint="@color/yarooms_gold_light" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -203,7 +208,7 @@
             android:text="CADASTRAR"
             android:textColor="@color/yarooms_blue_dark"
             android:textStyle="bold"
-            app:cornerRadius="8dp"
+            app:cornerRadius="14dp"
             android:backgroundTint="@color/yarooms_gold"
             android:layout_marginBottom="24dp"/>
 

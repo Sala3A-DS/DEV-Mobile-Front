@@ -37,9 +37,9 @@ class MinhasSalasAdapter(
 
         val sala = salas[position]
 
-        textoNomeEspaco.text = sala.nomeEspaco
-        textoLocalizacaoSala.text = "Localização: ${sala.localizacao}"
-        textoNumeroSala.text = "Número da sala: ${sala.numeroSala}"
+        textoNomeEspaco.text = sala.nomeParaExibir()
+        textoLocalizacaoSala.text = "Localização: ${sala.localizacao ?: "Não informada"}"
+        textoNumeroSala.text = "Número da sala: ${sala.numeroSala?.takeIf { it > 0 } ?: "Não informado"}"
 
         textoStatusSala.text = if (sala.ativa) {
             "Status: Ativa"

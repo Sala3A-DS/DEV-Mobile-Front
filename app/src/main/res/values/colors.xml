@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="yarooms_blue_dark">#0D2244</color>
-    <color name="yarooms_blue_light">#1B3B6F</color>
-    <color name="yarooms_gold">#C5A059</color>
-    <color name="yarooms_gold_light">#E5C78B</color>
+    <!-- YaRooms dark polished palette -->
+    <color name="yarooms_blue_dark">#081D35</color>
+    <color name="yarooms_blue_light">#14345D</color>
+    <color name="yarooms_surface">#123052</color>
+    <color name="yarooms_surface_soft">#173B66</color>
+    <color name="yarooms_input">#0B2748</color>
+    <color name="yarooms_input_stroke">#2C527D</color>
+    <color name="yarooms_card_stroke">#3B5F86</color>
+    <color name="yarooms_gold">#D6AE63</color>
+    <color name="yarooms_gold_light">#E9CC8A</color>
     <color name="white">#FFFFFF</color>
-    <color name="gray_text">#BDBDBD</color>
-    <color name="yarooms_error">#FF5252</color>
+    <color name="gray_text">#B8C5D6</color>
+    <color name="yarooms_text_secondary">#D5DEEA</color>
+    <color name="yarooms_error">#FF8A8A</color>
+    <color name="yarooms_danger">#A83232</color>
 </resources>

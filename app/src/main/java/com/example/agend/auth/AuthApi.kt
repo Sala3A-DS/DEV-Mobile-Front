@@ -13,19 +13,14 @@ interface AuthApi {
         @Query("data") data: String? = null
     ): Call<List<ReservaResponse>>
 
-    @POST("api/bookings")
-    fun makeBooking(@Body booking: BookingRequest): Call<String>
-    @GET("api/bookings")
-    fun listarAgendamentos(): Call<List<BookingResponse>>
 
-    // ATUALIZADO: Agora retorna o LoginResponse (que contém o Token)
     @POST("api/auth/login")
     fun login(@Body request: LoginRequest): Call<LoginResponse>
 
     @POST("api/auth/register")
     fun register(@Body request: RegisterRequest): Call<String>
 
-    // --- AS 3 ROTAS DE SENHA ATUALIZADAS ---
+    // --- ROTAS DE SENHA ---
     @POST("api/auth/forgot-password")
     fun forgotPassword(@Body request: ForgotPasswordRequest): Call<String>
 

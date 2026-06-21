@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginBottom="12dp"
-            android:background="@color/yarooms_blue_dark">
+            android:background="@drawable/bg_dropdown_modern">
 
             <Spinner
                 android:id="@+id/spinnerTurnoGeracao"
@@ -66,7 +66,7 @@
                 android:paddingStart="0dp"
                 android:paddingEnd="48dp"
                 android:background="@android:color/transparent"
-                android:popupBackground="@color/yarooms_blue_light" />
+                android:popupBackground="@color/yarooms_surface" />
 
             <ImageView
                 android:layout_width="24dp"
@@ -84,7 +84,8 @@
             android:hint="Quantidade de aulas"
             android:layout_marginBottom="12dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
             app:boxStrokeErrorColor="@color/yarooms_error"
             app:errorTextColor="@color/yarooms_error"
             app:hintTextColor="@color/yarooms_gold_light">
@@ -106,7 +107,8 @@
             android:hint="Horário inicial"
             android:layout_marginBottom="12dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
             app:boxStrokeErrorColor="@color/yarooms_error"
             app:errorTextColor="@color/yarooms_error"
             app:hintTextColor="@color/yarooms_gold_light">
@@ -129,7 +131,8 @@
             android:hint="Duração de cada aula em minutos"
             android:layout_marginBottom="12dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
             app:boxStrokeErrorColor="@color/yarooms_error"
             app:errorTextColor="@color/yarooms_error"
             app:hintTextColor="@color/yarooms_gold_light">
@@ -152,7 +155,8 @@
             android:hint="Intervalo após qual aula?"
             android:layout_marginBottom="12dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
             app:boxStrokeErrorColor="@color/yarooms_error"
             app:errorTextColor="@color/yarooms_error"
             app:hintTextColor="@color/yarooms_gold_light">
@@ -175,7 +179,8 @@
             android:hint="Duração do intervalo em minutos"
             android:layout_marginBottom="12dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/yarooms_gold"
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
             app:boxStrokeErrorColor="@color/yarooms_error"
             app:errorTextColor="@color/yarooms_error"
             app:hintTextColor="@color/yarooms_gold_light">

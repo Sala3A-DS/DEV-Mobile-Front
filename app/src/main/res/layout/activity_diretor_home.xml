@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Olá, Diretor"
-            android:textColor="#E5C78B"
+            android:textColor="@color/yarooms_gold_light"
             android:textSize="16sp"
             android:gravity="center"
             android:layout_marginTop="8dp"
@@ -61,8 +61,8 @@
                 android:text="Cadastrar\nsala"
                 android:textAllCaps="false"
                 android:textStyle="bold"
-                android:textColor="#0D2244"
-                android:backgroundTint="#C5A059" />
+                android:textColor="@color/yarooms_blue_dark"
+                android:backgroundTint="@color/yarooms_gold" />
 
             <Button
                 android:id="@+id/botaoMinhasSalas"
@@ -73,8 +73,8 @@
                 android:text="Minhas\nsalas"
                 android:textAllCaps="false"
                 android:textStyle="bold"
-                android:textColor="#0D2244"
-                android:backgroundTint="#E5C78B" />
+                android:textColor="@color/yarooms_blue_dark"
+                android:backgroundTint="@color/yarooms_gold_light" />
 
             <Button
                 android:id="@+id/botaoAgendamentosGerais"
@@ -85,8 +85,8 @@
                 android:text="Agendamentos\ngerais"
                 android:textAllCaps="false"
                 android:textStyle="bold"
-                android:textColor="#0D2244"
-                android:backgroundTint="#C5A059" />
+                android:textColor="@color/yarooms_blue_dark"
+                android:backgroundTint="@color/yarooms_gold" />
 
             <Button
                 android:id="@+id/botaoOpcoesUso"
@@ -97,8 +97,8 @@
                 android:text="Opções\nde uso"
                 android:textAllCaps="false"
                 android:textStyle="bold"
-                android:textColor="#0D2244"
-                android:backgroundTint="#E5C78B" />
+                android:textColor="@color/yarooms_blue_dark"
+                android:backgroundTint="@color/yarooms_gold_light" />
 
             <Button
                 android:id="@+id/botaoPeriodosAula"
@@ -109,8 +109,8 @@
                 android:text="Períodos\nde aula"
                 android:textAllCaps="false"
                 android:textStyle="bold"
-                android:textColor="#0D2244"
-                android:backgroundTint="#C5A059" />
+                android:textColor="@color/yarooms_blue_dark"
+                android:backgroundTint="@color/yarooms_gold" />
 
         </GridLayout>
 
@@ -121,8 +121,8 @@
             android:text="Sábado letivo: carregando..."
             android:textAllCaps="false"
             android:textStyle="bold"
-            android:textColor="#0D2244"
-            android:backgroundTint="#E5C78B"
+            android:textColor="@color/yarooms_blue_dark"
+            android:backgroundTint="@color/yarooms_gold_light"
             android:layout_marginTop="8dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -136,8 +136,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="24dp"
-            android:backgroundTint="#8B1E1E"
-            app:cornerRadius="8dp" />
+            android:backgroundTint="@color/yarooms_danger"
+            app:cornerRadius="14dp" />
 
         <TextView
             android:id="@+id/botaoInfoApp"

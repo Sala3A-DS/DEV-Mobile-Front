@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
-    app:cardBackgroundColor="@color/yarooms_blue_light"
+    app:cardBackgroundColor="@color/yarooms_surface"
     app:cardCornerRadius="10dp"
-    app:strokeColor="@color/yarooms_gold"
+    app:strokeColor="@color/yarooms_card_stroke"
     app:strokeWidth="1dp">
 
     <LinearLayout

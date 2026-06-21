@@ -1,18 +1,19 @@
 package com.example.agend.auth
 
+import com.google.gson.annotations.SerializedName
+
 // --- LOGIN & REGISTRO ---
 data class LoginRequest(val email: String, val senha: String)
 
 data class RegisterRequest(val nome: String, val email: String, val senha: String, val cargo: String)
 
-// ATUALIZADO: O back-end agora devolve um Token JWT além do usuário
 data class LoginResponse(
     val token: String,
     val user: UserResponse
 )
 
 data class UserResponse(
-    val id: String?, // ATUALIZADO: No Firebase o ID é String (ex: "yX8aB...")
+    val id: String?,
     val nome: String,
     val email: String,
     val cargo: String
@@ -23,37 +24,45 @@ data class ForgotPasswordRequest(val email: String) // Passo 1: Pede o código
 data class VerifyCodeRequest(val email: String, val codigo: String) // Passo 2: Digita o código
 data class ResetPasswordRequest(val email: String, val novaSenha: String) // Passo 3: Nova senha
 
-// --- AGENDAMENTOS ---
-data class BookingRequest(
-    val nomeFuncionario: String,
-    val spaceId: Int,
-    val dataHora: String
-)
-
-data class BookingResponse(
-    val id: String?, // ATUALIZADO: Ajustado para o padrão Firebase
-    val nomeFuncionario: String,
-    val spaceId: Int,
-    val dataHora: String
-)
-
 // --- SALAS ---
 
 data class SalaRequest(
     val nomeEspaco: String,
     val localizacao: String,
-    val numeroSala: Int
+    val numeroSala: Int,
+    val nome: String = nomeEspaco
 )
 
 data class SalaResponse(
+    @SerializedName(value = "id", alternate = ["_id"])
     val id: String?,
-    val nomeEspaco: String,
-    val localizacao: String,
-    val numeroSala: Int,
-    val diretorEmail: String,
-    val ativa: Boolean,
-    val criadoEm: String
-)
+
+    @SerializedName(value = "nomeEspaco", alternate = ["nome"])
+    val nomeEspaco: String?,
+
+    val localizacao: String?,
+    val numeroSala: Int?,
+    val diretorEmail: String?,
+    val ativa: Boolean = true,
+    val criadoEm: String?
+) {
+    fun nomeParaExibir(): String {
+        return nomeEspaco?.takeIf { it.isNotBlank() } ?: "Sala sem nome"
+    }
+
+    fun descricaoParaSpinner(): String {
+        val nome = nomeParaExibir()
+        val local = localizacao?.takeIf { it.isNotBlank() }
+        val numero = numeroSala
+
+        return when {
+            local != null && numero != null && numero > 0 -> "$nome - $local (Sala $numero)"
+            local != null -> "$nome - $local"
+            numero != null && numero > 0 -> "$nome (Sala $numero)"
+            else -> nome
+        }
+    }
+}
 
 // --- RESERVAS ---
 
@@ -62,7 +71,6 @@ data class ReservaRequest(
     val data: String,
     val periodoAula: String,
     val turma: String,
-    // ID da opção de uso escolhida pelo professor.
     val opcaoUsoId: String
 )
 
@@ -77,7 +85,6 @@ data class ReservaResponse(
     val horarioInicio: String,
     val horarioFim: String,
     val turma: String,
-    // Nome da finalidade escolhida.
     val opcaoUsoId: String?,
     val opcaoUsoNome: String?,
     val status: String,

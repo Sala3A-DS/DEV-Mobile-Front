@@ -12,7 +12,8 @@ import com.google.android.material.card.MaterialCardView
 
 class HorarioReservaAdapter(
     private val context: Context,
-    private val horarios: List<DisponibilidadeSalaResponse>
+    private val horarios: List<DisponibilidadeSalaResponse>,
+    private val onHorarioClick: ((DisponibilidadeSalaResponse) -> Unit)? = null
 ) : BaseAdapter() {
 
     override fun getCount(): Int {
@@ -42,15 +43,21 @@ class HorarioReservaAdapter(
         textoHora.text = "${horario.horarioInicio} às ${horario.horarioFim}"
 
         if (horario.disponivel) {
-            textoStatus.text = "Disponível para reserva"
+            textoStatus.text = "Toque para reservar"
             textoStatus.setTextColor(context.getColor(R.color.yarooms_gold))
             cardHorario.alpha = 1.0f
             cardHorario.strokeColor = context.getColor(R.color.yarooms_gold)
+            cardHorario.isEnabled = true
+            cardHorario.isClickable = true
+            cardHorario.setOnClickListener { onHorarioClick?.invoke(horario) }
         } else {
             textoStatus.text = "Ocupado por ${horario.professorNome ?: "outro professor"}"
             textoStatus.setTextColor(context.getColor(android.R.color.holo_red_light))
             cardHorario.alpha = 0.65f
             cardHorario.strokeColor = context.getColor(android.R.color.darker_gray)
+            cardHorario.isEnabled = false
+            cardHorario.isClickable = false
+            cardHorario.setOnClickListener(null)
         }
 
         return view

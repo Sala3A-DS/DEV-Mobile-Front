@@ -4,5 +4,9 @@
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <!-- Cor padrão de erro usada pelos TextInputLayout -->
         <item name="colorError">@color/yarooms_error</item>
+        <item name="android:statusBarColor">@color/yarooms_blue_dark</item>
+        <item name="android:navigationBarColor">@color/yarooms_blue_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 </resources>

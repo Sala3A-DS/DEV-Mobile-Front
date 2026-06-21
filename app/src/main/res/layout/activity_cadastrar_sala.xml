@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cadastre os espaços disponíveis da escola"
-            android:textColor="#E5C78B"
+            android:textColor="@color/yarooms_gold_light"
             android:textSize="14sp"
             android:gravity="center"
             android:layout_marginBottom="32dp" />
@@ -40,15 +40,16 @@
             android:layout_height="wrap_content"
             android:hint="Nome do espaço"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="#C5A059"
-            app:hintTextColor="#E5C78B">
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
+            app:hintTextColor="@color/yarooms_gold_light">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editNomeSala"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#E5C78B" />
+                android:textColorHint="@color/yarooms_gold_light" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -58,15 +59,16 @@
             android:hint="Localização"
             android:layout_marginTop="16dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="#C5A059"
-            app:hintTextColor="#E5C78B">
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
+            app:hintTextColor="@color/yarooms_gold_light">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBlocoSala"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#E5C78B" />
+                android:textColorHint="@color/yarooms_gold_light" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -76,8 +78,9 @@
             android:hint="Número da sala"
             android:layout_marginTop="16dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="#C5A059"
-            app:hintTextColor="#E5C78B">
+            app:boxBackgroundColor="@color/yarooms_input"
+            app:boxStrokeColor="@color/yarooms_input_stroke"
+            app:hintTextColor="@color/yarooms_gold_light">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editCapacidadeSala"
@@ -85,14 +88,14 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#E5C78B" />
+                android:textColorHint="@color/yarooms_gold_light" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/textoErroSala"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FF8080"
+            android:textColor="@color/yarooms_error"
             android:textSize="14sp"
             android:visibility="gone"
             android:layout_marginTop="16dp" />
@@ -103,10 +106,10 @@
             android:layout_height="54dp"
             android:text="Salvar espaço"
             android:textAllCaps="false"
-            android:textColor="#0D2244"
+            android:textColor="@color/yarooms_blue_dark"
             android:textStyle="bold"
             android:layout_marginTop="24dp"
-            android:backgroundTint="#C5A059" />
+            android:backgroundTint="@color/yarooms_gold" />
 
     </LinearLayout>
 
