@@ -10,31 +10,30 @@ object RetrofitClient {
 
     private const val BASE_URL = "https://dev-mobile-back.onrender.com/"
 
-    // Guarda o token JWT quando o usuário faz login.
+    // Armazena o token JWT da sessão atual.
     var token: String? = null
 
     private val httpClient = OkHttpClient.Builder()
 
-        // Aumenta o tempo para conectar no servidor.
-        // Ajuda quando o Render demora para acordar.
+        // Define o tempo máximo para estabelecer conexão com o servidor.
         .connectTimeout(5, TimeUnit.SECONDS)
 
-        // Aumenta o tempo para esperar resposta do servidor.
-        // Ajuda no forgot-password, porque ele ainda envia e-mail.
+        // Define o tempo máximo para receber a resposta do servidor.
         .readTimeout(5, TimeUnit.SECONDS)
 
-        // Aumenta o tempo para enviar dados ao servidor.
+        // Define o tempo máximo para enviar dados ao servidor.
         .writeTimeout(5, TimeUnit.SECONDS)
 
+        // Intercepta as requisições antes do envio.
         .addInterceptor { chain ->
 
-            // Pega a requisição original.
+            // Recupera a requisição original.
             val originalRequest = chain.request()
 
-            // Pega o caminho da URL.
+            // Obtém o caminho da URL para identificar a rota.
             val path = originalRequest.url().encodedPath()
 
-            // Rotas públicas que não precisam de token.
+            // Define as rotas de autenticação que não exigem token.
             val isPublicAuthRoute =
                 path.contains("/api/auth/login") ||
                         path.contains("/api/auth/register") ||
@@ -44,7 +43,7 @@ object RetrofitClient {
 
             val requestBuilder = originalRequest.newBuilder()
 
-            // Só adiciona token em rotas protegidas.
+            // Adiciona o token somente nas rotas protegidas.
             if (!isPublicAuthRoute) {
                 token?.let {
                     requestBuilder.addHeader("Authorization", "Bearer $it")
@@ -55,6 +54,7 @@ object RetrofitClient {
         }
         .build()
 
+    // Configura o Retrofit e os conversores utilizados pela API.
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .client(httpClient)
@@ -62,5 +62,6 @@ object RetrofitClient {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
+    // Disponibiliza a interface da API para as Activities e demais componentes.
     val api: AuthApi = retrofit.create(AuthApi::class.java)
 }

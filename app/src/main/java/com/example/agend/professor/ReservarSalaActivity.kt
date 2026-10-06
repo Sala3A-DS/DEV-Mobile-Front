@@ -60,12 +60,11 @@ class ReservarSalaActivity : AppCompatActivity() {
     private var turnoSelecionado: String = "MANHA"
     private var dataSelecionada: String = ""
 
-    //Sair da funcao do teclado
+    // Remove o foco e oculta o teclado ao tocar fora de um campo de texto.
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
             val viewAtual = currentFocus
 
-            // Se o foco atual estiver em um campo de texto, verifica se o toque foi fora dele.
             if (viewAtual is EditText) {
                 val areaDoCampo = android.graphics.Rect()
                 viewAtual.getGlobalVisibleRect(areaDoCampo)
@@ -76,11 +75,11 @@ class ReservarSalaActivity : AppCompatActivity() {
                 )
 
                 if (tocouForaDoCampo) {
-                    // Remove o foco do campo.
                     viewAtual.clearFocus()
 
-                    // Esconde o teclado.
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val imm =
+                        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
                     imm.hideSoftInputFromWindow(viewAtual.windowToken, 0)
                 }
             }
@@ -94,13 +93,14 @@ class ReservarSalaActivity : AppCompatActivity() {
         layout: TextInputLayout
     ) {
         editText.addTextChangedListener(object : TextWatcher {
+
             override fun beforeTextChanged(
                 s: CharSequence?,
                 start: Int,
                 count: Int,
                 after: Int
             ) {
-                // Não é necessário tratar antes da mudança.
+                // Nenhuma ação necessária antes da alteração.
             }
 
             override fun onTextChanged(
@@ -109,14 +109,13 @@ class ReservarSalaActivity : AppCompatActivity() {
                 before: Int,
                 count: Int
             ) {
-                // Remove o erro visual quando o usuário começa a corrigir o campo.
-                // Isso faz o label voltar para a cor normal.
+                // Remove os erros enquanto o usuário corrige o campo.
                 layout.error = null
                 mostrarErro(null)
             }
 
             override fun afterTextChanged(s: Editable?) {
-                // Não é necessário tratar depois da mudança.
+                // Nenhuma ação necessária após a alteração.
             }
         })
     }
@@ -124,12 +123,12 @@ class ReservarSalaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //Carrega pagina
+        // Inicializa a tela de reserva de sala.
         setContentView(R.layout.activity_reservar_sala)
 
-        //Botao voltar
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
+        // Configura o retorno para a tela anterior.
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
@@ -146,15 +145,13 @@ class ReservarSalaActivity : AppCompatActivity() {
         textoTituloHorarios = findViewById(R.id.textoTituloHorarios)
         listaHorarios = findViewById(R.id.listaHorariosDisponiveis)
 
-        // Permite rolar a lista de horários sem rolar a tela inteira.
-        // Isso evita que o ScrollView "roube" o toque da ListView.
+        // Permite rolar a lista de horários sem interferência do ScrollView pai.
         listaHorarios.setOnTouchListener { view, _ ->
             view.parent.requestDisallowInterceptTouchEvent(true)
             false
         }
 
-        // Limpa automaticamente os erros dos campos quando o usuário altera o conteúdo.
-        // Isso evita que o label continue vermelho depois que o campo foi corrigido.
+        // Remove automaticamente os erros quando os campos são corrigidos.
         configurarLimpezaErro(editDataReserva, layoutDataReserva)
         configurarLimpezaErro(editTurmaReserva, layoutTurmaReserva)
 
@@ -165,7 +162,7 @@ class ReservarSalaActivity : AppCompatActivity() {
     }
 
     private fun configurarAdapters() {
-        // Adapter das salas disponíveis.
+        // Configura o adapter das salas disponíveis.
         salasAdapter = ArrayAdapter(
             this,
             R.layout.item_spinner_sala,
@@ -175,7 +172,7 @@ class ReservarSalaActivity : AppCompatActivity() {
         salasAdapter.setDropDownViewResource(R.layout.item_spinner_sala_dropdown)
         spinnerSalas.adapter = salasAdapter
 
-        // Adapter dos turnos disponíveis para reserva.
+        // Configura o adapter dos turnos disponíveis.
         turnoAdapter = ArrayAdapter(
             this,
             R.layout.item_spinner_sala,
@@ -185,7 +182,7 @@ class ReservarSalaActivity : AppCompatActivity() {
         turnoAdapter.setDropDownViewResource(R.layout.item_spinner_sala_dropdown)
         spinnerTurnoReserva.adapter = turnoAdapter
 
-        // Adapter das finalidades de uso cadastradas pelo admin.
+        // Configura o adapter das finalidades de uso cadastradas.
         opcoesUsoAdapter = ArrayAdapter(
             this,
             R.layout.item_spinner_sala,
@@ -199,6 +196,7 @@ class ReservarSalaActivity : AppCompatActivity() {
     private fun carregarOpcoesUso() {
         mostrarErro(null)
 
+        // Busca no backend as finalidades de uso ativas.
         RetrofitClient.api.listarOpcoesUsoAtivas()
             .enqueue(object : Callback<List<OpcaoUsoResponse>> {
 
@@ -237,7 +235,10 @@ class ReservarSalaActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<List<OpcaoUsoResponse>>, t: Throwable) {
+                override fun onFailure(
+                    call: Call<List<OpcaoUsoResponse>>,
+                    t: Throwable
+                ) {
                     mostrarErro("Falha na conexão ao carregar opções de uso.")
                 }
             })
@@ -245,6 +246,7 @@ class ReservarSalaActivity : AppCompatActivity() {
 
     private fun configurarEventos() {
         spinnerSalas.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
@@ -253,11 +255,10 @@ class ReservarSalaActivity : AppCompatActivity() {
             ) {
                 salaSelecionada = salas.getOrNull(position)
 
-                // Quando muda a sala, limpamos os horários antigos.
+                // Limpa os horários da sala anteriormente selecionada.
                 limparHorarios()
 
-                // Se já tiver uma data selecionada, consulta automaticamente
-                // a disponibilidade da nova sala para essa mesma data.
+                // Atualiza automaticamente a disponibilidade para a nova sala.
                 if (dataSelecionada.isNotBlank()) {
                     consultarDisponibilidade()
                 }
@@ -268,49 +269,53 @@ class ReservarSalaActivity : AppCompatActivity() {
             }
         }
 
-        spinnerTurnoReserva.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                turnoSelecionado = when (position) {
-                    0 -> "MANHA"
-                    1 -> "TARDE"
-                    2 -> "NOITE"
-                    else -> "MANHA"
+        spinnerTurnoReserva.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    turnoSelecionado = when (position) {
+                        0 -> "MANHA"
+                        1 -> "TARDE"
+                        2 -> "NOITE"
+                        else -> "MANHA"
+                    }
+
+                    // Limpa os horários do turno anterior.
+                    limparHorarios()
+
+                    // Atualiza automaticamente a disponibilidade para o novo turno.
+                    if (dataSelecionada.isNotBlank()) {
+                        consultarDisponibilidade()
+                    }
                 }
 
-                // Ao trocar o turno, limpa os horários antigos.
-                limparHorarios()
-
-                // Se já existe data e sala selecionadas, consulta automaticamente o novo turno.
-                if (dataSelecionada.isNotBlank()) {
-                    consultarDisponibilidade()
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    turnoSelecionado = "MANHA"
                 }
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                turnoSelecionado = "MANHA"
-            }
-        }
+        spinnerOpcoesUso.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
 
-        spinnerOpcoesUso.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                // Guarda a finalidade selecionada pelo professor.
-                opcaoUsoSelecionada = opcoesUso.getOrNull(position)
-            }
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    // Armazena a finalidade selecionada pelo usuário.
+                    opcaoUsoSelecionada = opcoesUso.getOrNull(position)
+                }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                opcaoUsoSelecionada = null
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    opcaoUsoSelecionada = null
+                }
             }
-        }
 
         editDataReserva.setOnClickListener {
             abrirDatePicker()
@@ -321,7 +326,9 @@ class ReservarSalaActivity : AppCompatActivity() {
         }
 
         listaHorarios.setOnItemClickListener { _, _, position, _ ->
-            val disponibilidade = disponibilidades.getOrNull(position) ?: return@setOnItemClickListener
+            val disponibilidade =
+                disponibilidades.getOrNull(position)
+                    ?: return@setOnItemClickListener
 
             if (!disponibilidade.disponivel) {
                 Toast.makeText(
@@ -329,6 +336,7 @@ class ReservarSalaActivity : AppCompatActivity() {
                     "Este horário já está ocupado.",
                     Toast.LENGTH_SHORT
                 ).show()
+
                 return@setOnItemClickListener
             }
 
@@ -346,24 +354,33 @@ class ReservarSalaActivity : AppCompatActivity() {
         val dialog = DatePickerDialog(
             this,
             { _, anoSelecionado, mesSelecionado, diaSelecionado ->
-                val mesFormatado = (mesSelecionado + 1).toString().padStart(2, '0')
-                val diaFormatado = diaSelecionado.toString().padStart(2, '0')
+                val mesFormatado =
+                    (mesSelecionado + 1).toString().padStart(2, '0')
 
-                dataSelecionada = "$anoSelecionado-$mesFormatado-$diaFormatado"
+                val diaFormatado =
+                    diaSelecionado.toString().padStart(2, '0')
+
+                dataSelecionada =
+                    "$anoSelecionado-$mesFormatado-$diaFormatado"
+
                 editDataReserva.setText(dataSelecionada)
 
-                // Remove erro visual da data depois que o usuário escolhe uma data válida.
+                // Remove o erro após a seleção de uma data válida.
                 layoutDataReserva.error = null
                 mostrarErro(null)
 
-                // Verifica se a data escolhida é sábado ou domingo antes de consultar.
                 val calendarioSelecionado = Calendar.getInstance()
-                calendarioSelecionado.set(anoSelecionado, mesSelecionado, diaSelecionado)
+                calendarioSelecionado.set(
+                    anoSelecionado,
+                    mesSelecionado,
+                    diaSelecionado
+                )
 
-                val diaSemana = calendarioSelecionado.get(Calendar.DAY_OF_WEEK)
+                val diaSemana =
+                    calendarioSelecionado.get(Calendar.DAY_OF_WEEK)
 
-                // Domingo continua bloqueado direto no app.
-                // Sábado será validado pelo back-end, porque pode ser letivo se o admin ativar.
+                // Domingo não permite reservas.
+                // Sábados são validados pelo backend conforme o calendário letivo.
                 if (diaSemana == Calendar.SUNDAY) {
                     limparHorarios()
                     mostrarErro("Não é permitido reservar salas aos domingos.")
@@ -383,7 +400,7 @@ class ReservarSalaActivity : AppCompatActivity() {
             dia
         )
 
-        // Impede selecionar datas passadas.
+        // Impede a seleção de datas anteriores à atual.
         dialog.datePicker.minDate = System.currentTimeMillis() - 1000
 
         dialog.show()
@@ -392,44 +409,53 @@ class ReservarSalaActivity : AppCompatActivity() {
     private fun carregarSalas() {
         mostrarErro(null)
 
-        RetrofitClient.api.listarSalas().enqueue(object : Callback<List<SalaResponse>> {
-            override fun onResponse(
-                call: Call<List<SalaResponse>>,
-                response: Response<List<SalaResponse>>
-            ) {
-                if (response.isSuccessful) {
-                    val resposta = response.body() ?: emptyList()
+        // Busca no backend as salas disponíveis para reserva.
+        RetrofitClient.api.listarSalas()
+            .enqueue(object : Callback<List<SalaResponse>> {
 
-                    salas.clear()
-                    nomesSalas.clear()
+                override fun onResponse(
+                    call: Call<List<SalaResponse>>,
+                    response: Response<List<SalaResponse>>
+                ) {
+                    if (response.isSuccessful) {
+                        val resposta = response.body() ?: emptyList()
 
-                    salas.addAll(resposta)
+                        salas.clear()
+                        nomesSalas.clear()
 
-                    if (salas.isEmpty()) {
-                        nomesSalas.add("Nenhuma sala cadastrada")
-                        spinnerSalas.isEnabled = false
-                        botaoConsultar.isEnabled = false
+                        salas.addAll(resposta)
+
+                        if (salas.isEmpty()) {
+                            nomesSalas.add("Nenhuma sala cadastrada")
+                            spinnerSalas.isEnabled = false
+                            botaoConsultar.isEnabled = false
+                        } else {
+                            nomesSalas.addAll(
+                                salas.map {
+                                    "${it.nomeEspaco} - ${it.localizacao} (Sala ${it.numeroSala})"
+                                }
+                            )
+
+                            spinnerSalas.isEnabled = true
+                            botaoConsultar.isEnabled = true
+                        }
+
+                        salasAdapter.notifyDataSetChanged()
                     } else {
-                        nomesSalas.addAll(
-                            salas.map {
-                                "${it.nomeEspaco} - ${it.localizacao} (Sala ${it.numeroSala})"
-                            }
+                        tratarErroSessaoOuServidor(
+                            response.code(),
+                            response.errorBody()?.string()
                         )
-
-                        spinnerSalas.isEnabled = true
-                        botaoConsultar.isEnabled = true
                     }
-
-                    salasAdapter.notifyDataSetChanged()
-                } else {
-                    tratarErroSessaoOuServidor(response.code(), response.errorBody()?.string())
                 }
-            }
 
-            override fun onFailure(call: Call<List<SalaResponse>>, t: Throwable) {
-                mostrarErro("Falha na conexão ao carregar salas.")
-            }
-        })
+                override fun onFailure(
+                    call: Call<List<SalaResponse>>,
+                    t: Throwable
+                ) {
+                    mostrarErro("Falha na conexão ao carregar salas.")
+                }
+            })
     }
 
     private fun consultarDisponibilidade() {
@@ -452,11 +478,13 @@ class ReservarSalaActivity : AppCompatActivity() {
         botaoConsultar.isEnabled = false
         botaoConsultar.text = "Consultando..."
 
+        // Consulta ao backend os horários disponíveis para a sala, data e turno.
         RetrofitClient.api.consultarDisponibilidade(
             salaId = sala.id,
             data = dataSelecionada,
             turno = turnoSelecionado
         ).enqueue(object : Callback<List<DisponibilidadeSalaResponse>> {
+
             override fun onResponse(
                 call: Call<List<DisponibilidadeSalaResponse>>,
                 response: Response<List<DisponibilidadeSalaResponse>>
@@ -470,7 +498,7 @@ class ReservarSalaActivity : AppCompatActivity() {
                     disponibilidades.clear()
                     disponibilidades.addAll(resposta)
 
-                    // Usa adapter customizado para mostrar os horários em cards.
+                    // Exibe os horários no adapter personalizado.
                     listaHorarios.adapter = HorarioReservaAdapter(
                         this@ReservarSalaActivity,
                         disponibilidades
@@ -479,13 +507,20 @@ class ReservarSalaActivity : AppCompatActivity() {
                     textoTituloHorarios.visibility = View.VISIBLE
                     listaHorarios.visibility = View.VISIBLE
                 } else {
-                    tratarErroSessaoOuServidor(response.code(), response.errorBody()?.string())
+                    tratarErroSessaoOuServidor(
+                        response.code(),
+                        response.errorBody()?.string()
+                    )
                 }
             }
 
-            override fun onFailure(call: Call<List<DisponibilidadeSalaResponse>>, t: Throwable) {
+            override fun onFailure(
+                call: Call<List<DisponibilidadeSalaResponse>>,
+                t: Throwable
+            ) {
                 botaoConsultar.isEnabled = true
                 botaoConsultar.text = "Atualizar disponibilidade"
+
                 mostrarErro("Falha na conexão ao consultar disponibilidade.")
             }
         })
@@ -506,14 +541,13 @@ class ReservarSalaActivity : AppCompatActivity() {
             return
         }
 
-        // Lê a turma informada pelo professor.
-        // Exemplo: 3A - DS.
+        // Obtém a turma informada pelo professor.
         val turma = editTurmaReserva.text.toString().trim()
 
-        // Limpa erro antigo do campo turma.
+        // Remove o erro anterior antes de validar novamente.
         layoutTurmaReserva.error = null
 
-        // A turma é obrigatória para identificar qual classe usará o espaço.
+        // A turma identifica a classe que utilizará o espaço.
         if (turma.isBlank()) {
             layoutTurmaReserva.error = "Informe a turma que usará o espaço"
             mostrarErro("Informe a turma antes de reservar.")
@@ -528,58 +562,65 @@ class ReservarSalaActivity : AppCompatActivity() {
             opcaoUsoId = opcaoUso.id
         )
 
-        RetrofitClient.api.criarReserva(request).enqueue(object : Callback<ReservaResponse> {
-            override fun onResponse(
-                call: Call<ReservaResponse>,
-                response: Response<ReservaResponse>
-            ) {
-                if (response.isSuccessful) {
-                    Toast.makeText(
-                        this@ReservarSalaActivity,
-                        "Reserva criada com sucesso!",
-                        Toast.LENGTH_LONG
-                    ).show()
+        // Envia a solicitação de reserva ao backend.
+        RetrofitClient.api.criarReserva(request)
+            .enqueue(object : Callback<ReservaResponse> {
 
-                    // Atualiza a lista para mostrar o horário como ocupado.
-                    consultarDisponibilidade()
-                } else {
-                    val erroServidor = response.errorBody()?.string()
-
-                    // Caso específico: outra pessoa já reservou essa sala nesse horário.
-                    // O back-end deve retornar 409 Conflict nesse cenário.
-                    if (response.code() == 409) {
-                        val mensagem = erroServidor
-                            ?: "ERRO: Esta sala já está reservada neste dia e horário."
-
-                        mostrarErro(mensagem)
-
+                override fun onResponse(
+                    call: Call<ReservaResponse>,
+                    response: Response<ReservaResponse>
+                ) {
+                    if (response.isSuccessful) {
                         Toast.makeText(
                             this@ReservarSalaActivity,
-                            "Esta sala já está reservada neste horário.",
+                            "Reserva criada com sucesso!",
                             Toast.LENGTH_LONG
                         ).show()
 
-                        // Atualiza a disponibilidade para mostrar o horário como ocupado.
+                        // Atualiza a disponibilidade após a reserva.
                         consultarDisponibilidade()
-                        return
+                    } else {
+                        val erroServidor = response.errorBody()?.string()
+
+                        // Trata especificamente o conflito de horário.
+                        if (response.code() == 409) {
+                            val mensagem = erroServidor
+                                ?: "ERRO: Esta sala já está reservada neste dia e horário."
+
+                            mostrarErro(mensagem)
+
+                            Toast.makeText(
+                                this@ReservarSalaActivity,
+                                "Esta sala já está reservada neste horário.",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            // Atualiza a disponibilidade para refletir o conflito.
+                            consultarDisponibilidade()
+                            return
+                        }
+
+                        tratarErroSessaoOuServidor(
+                            response.code(),
+                            erroServidor
+                        )
                     }
-
-                    // Outros erros continuam sendo tratados pelo método geral.
-                    tratarErroSessaoOuServidor(response.code(), erroServidor)
                 }
-            }
 
-            override fun onFailure(call: Call<ReservaResponse>, t: Throwable) {
-                // onFailure só deve acontecer quando não houve resposta do servidor:
-                // sem internet, timeout, servidor fora, etc.
-                mostrarErro("Falha na conexão ao criar reserva.")
-            }
-        })
+                override fun onFailure(
+                    call: Call<ReservaResponse>,
+                    t: Throwable
+                ) {
+                    // Trata falhas sem resposta do servidor, como timeout ou falta de conexão.
+                    mostrarErro("Falha na conexão ao criar reserva.")
+                }
+            })
     }
+
     private fun limparHorarios() {
         disponibilidades.clear()
 
-        // Remove os cards antigos da lista.
+        // Remove os horários atualmente exibidos.
         listaHorarios.adapter = null
 
         textoTituloHorarios.visibility = View.GONE
@@ -596,7 +637,10 @@ class ReservarSalaActivity : AppCompatActivity() {
         }
     }
 
-    private fun tratarErroSessaoOuServidor(codigo: Int, erro: String?) {
+    private fun tratarErroSessaoOuServidor(
+        codigo: Int,
+        erro: String?
+    ) {
         if (codigo == 401 || codigo == 403) {
             Toast.makeText(
                 this,
@@ -604,18 +648,19 @@ class ReservarSalaActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
 
-            // Limpa o token em memória.
+            // Remove o token da sessão em memória.
             RetrofitClient.token = null
 
-            // Limpa a sessão salva no celular.
+            // Remove os dados da sessão persistida.
             SessionManager(this).limparSessao()
 
-            // Volta para a tela de login e impede o usuário de voltar para telas protegidas.
+            // Retorna ao login e remove as telas protegidas da pilha.
             val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
             startActivity(intent)
             finish()
-
         } else {
             mostrarErro(erro ?: "Erro no servidor: $codigo")
         }

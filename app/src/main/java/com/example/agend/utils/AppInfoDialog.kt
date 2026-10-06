@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog
 
 object AppInfoDialog {
 
+    // Exibe as informações e os recursos disponíveis no aplicativo.
     fun mostrar(context: Context) {
         AlertDialog.Builder(context)
             .setTitle("Sobre o YaRooms")
@@ -30,6 +31,7 @@ object AppInfoDialog {
                 O APK está disponível apenas para dispositivos Android.
                 """.trimIndent()
             )
+            // Fecha o diálogo ao confirmar a leitura.
             .setPositiveButton("OK", null)
             .show()
     }

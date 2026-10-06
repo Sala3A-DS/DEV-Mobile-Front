@@ -4,8 +4,7 @@ import android.content.Context
 
 class SessionManager(context: Context) {
 
-    // SharedPreferences é usado para salvar dados simples no celular.
-    // Aqui vamos guardar token, nome, e-mail e cargo do usuário logado.
+    // Armazena os dados da sessão localmente usando SharedPreferences.
     private val prefs = context.getSharedPreferences("yarooms_session", Context.MODE_PRIVATE)
 
     companion object {
@@ -15,7 +14,7 @@ class SessionManager(context: Context) {
         private const val KEY_CARGO = "cargo"
     }
 
-    // Salva os dados da sessão após o login ser feito com sucesso.
+    // Persiste os dados do usuário após um login bem-sucedido.
     fun salvarSessao(
         token: String,
         email: String,
@@ -30,33 +29,32 @@ class SessionManager(context: Context) {
             .apply()
     }
 
-    // Recupera o token salvo.
+    // Recupera o token armazenado.
     fun getToken(): String? {
         return prefs.getString(KEY_TOKEN, null)
     }
 
-    // Recupera o e-mail salvo.
+    // Recupera o e-mail armazenado.
     fun getEmail(): String {
         return prefs.getString(KEY_EMAIL, "") ?: ""
     }
 
-    // Recupera o nome salvo.
+    // Recupera o nome armazenado.
     fun getNome(): String {
         return prefs.getString(KEY_NOME, "Usuário") ?: "Usuário"
     }
 
-    // Recupera o cargo salvo.
+    // Recupera o cargo armazenado.
     fun getCargo(): String {
         return prefs.getString(KEY_CARGO, "") ?: ""
     }
 
-    // Verifica se existe um token salvo.
-    // Se existir, o usuário pode ser redirecionado automaticamente.
+    // Verifica se existe um token válido armazenado.
     fun estaLogado(): Boolean {
         return !getToken().isNullOrBlank()
     }
 
-    // Limpa a sessão no logout ou quando o token expirar.
+    // Remove todos os dados da sessão armazenada.
     fun limparSessao() {
         prefs.edit().clear().apply()
     }

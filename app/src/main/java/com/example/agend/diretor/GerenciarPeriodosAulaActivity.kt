@@ -60,10 +60,10 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Carrega a tela onde o admin cadastra e gerencia os períodos de aula.
+        // Inicializa a tela de gerenciamento dos períodos de aula.
         setContentView(R.layout.activity_gerenciar_periodos_aula)
 
-        //Botao voltar
+        // Configura o botão de retorno para fechar a tela atual.
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
@@ -73,7 +73,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
         listaPeriodos = findViewById(R.id.listaPeriodosAula)
         textoErro = findViewById(R.id.textoErroPeriodosAula)
 
-        // Permite rolar a lista de períodos sem rolar a tela inteira.
+        // Permite rolar a lista sem que o ScrollView externo intercepte o toque.
         listaPeriodos.setOnTouchListener { view, _ ->
             view.parent.requestDisallowInterceptTouchEvent(true)
             false
@@ -91,7 +91,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
         editIntervaloAposAula = findViewById(R.id.editIntervaloAposAula)
         editDuracaoIntervalo = findViewById(R.id.editDuracaoIntervalo)
 
-        // Limpa automaticamente os erros dos campos de geração automática.
+        // Remove automaticamente os erros durante a edição dos campos.
         configurarLimpezaErro(editQuantidade, layoutQuantidade)
         configurarLimpezaErro(editHorarioInicialGeracao, layoutHorarioInicialGeracao)
         configurarLimpezaErro(editDuracaoAula, layoutDuracaoAula)
@@ -104,7 +104,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
         botaoFiltroTarde = findViewById(R.id.botaoFiltroTarde)
         botaoFiltroNoite = findViewById(R.id.botaoFiltroNoite)
 
-        //Opcao de turnos na lista de periodos gerados
+        // Filtra os períodos pelo turno selecionado.
         botaoFiltroManha.setOnClickListener {
             turnoFiltroSelecionado = "MANHA"
             atualizarBotoesFiltro()
@@ -139,6 +139,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
 
         turnoSelecionado = valoresTurnos.first()
 
+        // Atualiza o turno utilizado na geração automática.
         spinnerTurnoGeracao.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -154,6 +155,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
             }
         }
 
+        // Inicia a geração automática dos períodos.
         botaoGerarPeriodos.setOnClickListener {
             gerarPeriodosAutomaticamente()
         }
@@ -173,7 +175,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
                 count: Int,
                 after: Int
             ) {
-                // Não é necessário tratar antes da mudança.
+                // Nenhuma ação necessária antes da alteração.
             }
 
             override fun onTextChanged(
@@ -182,14 +184,13 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
                 before: Int,
                 count: Int
             ) {
-                // Remove o erro visual quando o usuário começa a corrigir o campo.
-                // Isso faz o label voltar para a cor normal.
+                // Remove o erro enquanto o usuário corrige o campo.
                 layout.error = null
                 mostrarErro(null)
             }
 
             override fun afterTextChanged(s: Editable?) {
-                // Não é necessário tratar depois da mudança.
+                // Nenhuma ação necessária após a alteração.
             }
         })
     }
@@ -226,6 +227,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
     private fun carregarPeriodos() {
         mostrarErro(null)
 
+        // Consulta ao backend os períodos disponíveis para o administrador.
         RetrofitClient.api.listarPeriodosAulaAdmin()
             .enqueue(object : Callback<List<PeriodoAulaResponse>> {
 
@@ -255,6 +257,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
     }
 
     private fun atualizarLista() {
+        // Exibe somente os períodos correspondentes ao turno selecionado.
         val periodosFiltrados = periodos.filter {
             it.turno.equals(turnoFiltroSelecionado, ignoreCase = true)
         }
@@ -275,6 +278,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
             return
         }
 
+        // Exibe os períodos utilizando o adapter personalizado.
         listaPeriodos.adapter = PeriodoAulaAdapter(
             context = this,
             periodos = periodosFiltrados
@@ -296,16 +300,19 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
         val quantidade = quantidadeTexto.toIntOrNull()
         val duracaoAula = duracaoTexto.toIntOrNull()
 
+        // Valida a quantidade de aulas informada.
         if (quantidade == null || quantidade <= 0) {
             layoutQuantidade.error = "Informe uma quantidade válida"
             return
         }
 
+        // Valida o horário inicial no formato esperado pelo backend.
         if (!horarioInicial.matches(Regex("^\\d{2}:\\d{2}$"))) {
             layoutHorarioInicialGeracao.error = "Use o formato HH:mm"
             return
         }
 
+        // Valida a duração de cada aula.
         if (duracaoAula == null || duracaoAula <= 0) {
             layoutDuracaoAula.error = "Informe uma duração válida"
             return
@@ -323,9 +330,11 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
             duracaoIntervaloMinutos = duracaoIntervalo
         )
 
+        // Evita múltiplas solicitações durante a geração.
         botaoGerarPeriodos.isEnabled = false
         botaoGerarPeriodos.text = "Gerando..."
 
+        // Envia os parâmetros de geração automática para o backend.
         RetrofitClient.api.gerarPeriodosAula(request)
             .enqueue(object : Callback<List<PeriodoAulaResponse>> {
 
@@ -343,6 +352,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
 
+                        // Atualiza a lista após a geração.
                         carregarPeriodos()
                     } else {
                         tratarErroSessaoOuServidor(
@@ -364,6 +374,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
     private fun alterarStatus(periodo: PeriodoAulaResponse) {
         val id = periodo.id
 
+        // Impede a alteração quando o período não possui identificador válido.
         if (id.isNullOrBlank()) {
             mostrarErro("Período inválido.")
             return
@@ -373,6 +384,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
             ativo = !periodo.ativo
         )
 
+        // Atualiza o status do período no backend.
         RetrofitClient.api.alterarStatusPeriodoAula(id, request)
             .enqueue(object : Callback<PeriodoAulaResponse> {
 
@@ -381,6 +393,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
                     response: Response<PeriodoAulaResponse>
                 ) {
                     if (response.isSuccessful) {
+                        // Recarrega a lista para refletir o novo status.
                         carregarPeriodos()
                     } else {
                         tratarErroSessaoOuServidor(
@@ -404,7 +417,6 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
         layoutDuracaoIntervalo.error = null
     }
 
-
     private fun mostrarErro(mensagem: String?) {
         if (mensagem.isNullOrBlank()) {
             textoErro.text = ""
@@ -423,18 +435,19 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
 
-            // Limpa o token em memória.
+            // Remove o token da sessão em memória.
             RetrofitClient.token = null
 
-            // Limpa a sessão salva no celular.
+            // Remove os dados da sessão persistida.
             SessionManager(this).limparSessao()
 
-            // Volta para o login limpando a pilha de telas protegidas.
+            // Retorna ao login e remove as telas protegidas da pilha.
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
         } else {
+            // Exibe a mensagem retornada pelo backend ou o código HTTP.
             mostrarErro(erro ?: "Erro no servidor: $codigo")
         }
     }

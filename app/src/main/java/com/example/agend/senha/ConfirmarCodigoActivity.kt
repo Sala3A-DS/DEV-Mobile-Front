@@ -26,7 +26,7 @@ import retrofit2.Response
 class ConfirmarCodigoActivity : AppCompatActivity() {
 
     private var countDownTimer: CountDownTimer? = null
-    private val EXPIRACAO_MS = 1 * 60 * 1000L // 1 minuto.
+    private val EXPIRACAO_MS = 1 * 60 * 1000L // Tempo de validade do código.
 
     private lateinit var camposCodigo: List<EditText>
 
@@ -47,7 +47,9 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
                 if (tocouForaDoCampo) {
                     viewAtual.clearFocus()
 
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val imm =
+                        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
                     imm.hideSoftInputFromWindow(viewAtual.windowToken, 0)
                 }
             }
@@ -59,7 +61,7 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Carrega a tela de confirmação de código.
+        // Inicializa a tela de confirmação do código.
         setContentView(R.layout.activity_confirmar_codigo)
 
         val email = intent.getStringExtra("email") ?: ""
@@ -70,7 +72,7 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
         val textoExpiracao = findViewById<TextView>(R.id.textoExpiracaoCodigo)
         val textoEmailEnv = findViewById<TextView>(R.id.textoEmailEnviado)
 
-        // Campos separados do código.
+        // Inicializa os campos individuais do código de verificação.
         camposCodigo = listOf(
             findViewById(R.id.editCodigo1),
             findViewById(R.id.editCodigo2),
@@ -89,6 +91,7 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
             val codigo = obterCodigoDigitado()
             textoErro.visibility = View.GONE
 
+            // Impede a validação enquanto o código estiver incompleto.
             if (codigo.length < 6) {
                 textoErro.text = "⚠️ Digite o código completo."
                 textoErro.visibility = View.VISIBLE
@@ -98,15 +101,21 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
             botaoConfirmar.isEnabled = false
             botaoConfirmar.text = "Verificando..."
 
+            // Envia o código informado para validação no backend.
             RetrofitClient.api.verifyCode(VerifyCodeRequest(email, codigo)).enqueue(object :
                 Callback<String> {
-                override fun onResponse(call: Call<String>, response: Response<String>) {
+
+                override fun onResponse(
+                    call: Call<String>,
+                    response: Response<String>
+                ) {
                     botaoConfirmar.isEnabled = true
                     botaoConfirmar.text = "Confirmar Código"
 
                     if (response.isSuccessful) {
                         val respostaServidor = response.body() ?: ""
 
+                        // Código válido: interrompe o timer e abre a tela de nova senha.
                         if (respostaServidor.contains("SUCESSO", ignoreCase = true)) {
                             countDownTimer?.cancel()
 
@@ -114,6 +123,7 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
                                 this@ConfirmarCodigoActivity,
                                 NovaSenhaActivity::class.java
                             )
+
                             intent.putExtra("email", email)
                             startActivity(intent)
                             finish()
@@ -124,7 +134,9 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
                     } else {
                         val erroServidor = response.errorBody()?.string()
 
-                        textoErro.text = erroServidor ?: "⚠️ Código inválido ou expirado."
+                        textoErro.text =
+                            erroServidor ?: "⚠️ Código inválido ou expirado."
+
                         textoErro.visibility = View.VISIBLE
                     }
                 }
@@ -144,13 +156,22 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
             botaoReenviar.isEnabled = false
             botaoReenviar.text = "Reenviando..."
 
+            // Solicita um novo código de recuperação para o e-mail informado.
             RetrofitClient.api.forgotPassword(ForgotPasswordRequest(email)).enqueue(object :
                 Callback<String> {
-                override fun onResponse(call: Call<String>, response: Response<String>) {
+
+                override fun onResponse(
+                    call: Call<String>,
+                    response: Response<String>
+                ) {
                     botaoReenviar.isEnabled = true
                     botaoReenviar.text = "Não recebeu? Reenviar Código"
 
-                    if (response.isSuccessful && response.body()?.contains("SUCESSO", ignoreCase = true) == true) {
+                    // Reinicia o fluxo quando o novo código é enviado com sucesso.
+                    if (
+                        response.isSuccessful &&
+                        response.body()?.contains("SUCESSO", ignoreCase = true) == true
+                    ) {
                         limparCamposCodigo()
 
                         Toast.makeText(
@@ -185,14 +206,16 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
 
     private fun configurarCamposCodigo() {
         camposCodigo.forEachIndexed { index, campo ->
+
             campo.addTextChangedListener(object : TextWatcher {
+
                 override fun beforeTextChanged(
                     s: CharSequence?,
                     start: Int,
                     count: Int,
                     after: Int
                 ) {
-                    // Não é necessário tratar antes da mudança.
+                    // Nenhuma ação necessária antes da alteração.
                 }
 
                 override fun onTextChanged(
@@ -201,11 +224,11 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
                     before: Int,
                     count: Int
                 ) {
-                    // Não é necessário tratar durante a mudança.
+                    // Nenhuma ação necessária durante a alteração.
                 }
 
                 override fun afterTextChanged(s: Editable?) {
-                    // Ao digitar um número, avança automaticamente para o próximo campo.
+                    // Avança automaticamente para o próximo campo após a digitação.
                     if (!s.isNullOrEmpty() && index < camposCodigo.lastIndex) {
                         camposCodigo[index + 1].requestFocus()
                     }
@@ -216,7 +239,7 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
                 val apagou = keyCode == KeyEvent.KEYCODE_DEL &&
                         event.action == KeyEvent.ACTION_DOWN
 
-                // Ao apagar em um campo vazio, volta para o campo anterior.
+                // Ao apagar um campo vazio, retorna o foco para o campo anterior.
                 if (apagou && campo.text.isNullOrEmpty() && index > 0) {
                     camposCodigo[index - 1].requestFocus()
                     camposCodigo[index - 1].setSelection(
@@ -229,19 +252,19 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
             }
         }
 
-        // Foca automaticamente no primeiro campo.
+        // Define o primeiro campo como foco inicial.
         camposCodigo.firstOrNull()?.requestFocus()
     }
 
     private fun obterCodigoDigitado(): String {
-        // Junta os 6 campos em uma única String.
+        // Combina os campos individuais em uma única sequência.
         return camposCodigo.joinToString(separator = "") {
             it.text.toString().trim()
         }
     }
 
     private fun limparCamposCodigo() {
-        // Limpa todos os campos e volta o foco para o primeiro.
+        // Limpa o código atual e retorna o foco para o primeiro campo.
         camposCodigo.forEach { it.setText("") }
         camposCodigo.firstOrNull()?.requestFocus()
     }
@@ -249,12 +272,15 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
     private fun iniciarContagem(textoExpiracao: TextView) {
         countDownTimer?.cancel()
 
+        // Controla o período de validade do código exibido na tela.
         countDownTimer = object : CountDownTimer(EXPIRACAO_MS, 1000) {
+
             override fun onTick(millisUntilFinished: Long) {
                 val min = (millisUntilFinished / 1000) / 60
                 val sec = (millisUntilFinished / 1000) % 60
 
-                textoExpiracao.text = "⏱ O código expira em %02d:%02d".format(min, sec)
+                textoExpiracao.text =
+                    "⏱ O código expira em %02d:%02d".format(min, sec)
 
                 textoExpiracao.setTextColor(
                     if (millisUntilFinished < 60_000) {
@@ -275,7 +301,7 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        // Cancela o timer para evitar vazamento de memória.
+        // Cancela o timer quando a Activity é destruída.
         countDownTimer?.cancel()
     }
 }

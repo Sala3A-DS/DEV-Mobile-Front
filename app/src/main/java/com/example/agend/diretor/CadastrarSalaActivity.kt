@@ -25,7 +25,7 @@ import android.widget.LinearLayout
 
 class CadastrarSalaActivity : AppCompatActivity() {
 
-    // Fecha o teclado e remove o foco do campo quando o usuário toca fora de um EditText.
+    // Remove o foco e oculta o teclado ao tocar fora de um campo de texto.
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
             val viewAtual = currentFocus
@@ -63,7 +63,7 @@ class CadastrarSalaActivity : AppCompatActivity() {
                 count: Int,
                 after: Int
             ) {
-                // Não é necessário tratar antes da mudança.
+                // Nenhuma ação necessária antes da alteração.
             }
 
             override fun onTextChanged(
@@ -72,14 +72,13 @@ class CadastrarSalaActivity : AppCompatActivity() {
                 before: Int,
                 count: Int
             ) {
-                // Remove o erro visual quando o usuário começa a corrigir o campo.
-                // Isso faz o label voltar para a cor normal.
+                // Remove o erro enquanto o usuário corrige o campo.
                 layout.error = null
                 textoErro.visibility = View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
-                // Não é necessário tratar depois da mudança.
+                // Nenhuma ação necessária após a alteração.
             }
         })
     }
@@ -87,17 +86,17 @@ class CadastrarSalaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Carrega o layout da tela de cadastro de espaços/salas.
+        // Inicializa a tela de cadastro de espaços.
         setContentView(R.layout.activity_cadastrar_sala)
 
-        //Botao voltar
+        // Configura o botão de retorno para fechar a tela atual.
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
 
-        // Campos do formulário.
+        // Inicializa os campos e componentes do formulário.
         val layoutNome = findViewById<TextInputLayout>(R.id.layoutNomeSala)
         val layoutLocalizacao = findViewById<TextInputLayout>(R.id.layoutBlocoSala)
         val layoutNumeroSala = findViewById<TextInputLayout>(R.id.layoutCapacidadeSala)
@@ -109,8 +108,7 @@ class CadastrarSalaActivity : AppCompatActivity() {
         val botaoSalvar = findViewById<Button>(R.id.botaoSalvarSala)
         val textoErro = findViewById<TextView>(R.id.textoErroSala)
 
-        // Limpa automaticamente os erros dos campos quando o usuário digita.
-        // Isso evita que o label continue vermelho depois que o texto foi corrigido.
+        // Remove automaticamente os erros durante a edição dos campos.
         configurarLimpezaErro(editNome, layoutNome, textoErro)
         configurarLimpezaErro(editLocalizacao, layoutLocalizacao, textoErro)
         configurarLimpezaErro(editNumeroSala, layoutNumeroSala, textoErro)
@@ -118,7 +116,7 @@ class CadastrarSalaActivity : AppCompatActivity() {
         botaoSalvar.setOnClickListener {
             textoErro.visibility = View.GONE
 
-            // Limpa erros anteriores.
+            // Limpa os erros antes de iniciar uma nova validação.
             layoutNome.error = null
             layoutLocalizacao.error = null
             layoutNumeroSala.error = null
@@ -127,19 +125,19 @@ class CadastrarSalaActivity : AppCompatActivity() {
             val localizacao = editLocalizacao.text.toString().trim()
             val numeroSalaTexto = editNumeroSala.text.toString().trim()
 
-            // Validação do nome do espaço.
+            // Valida o preenchimento do nome do espaço.
             if (nomeEspaco.isEmpty()) {
                 layoutNome.error = "Informe o nome do espaço"
                 return@setOnClickListener
             }
 
-            // Validação da localização.
+            // Valida o preenchimento da localização.
             if (localizacao.isEmpty()) {
                 layoutLocalizacao.error = "Informe a localização"
                 return@setOnClickListener
             }
 
-            // Validação do número da sala.
+            // Valida o preenchimento do número da sala.
             if (numeroSalaTexto.isEmpty()) {
                 layoutNumeroSala.error = "Informe o número da sala"
                 return@setOnClickListener
@@ -147,6 +145,7 @@ class CadastrarSalaActivity : AppCompatActivity() {
 
             val numeroSala = numeroSalaTexto.toIntOrNull()
 
+            // Garante que o número informado seja válido e positivo.
             if (numeroSala == null || numeroSala <= 0) {
                 layoutNumeroSala.error = "Informe um número de sala válido"
                 return@setOnClickListener
@@ -158,6 +157,7 @@ class CadastrarSalaActivity : AppCompatActivity() {
                 numeroSala = numeroSala
             )
 
+            // Evita múltiplos envios enquanto o cadastro está em andamento.
             botaoSalvar.isEnabled = false
             botaoSalvar.text = "Salvando..."
 
@@ -178,6 +178,7 @@ class CadastrarSalaActivity : AppCompatActivity() {
 
                         finish()
                     } else {
+                        // Exibe a mensagem retornada pelo backend ou o código HTTP.
                         val erro = response.errorBody()?.string()
 
                         textoErro.text = erro ?: "Erro ao cadastrar espaço: ${response.code()}"
@@ -189,6 +190,7 @@ class CadastrarSalaActivity : AppCompatActivity() {
                     botaoSalvar.isEnabled = true
                     botaoSalvar.text = "Salvar espaço"
 
+                    // Informa ao usuário quando não foi possível acessar o servidor.
                     textoErro.text = "Falha na conexão com o servidor."
                     textoErro.visibility = View.VISIBLE
                 }

@@ -27,6 +27,7 @@ class AgendamentosGeraisAdapter(
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        // Reutiliza a view existente ou infla o layout do item.
         val view = convertView ?: LayoutInflater.from(context)
             .inflate(R.layout.item_agendamento_geral, parent, false)
 
@@ -40,6 +41,7 @@ class AgendamentosGeraisAdapter(
 
         val reserva = reservas[position]
 
+        // Define valores padrão para campos opcionais da reserva.
         val turma = if (reserva.turma.isNullOrBlank()) {
             "Não informada"
         } else {
@@ -52,6 +54,7 @@ class AgendamentosGeraisAdapter(
             reserva.opcaoUsoNome
         }
 
+        // Preenche os dados da reserva no layout.
         textoSala.text = reserva.salaNome
         textoProfessor.text = "Professor: ${reserva.professorNome}"
         textoTurma.text = "Turma: $turma"

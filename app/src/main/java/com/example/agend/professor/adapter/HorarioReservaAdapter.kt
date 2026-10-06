@@ -27,7 +27,12 @@ class HorarioReservaAdapter(
         return position.toLong()
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+    override fun getView(
+        position: Int,
+        convertView: View?,
+        parent: ViewGroup?
+    ): View {
+        // Reutiliza a view existente ou cria um novo card de horário.
         val view = convertView ?: LayoutInflater.from(context)
             .inflate(R.layout.item_horario_reserva, parent, false)
 
@@ -38,19 +43,29 @@ class HorarioReservaAdapter(
 
         val horario = horarios[position]
 
+        // Preenche o período e o intervalo de horário.
         textoPeriodo.text = "${horario.periodoAula}ª aula"
         textoHora.text = "${horario.horarioInicio} às ${horario.horarioFim}"
 
         if (horario.disponivel) {
+            // Destaca o horário como disponível para reserva.
             textoStatus.text = "Disponível para reserva"
-            textoStatus.setTextColor(context.getColor(R.color.yarooms_gold))
+            textoStatus.setTextColor(
+                context.getColor(R.color.yarooms_gold)
+            )
             cardHorario.alpha = 1.0f
             cardHorario.strokeColor = context.getColor(R.color.yarooms_gold)
         } else {
-            textoStatus.text = "Ocupado por ${horario.professorNome ?: "outro professor"}"
-            textoStatus.setTextColor(context.getColor(android.R.color.holo_red_light))
+            // Indica que o horário já está ocupado.
+            textoStatus.text =
+                "Ocupado por ${horario.professorNome ?: "outro professor"}"
+
+            textoStatus.setTextColor(
+                context.getColor(android.R.color.holo_red_light)
+            )
             cardHorario.alpha = 0.65f
-            cardHorario.strokeColor = context.getColor(android.R.color.darker_gray)
+            cardHorario.strokeColor =
+                context.getColor(android.R.color.darker_gray)
         }
 
         return view

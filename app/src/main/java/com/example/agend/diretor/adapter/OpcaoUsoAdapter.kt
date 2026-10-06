@@ -29,6 +29,7 @@ class OpcaoUsoAdapter(
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        // Reutiliza a view existente ou infla o layout do item.
         val view = convertView ?: LayoutInflater.from(context)
             .inflate(R.layout.item_opcao_uso, parent, false)
 
@@ -38,8 +39,10 @@ class OpcaoUsoAdapter(
 
         val opcao = opcoes[position]
 
+        // Exibe o nome da opção de uso.
         textoNome.text = opcao.nome
 
+        // Atualiza o status e a ação disponível para a opção.
         if (opcao.ativa) {
             textoStatus.text = "Status: ativa"
             botaoAlterarStatus.text = "Desativar"
@@ -48,7 +51,7 @@ class OpcaoUsoAdapter(
             botaoAlterarStatus.text = "Ativar"
         }
 
-        // Chama a função da Activity para ativar ou desativar a opção.
+        // Encaminha a alteração de status para a Activity.
         botaoAlterarStatus.setOnClickListener {
             onAlterarStatus(opcao)
         }

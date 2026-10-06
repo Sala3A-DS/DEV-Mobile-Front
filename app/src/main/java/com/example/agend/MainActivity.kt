@@ -28,11 +28,11 @@ import android.text.TextWatcher
 
 class MainActivity : AppCompatActivity() {
 
+    // Remove o foco e oculta o teclado ao tocar fora de um campo de texto.
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
             val viewAtual = currentFocus
 
-            // Se o foco atual estiver em um campo de texto, verifica se o toque foi fora dele.
             if (viewAtual is EditText) {
                 val areaDoCampo = android.graphics.Rect()
                 viewAtual.getGlobalVisibleRect(areaDoCampo)
@@ -43,11 +43,12 @@ class MainActivity : AppCompatActivity() {
                 )
 
                 if (tocouForaDoCampo) {
-                    // Remove o foco do campo.
                     viewAtual.clearFocus()
 
-                    // Esconde o teclado.
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val imm = getSystemService(
+                        Context.INPUT_METHOD_SERVICE
+                    ) as InputMethodManager
+
                     imm.hideSoftInputFromWindow(viewAtual.windowToken, 0)
                 }
             }
@@ -61,8 +62,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Inicializa o gerenciador de sessão.
-        // Ele salva e recupera token, e-mail, nome e cargo do usuário.
+        // Inicializa o gerenciador responsável pela sessão persistida.
         sessionManager = SessionManager(this)
 
         setContentView(R.layout.activity_login)
@@ -76,12 +76,21 @@ class MainActivity : AppCompatActivity() {
         val textoErro = findViewById<TextView>(R.id.textoErroLogin)
         val textoEsqueci = findViewById<TextView>(R.id.textoEsqueciSenha)
 
-        // Remove erro visual do e-mail quando o usuário começa a digitar novamente.
-        // Isso faz o label voltar para a cor normal.
+        // Limpa o estado de erro enquanto o usuário corrige o e-mail.
         editEmail.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
                 layoutEmail.error = null
                 textoErro.visibility = View.GONE
             }
@@ -89,12 +98,21 @@ class MainActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // Remove erro visual da senha quando o usuário começa a digitar novamente.
-        // Isso evita o campo continuar vermelho depois de corrigido.
+        // Limpa o estado de erro enquanto o usuário corrige a senha.
         editSenha.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
                 layoutSenha.error = null
                 textoErro.visibility = View.GONE
             }
@@ -106,12 +124,12 @@ class MainActivity : AppCompatActivity() {
             val email = editEmail.text.toString().trim().lowercase()
             val senha = editSenha.text.toString().trim()
 
-            // Limpa erros anteriores.
+            // Reseta mensagens de validação antes de uma nova tentativa.
             textoErro.visibility = View.GONE
             layoutEmail.error = null
             layoutSenha.error = null
 
-            // Validação do e-mail.
+            // Valida o preenchimento e o formato do e-mail.
             if (email.isEmpty()) {
                 layoutEmail.error = "Informe o e-mail"
                 return@setOnClickListener
@@ -122,18 +140,19 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Validação da senha.
+            // Valida o preenchimento da senha.
             if (senha.isEmpty()) {
                 layoutSenha.error = "Informe a senha"
                 return@setOnClickListener
             }
 
-            // Trava o botão para evitar duplo clique.
+            // Evita múltiplas requisições durante o processamento do login.
             botaoEntrar.isEnabled = false
             botaoEntrar.text = "Conectando..."
 
             val pedido = LoginRequest(email, senha)
 
+            // Envia as credenciais para autenticação no backend.
             RetrofitClient.api.login(pedido).enqueue(object : Callback<LoginResponse> {
 
                 override fun onResponse(
@@ -148,17 +167,17 @@ class MainActivity : AppCompatActivity() {
                         val usuario = loginResponse?.user
                         val token = loginResponse?.token
 
-                        // Valida se a resposta veio completa.
+                        // Garante que a resposta contenha os dados necessários para criar a sessão.
                         if (token.isNullOrBlank() || usuario == null) {
                             textoErro.text = "⚠️ Resposta inválida do servidor."
                             textoErro.visibility = View.VISIBLE
                             return
                         }
 
-                        // Salva o token em memória para as próximas requisições enquanto o app está aberto.
+                        // Mantém o token disponível para as requisições da sessão atual.
                         RetrofitClient.token = token
 
-                        // Salva a sessão no celular para manter o usuário logado ao reabrir o app.
+                        // Persiste os dados necessários para restaurar a sessão posteriormente.
                         sessionManager.salvarSessao(
                             token = token,
                             email = usuario.email,
@@ -166,23 +185,27 @@ class MainActivity : AppCompatActivity() {
                             cargo = usuario.cargo
                         )
 
-                        // Redireciona conforme o cargo.
+                        // Direciona o usuário para a área correspondente ao seu cargo.
                         abrirTelaPrincipal(
                             email = usuario.email,
                             nome = usuario.nome,
                             cargo = usuario.cargo
                         )
                     } else {
+                        // Credenciais rejeitadas pelo backend.
                         textoErro.text = "⚠️ E-mail ou senha incorretos."
                         textoErro.visibility = View.VISIBLE
                     }
                 }
 
-                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-
+                override fun onFailure(
+                    call: Call<LoginResponse>,
+                    t: Throwable
+                ) {
                     botaoEntrar.isEnabled = true
                     botaoEntrar.text = "Entrar"
 
+                    // Diferencia timeout de outras falhas de comunicação.
                     textoErro.text =
                         if (t is java.net.SocketTimeoutException) {
                             "⚠️ O servidor demorou para responder. Tente novamente."
@@ -195,10 +218,12 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
+        // Abre a tela de cadastro de usuário.
         textoCadastro.setOnClickListener {
             startActivity(Intent(this, CadastroActivity::class.java))
         }
 
+        // Abre o fluxo de recuperação de senha.
         textoEsqueci.setOnClickListener {
             startActivity(Intent(this, EsqueciSenhaActivity::class.java))
         }
@@ -211,15 +236,14 @@ class MainActivity : AppCompatActivity() {
     ) {
         val cargoNormalizado = cargo.trim().uppercase()
 
-        // ADM vai para o painel do diretor.
-        // Qualquer outro cargo vai para a tela do professor/coordenador.
+        // Define a tela inicial conforme o perfil de acesso.
         val intent = if (cargoNormalizado == "ADM") {
             Intent(this, DiretorHomeActivity::class.java)
         } else {
             Intent(this, HomeActivity::class.java)
         }
 
-        // Envia os dados básicos para a próxima tela.
+        // Encaminha os dados básicos do usuário para a Activity de destino.
         intent.putExtra("email", email)
         intent.putExtra("nome", nome)
         intent.putExtra("cargo", cargo)

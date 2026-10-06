@@ -17,19 +17,20 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Primeira tela do app.
+        // Inicializa a tela de Splash.
         setContentView(R.layout.activity_splash)
 
+        // Gerencia os dados da sessão persistida do usuário.
         sessionManager = SessionManager(this)
 
-        // Aguarda 3 segundos antes de decidir para onde o usuário vai.
+        // Aguarda a exibição da Splash antes de restaurar a sessão.
         Handler(Looper.getMainLooper()).postDelayed({
             abrirProximaTela()
         }, 3000)
     }
 
     private fun abrirProximaTela() {
-        // Se não houver sessão salva, vai para o login.
+        // Sem sessão válida, direciona o usuário para o login.
         if (!sessionManager.estaLogado()) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
@@ -38,7 +39,7 @@ class SplashActivity : AppCompatActivity() {
 
         val token = sessionManager.getToken()
 
-        // Se o token salvo estiver inválido/vazio, limpa a sessão e volta ao login.
+        // Token ausente ou inválido: encerra a sessão e retorna ao login.
         if (token.isNullOrBlank()) {
             sessionManager.limparSessao()
             startActivity(Intent(this, MainActivity::class.java))
@@ -46,18 +47,19 @@ class SplashActivity : AppCompatActivity() {
             return
         }
 
-        // Restaura o token para o Retrofit enviar nas requisições protegidas.
+        // Disponibiliza o token para as requisições autenticadas do Retrofit.
         RetrofitClient.token = token
 
         val cargo = sessionManager.getCargo().trim().uppercase()
 
+        // Define a tela inicial conforme o perfil de acesso.
         val intent = if (cargo == "ADM") {
             Intent(this, DiretorHomeActivity::class.java)
         } else {
             Intent(this, HomeActivity::class.java)
         }
 
-        // Envia os dados salvos para a próxima tela.
+        // Mantém os dados da sessão disponíveis na Activity de destino.
         intent.putExtra("email", sessionManager.getEmail())
         intent.putExtra("nome", sessionManager.getNome())
         intent.putExtra("cargo", sessionManager.getCargo())

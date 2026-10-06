@@ -1,29 +1,46 @@
 package com.example.agend.auth
 
-// --- LOGIN & REGISTRO ---
-data class LoginRequest(val email: String, val senha: String)
+// Modelos utilizados na autenticação e cadastro de usuários.
+data class LoginRequest(
+    val email: String,
+    val senha: String
+)
 
-data class RegisterRequest(val nome: String, val email: String, val senha: String, val cargo: String)
+data class RegisterRequest(
+    val nome: String,
+    val email: String,
+    val senha: String,
+    val cargo: String
+)
 
-// ATUALIZADO: O back-end agora devolve um Token JWT além do usuário
 data class LoginResponse(
     val token: String,
     val user: UserResponse
 )
 
 data class UserResponse(
-    val id: String?, // ATUALIZADO: No Firebase o ID é String (ex: "yX8aB...")
+    val id: String?,
     val nome: String,
     val email: String,
     val cargo: String
 )
 
-// --- AS 3 ETAPAS DE RECUPERAÇÃO DE SENHA ---
-data class ForgotPasswordRequest(val email: String) // Passo 1: Pede o código
-data class VerifyCodeRequest(val email: String, val codigo: String) // Passo 2: Digita o código
-data class ResetPasswordRequest(val email: String, val novaSenha: String) // Passo 3: Nova senha
+// Modelos utilizados no fluxo de recuperação de senha.
+data class ForgotPasswordRequest(
+    val email: String
+)
 
-// --- AGENDAMENTOS ---
+data class VerifyCodeRequest(
+    val email: String,
+    val codigo: String
+)
+
+data class ResetPasswordRequest(
+    val email: String,
+    val novaSenha: String
+)
+
+// Modelos utilizados pelos agendamentos legados.
 data class BookingRequest(
     val nomeFuncionario: String,
     val spaceId: Int,
@@ -31,14 +48,13 @@ data class BookingRequest(
 )
 
 data class BookingResponse(
-    val id: String?, // ATUALIZADO: Ajustado para o padrão Firebase
+    val id: String?,
     val nomeFuncionario: String,
     val spaceId: Int,
     val dataHora: String
 )
 
-// --- SALAS ---
-
+// Modelos utilizados no cadastro e consulta de salas.
 data class SalaRequest(
     val nomeEspaco: String,
     val localizacao: String,
@@ -55,14 +71,12 @@ data class SalaResponse(
     val criadoEm: String
 )
 
-// --- RESERVAS ---
-
+// Modelos utilizados na criação e consulta de reservas.
 data class ReservaRequest(
     val salaId: String,
     val data: String,
     val periodoAula: String,
     val turma: String,
-    // ID da opção de uso escolhida pelo professor.
     val opcaoUsoId: String
 )
 
@@ -77,7 +91,6 @@ data class ReservaResponse(
     val horarioInicio: String,
     val horarioFim: String,
     val turma: String,
-    // Nome da finalidade escolhida.
     val opcaoUsoId: String?,
     val opcaoUsoNome: String?,
     val status: String,
@@ -92,7 +105,8 @@ data class DisponibilidadeSalaResponse(
     val reservaId: String?,
     val professorNome: String?
 )
-//Admin
+
+// Modelos utilizados na configuração administrativa do sistema.
 data class ConfiguracaoSistemaResponse(
     val sabadoLetivo: Boolean
 )
@@ -101,8 +115,7 @@ data class SabadoLetivoRequest(
     val sabadoLetivo: Boolean
 )
 
-// Resposta da API para uma opção de uso cadastrada pelo admin.
-// Exemplo: Aula prática, Reunião, Prova, Palestra.
+// Modelos utilizados no gerenciamento das opções de uso.
 data class OpcaoUsoResponse(
     val id: String?,
     val nome: String,
@@ -111,20 +124,15 @@ data class OpcaoUsoResponse(
     val criadoEm: String?
 )
 
-// Request usado para cadastrar uma nova opção de uso.
 data class OpcaoUsoRequest(
     val nome: String
 )
 
-// Request usado para ativar ou desativar uma opção de uso.
 data class OpcaoUsoStatusRequest(
     val ativa: Boolean
 )
 
-// --- PERÍODOS DE AULA ---
-
-// Resposta da API para um período/aula configurado pelo admin.
-// Exemplo: 1ª aula - 07:00 às 07:50.
+// Modelos utilizados no gerenciamento dos períodos de aula.
 data class PeriodoAulaResponse(
     val id: String?,
     val turno: String?,
@@ -136,13 +144,11 @@ data class PeriodoAulaResponse(
     val criadoEm: String?
 )
 
-// Request usado para ativar ou desativar um período de aula.
 data class PeriodoAulaStatusRequest(
     val ativo: Boolean
 )
 
-// Request usado para gerar automaticamente os períodos de aula.
-// Exemplo: 6 aulas, começando 07:00, com 50 minutos cada.
+// Dados utilizados para gerar automaticamente os períodos de aula.
 data class GerarPeriodosRequest(
     val turno: String,
     val quantidadeAulas: Int,

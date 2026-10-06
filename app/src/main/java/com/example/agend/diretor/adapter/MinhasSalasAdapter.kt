@@ -27,6 +27,7 @@ class MinhasSalasAdapter(
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        // Reutiliza a view existente ou infla o layout do item.
         val view = convertView ?: LayoutInflater.from(context)
             .inflate(R.layout.item_minha_sala, parent, false)
 
@@ -37,10 +38,12 @@ class MinhasSalasAdapter(
 
         val sala = salas[position]
 
+        // Preenche os dados da sala no layout.
         textoNomeEspaco.text = sala.nomeEspaco
         textoLocalizacaoSala.text = "Localização: ${sala.localizacao}"
         textoNumeroSala.text = "Número da sala: ${sala.numeroSala}"
 
+        // Exibe o status atual da sala.
         textoStatusSala.text = if (sala.ativa) {
             "Status: Ativa"
         } else {

@@ -37,10 +37,10 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Carrega a tela de gerenciamento de opções de uso.
+        // Inicializa a tela de gerenciamento de opções de uso.
         setContentView(R.layout.activity_gerenciar_opcoes_uso)
 
-        //Botao voltar
+        // Configura o botão de retorno para fechar a tela atual.
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
@@ -53,18 +53,18 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
         listaOpcoes = findViewById(R.id.listaOpcoesUso)
         textoErro = findViewById(R.id.textoErroOpcoesUso)
 
-        // Cadastra uma nova opção informada pelo admin.
+        // Inicia o cadastro da opção informada pelo administrador.
         botaoCadastrar.setOnClickListener {
             cadastrarOpcao()
         }
 
-        // Permite rolar a lista de opções sem rolar a tela inteira.
-        // Isso evita que o ScrollView "roube" o toque do ListView.
+        // Permite rolar a lista sem que o ScrollView externo intercepte o toque.
         listaOpcoes.setOnTouchListener { view, _ ->
             view.parent.requestDisallowInterceptTouchEvent(true)
             false
         }
 
+        // Carrega as opções cadastradas no backend.
         carregarOpcoes()
     }
 
@@ -74,16 +74,19 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
 
         val nome = editNome.text.toString().trim()
 
+        // Valida o preenchimento do nome da opção.
         if (nome.isBlank()) {
             layoutNome.error = "Informe o nome da opção"
             return
         }
 
+        // Garante o tamanho mínimo do nome informado.
         if (nome.length < 3) {
             layoutNome.error = "Digite pelo menos 3 caracteres"
             return
         }
 
+        // Evita múltiplos cadastros enquanto a requisição está em andamento.
         botaoCadastrar.isEnabled = false
         botaoCadastrar.text = "Cadastrando..."
 
@@ -91,6 +94,7 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
             nome = nome
         )
 
+        // Envia a nova opção para o backend.
         RetrofitClient.api.cadastrarOpcaoUso(request)
             .enqueue(object : Callback<OpcaoUsoResponse> {
 
@@ -110,6 +114,7 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
 
+                        // Atualiza a lista após o cadastro.
                         carregarOpcoes()
                     } else {
                         tratarErroSessaoOuServidor(
@@ -131,6 +136,7 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
     private fun carregarOpcoes() {
         mostrarErro(null)
 
+        // Consulta ao backend as opções disponíveis para o administrador.
         RetrofitClient.api.listarOpcoesUsoAdmin()
             .enqueue(object : Callback<List<OpcaoUsoResponse>> {
 
@@ -169,6 +175,7 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
             return
         }
 
+        // Exibe as opções utilizando o adapter personalizado.
         listaOpcoes.adapter = OpcaoUsoAdapter(
             context = this,
             opcoes = opcoes
@@ -180,6 +187,7 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
     private fun alterarStatus(opcao: OpcaoUsoResponse) {
         val id = opcao.id
 
+        // Impede a atualização quando a opção não possui um identificador válido.
         if (id.isNullOrBlank()) {
             mostrarErro("Opção inválida.")
             return
@@ -191,6 +199,7 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
             ativa = novoStatus
         )
 
+        // Atualiza o status da opção no backend.
         RetrofitClient.api.alterarStatusOpcaoUso(id, request)
             .enqueue(object : Callback<OpcaoUsoResponse> {
 
@@ -199,6 +208,7 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
                     response: Response<OpcaoUsoResponse>
                 ) {
                     if (response.isSuccessful) {
+                        // Recarrega a lista para refletir o novo status.
                         carregarOpcoes()
                     } else {
                         tratarErroSessaoOuServidor(
@@ -232,18 +242,19 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
 
-            // Limpa o token em memória.
+            // Remove o token da sessão em memória.
             RetrofitClient.token = null
 
-            // Limpa a sessão salva no celular.
+            // Remove os dados da sessão persistida.
             SessionManager(this).limparSessao()
 
-            // Volta para o login e limpa a pilha de telas.
+            // Retorna ao login e remove as telas protegidas da pilha.
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
         } else {
+            // Exibe a mensagem retornada pelo backend ou o código HTTP.
             mostrarErro(erro ?: "Erro no servidor: $codigo")
         }
     }

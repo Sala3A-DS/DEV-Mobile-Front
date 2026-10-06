@@ -25,12 +25,11 @@ import android.widget.LinearLayout
 
 class CadastroActivity : AppCompatActivity() {
 
-    //Sair da funcao do teclado
+    // Remove o foco e oculta o teclado ao tocar fora de um campo de texto.
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
             val viewAtual = currentFocus
 
-            // Se o foco atual estiver em um campo de texto, verifica se o toque foi fora dele.
             if (viewAtual is EditText) {
                 val areaDoCampo = android.graphics.Rect()
                 viewAtual.getGlobalVisibleRect(areaDoCampo)
@@ -41,11 +40,12 @@ class CadastroActivity : AppCompatActivity() {
                 )
 
                 if (tocouForaDoCampo) {
-                    // Remove o foco do campo.
                     viewAtual.clearFocus()
 
-                    // Esconde o teclado.
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val imm = getSystemService(
+                        Context.INPUT_METHOD_SERVICE
+                    ) as InputMethodManager
+
                     imm.hideSoftInputFromWindow(viewAtual.windowToken, 0)
                 }
             }
@@ -54,19 +54,19 @@ class CadastroActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(event)
     }
 
+    // Remove o erro visual do campo assim que o usuário começa a corrigi-lo.
     private fun configurarLimpezaErro(
         editText: TextInputEditText,
         layout: TextInputLayout
     ) {
         editText.addTextChangedListener(object : TextWatcher {
+
             override fun beforeTextChanged(
                 s: CharSequence?,
                 start: Int,
                 count: Int,
                 after: Int
-            ) {
-                // Não é necessário tratar antes da mudança.
-            }
+            ) {}
 
             override fun onTextChanged(
                 s: CharSequence?,
@@ -74,49 +74,47 @@ class CadastroActivity : AppCompatActivity() {
                 before: Int,
                 count: Int
             ) {
-                // Remove o erro visual quando o usuário começa a corrigir o campo.
-                // Isso faz o label voltar para a cor normal.
                 layout.error = null
             }
 
-            override fun afterTextChanged(s: Editable?) {
-                // Não é necessário tratar depois da mudança.
-            }
+            override fun afterTextChanged(s: Editable?) {}
         })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Define o layout da tela de cadastro.
+        // Inicializa a tela de cadastro.
         setContentView(R.layout.activity_cadastro)
 
-        //Botao voltar
+        // Retorna para a tela anterior.
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
 
-        // Campos principais do formulário.
+        // Campos de entrada e seus respectivos containers de validação.
         val layoutNome = findViewById<TextInputLayout>(R.id.layoutNome)
         val layoutEmail = findViewById<TextInputLayout>(R.id.layoutEmailCadastro)
         val layoutSenha = findViewById<TextInputLayout>(R.id.layoutSenhaCadastro)
-        val layoutConfirmarSenha = findViewById<TextInputLayout>(R.id.layoutConfirmarSenhaCadastro)
+        val layoutConfirmarSenha =
+            findViewById<TextInputLayout>(R.id.layoutConfirmarSenhaCadastro)
 
-        // NOVO: campo de cargo personalizado.
-        // Esse campo só aparece quando o usuário seleciona "Outros".
-        val layoutCargoPersonalizado = findViewById<TextInputLayout>(R.id.layoutCargoPersonalizado)
+        // Campo adicional exibido somente para o perfil "Outros".
+        val layoutCargoPersonalizado =
+            findViewById<TextInputLayout>(R.id.layoutCargoPersonalizado)
 
         val editNome = findViewById<TextInputEditText>(R.id.editNome)
         val editEmail = findViewById<TextInputEditText>(R.id.editEmailCadastro)
         val editSenha = findViewById<TextInputEditText>(R.id.editSenhaCadastro)
-        val editConfirmarSenha = findViewById<TextInputEditText>(R.id.editConfirmarSenhaCadastro)
+        val editConfirmarSenha =
+            findViewById<TextInputEditText>(R.id.editConfirmarSenhaCadastro)
 
-        // NOVO: input onde o usuário digita o cargo caso selecione "Outros".
-        val editCargoPersonalizado = findViewById<TextInputEditText>(R.id.editCargoPersonalizado)
-        // Limpa automaticamente os erros dos campos quando o usuário digita.
-        // Isso evita que o label continue vermelho depois que o texto foi corrigido.
+        val editCargoPersonalizado =
+            findViewById<TextInputEditText>(R.id.editCargoPersonalizado)
+
+        // Configura a remoção automática dos erros durante a edição dos campos.
         configurarLimpezaErro(editNome, layoutNome)
         configurarLimpezaErro(editEmail, layoutEmail)
         configurarLimpezaErro(editConfirmarSenha, layoutConfirmarSenha)
@@ -125,7 +123,7 @@ class CadastroActivity : AppCompatActivity() {
         val botaoCadastrar = findViewById<Button>(R.id.botaoCadastrar)
         val radioGrupo = findViewById<RadioGroup>(R.id.radioGrupoPerfil)
 
-        // Views do indicador de força da senha.
+        // Componentes utilizados para indicar a força da senha.
         val layoutForca = findViewById<LinearLayout>(R.id.layoutForcaSenha)
         val barra1 = findViewById<View>(R.id.barra1)
         val barra2 = findViewById<View>(R.id.barra2)
@@ -133,19 +131,17 @@ class CadastroActivity : AppCompatActivity() {
         val barra4 = findViewById<View>(R.id.barra4)
         val textoForca = findViewById<TextView>(R.id.textoForcaSenha)
 
-        // Requisitos visuais da senha.
+        // Indicadores dos requisitos mínimos da senha.
         val reqMaiuscula = findViewById<TextView>(R.id.reqMaiuscula)
         val reqMinuscula = findViewById<TextView>(R.id.reqMinuscula)
         val reqMinimo = findViewById<TextView>(R.id.reqMinimo)
         val reqNumero = findViewById<TextView>(R.id.reqNumero)
         val reqEspecial = findViewById<TextView>(R.id.reqEspecial)
 
-        // Garante que o campo de cargo personalizado comece invisível.
+        // O campo de cargo personalizado permanece oculto inicialmente.
         layoutCargoPersonalizado.visibility = View.GONE
 
-        // Monitora a seleção do perfil.
-        // Quando "Outros" for selecionado, o campo Cargo aparece.
-        // Quando qualquer outro perfil for selecionado, ele desaparece e limpa o texto.
+        // Exibe o campo de cargo quando o perfil "Outros" é selecionado.
         radioGrupo.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId == R.id.radioOutros) {
                 layoutCargoPersonalizado.visibility = View.VISIBLE
@@ -156,7 +152,7 @@ class CadastroActivity : AppCompatActivity() {
             }
         }
 
-        // Cores usadas na validação visual.
+        // Cores utilizadas nos estados dos requisitos e da força da senha.
         val corOk = ContextCompat.getColor(this, android.R.color.holo_green_light)
         val corErro = ContextCompat.getColor(this, android.R.color.holo_red_light)
         val corFraco = ContextCompat.getColor(this, android.R.color.holo_red_light)
@@ -165,16 +161,15 @@ class CadastroActivity : AppCompatActivity() {
         val corForte = ContextCompat.getColor(this, android.R.color.holo_green_light)
         val corInativo = 0xFFE0E0E0.toInt()
 
-        // Monitora a senha em tempo real para atualizar os requisitos e a barra de força.
+        // Atualiza os requisitos e a força da senha em tempo real.
         editSenha.addTextChangedListener(object : TextWatcher {
+
             override fun beforeTextChanged(
                 s: CharSequence?,
                 start: Int,
                 count: Int,
                 after: Int
-            ) {
-                // Não é necessário fazer nada antes da alteração.
-            }
+            ) {}
 
             override fun onTextChanged(
                 s: CharSequence?,
@@ -182,14 +177,13 @@ class CadastroActivity : AppCompatActivity() {
                 before: Int,
                 count: Int
             ) {
-                // Remove o erro visual da senha quando o usuário começa a corrigir.
                 layoutSenha.error = null
             }
 
             override fun afterTextChanged(s: Editable?) {
                 val senha = s.toString()
 
-                // Se a senha estiver vazia, oculta o indicador de força.
+                // Oculta o indicador quando não há senha digitada.
                 if (senha.isEmpty()) {
                     layoutForca.visibility = View.GONE
                     return
@@ -197,14 +191,14 @@ class CadastroActivity : AppCompatActivity() {
 
                 layoutForca.visibility = View.VISIBLE
 
-                // Regras de senha forte.
+                // Avalia os requisitos mínimos de segurança da senha.
                 val temMaiuscula = senha.any { it.isUpperCase() }
                 val temMinuscula = senha.any { it.isLowerCase() }
                 val temMinimo = senha.length >= 8
                 val temNumero = senha.any { it.isDigit() }
                 val temEspecial = senha.any { !it.isLetterOrDigit() }
 
-                // Atualiza os textos dos requisitos.
+                // Atualiza a indicação textual de cada requisito.
                 reqMaiuscula.text =
                     if (temMaiuscula) "✓  Pelo menos 1 letra maiúscula"
                     else "✗  Pelo menos 1 letra maiúscula"
@@ -225,14 +219,14 @@ class CadastroActivity : AppCompatActivity() {
                     if (temEspecial) "✓  Pelo menos 1 caractere especial (!@#\$...)"
                     else "✗  Pelo menos 1 caractere especial (!@#\$...)"
 
-                // Atualiza as cores dos requisitos.
+                // Atualiza as cores conforme o atendimento dos requisitos.
                 reqMaiuscula.setTextColor(if (temMaiuscula) corOk else corErro)
                 reqMinuscula.setTextColor(if (temMinuscula) corOk else corErro)
                 reqMinimo.setTextColor(if (temMinimo) corOk else corErro)
                 reqNumero.setTextColor(if (temNumero) corOk else corErro)
                 reqEspecial.setTextColor(if (temEspecial) corOk else corErro)
 
-                // Conta quantos requisitos foram atendidos.
+                // Calcula o nível de força com base nos requisitos atendidos.
                 val pontos = listOf(
                     temMaiuscula,
                     temMinuscula,
@@ -241,12 +235,19 @@ class CadastroActivity : AppCompatActivity() {
                     temEspecial
                 ).count { it }
 
-                val barras = listOf(barra1, barra2, barra3, barra4)
+                val barras = listOf(
+                    barra1,
+                    barra2,
+                    barra3,
+                    barra4
+                )
 
-                // Reseta as barras antes de pintar novamente.
-                barras.forEach { it.setBackgroundColor(corInativo) }
+                // Reseta o indicador antes de aplicar o novo nível.
+                barras.forEach {
+                    it.setBackgroundColor(corInativo)
+                }
 
-                // Atualiza o nível visual da senha.
+                // Define a classificação visual da senha.
                 when (pontos) {
                     1 -> {
                         barra1.setBackgroundColor(corFraco)
@@ -279,7 +280,9 @@ class CadastroActivity : AppCompatActivity() {
                     }
 
                     5 -> {
-                        barras.forEach { it.setBackgroundColor(corForte) }
+                        barras.forEach {
+                            it.setBackgroundColor(corForte)
+                        }
                         textoForca.text = "Senha forte! ✓"
                         textoForca.setTextColor(corForte)
                     }
@@ -301,20 +304,20 @@ class CadastroActivity : AppCompatActivity() {
 
             val perfilId = radioGrupo.checkedRadioButtonId
 
-            // Limpa erros anteriores.
+            // Remove os erros exibidos antes de uma nova tentativa.
             layoutNome.error = null
             layoutEmail.error = null
             layoutSenha.error = null
             layoutConfirmarSenha.error = null
             layoutCargoPersonalizado.error = null
 
-            // Validação do nome.
+            // Valida o nome.
             if (nome.isEmpty()) {
                 layoutNome.error = "Informe seu nome"
                 return@setOnClickListener
             }
 
-            // Validação do e-mail.
+            // Valida o preenchimento e o formato do e-mail.
             if (email.isEmpty()) {
                 layoutEmail.error = "Informe o e-mail"
                 return@setOnClickListener
@@ -325,15 +328,13 @@ class CadastroActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // NOVO: se o usuário escolher "Outros", o campo Cargo se torna obrigatório.
+            // O cargo personalizado é obrigatório quando "Outros" está selecionado.
             if (perfilId == R.id.radioOutros && cargoPersonalizado.isEmpty()) {
                 layoutCargoPersonalizado.error = "Informe seu cargo"
                 return@setOnClickListener
             }
 
-            // Define o cargo enviado ao back-end.
-            // Professor, coordenador e diretor usam valores padronizados.
-            // Outros usa o cargo digitado pela pessoa, em letras maiúsculas.
+            // Converte o perfil selecionado para o valor esperado pelo backend.
             val cargo = when (perfilId) {
                 R.id.radioProfessor -> "PROFESSOR"
                 R.id.radioCoordenador -> "COORDENADOR"
@@ -341,59 +342,67 @@ class CadastroActivity : AppCompatActivity() {
                 else -> ""
             }
 
-            // Validação da senha.
+            // Valida o preenchimento da senha.
             if (senha.isEmpty()) {
                 layoutSenha.error = "Informe a senha"
                 return@setOnClickListener
             }
 
-            // Validação do campo confirmar senha.
             if (confirmarSenha.isEmpty()) {
                 layoutConfirmarSenha.error = "Confirme sua senha"
                 return@setOnClickListener
             }
 
-            // Verifica se senha e confirmação são iguais.
+            // Garante que a confirmação corresponda à senha informada.
             if (senha != confirmarSenha) {
                 layoutConfirmarSenha.error = "As senhas não coincidem"
                 return@setOnClickListener
             }
 
-            // Regras obrigatórias da senha forte.
+            // Avalia os requisitos obrigatórios da senha.
             val temMaiuscula = senha.any { it.isUpperCase() }
             val temMinuscula = senha.any { it.isLowerCase() }
             val temMinimo = senha.length >= 8
             val temNumero = senha.any { it.isDigit() }
             val temEspecial = senha.any { !it.isLetterOrDigit() }
 
-            // A senha só passa se tiver todos os requisitos.
+            // Impede o cadastro enquanto algum requisito de segurança não for atendido.
             if (!temMaiuscula || !temMinuscula || !temMinimo || !temNumero || !temEspecial) {
                 layoutSenha.error = "A senha não atende os requisitos mínimos"
+
                 Toast.makeText(
                     this,
                     "A senha deve ter maiúscula, minúscula, número, caractere especial e mínimo de 8 caracteres.",
                     Toast.LENGTH_LONG
                 ).show()
+
                 return@setOnClickListener
             }
 
-            // Validação do perfil.
+            // Garante que um perfil tenha sido selecionado.
             if (perfilId == -1) {
-                Toast.makeText(this, "⚠️ Selecione seu perfil!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "⚠️ Selecione seu perfil!",
+                    Toast.LENGTH_SHORT
+                ).show()
+
                 return@setOnClickListener
             }
 
-            // Bloqueia o botão para evitar vários cadastros ao mesmo tempo.
+            // Evita múltiplas requisições durante o cadastro.
             botaoCadastrar.isEnabled = false
             botaoCadastrar.text = "Cadastrando..."
 
-            // Envia o cargo final para o back-end.
-            // O back-end já recebe apenas uma string "cargo".
+            // Monta o payload enviado ao backend.
             val pedido = RegisterRequest(nome, email, senha, cargo)
 
             RetrofitClient.api.register(pedido).enqueue(object : Callback<String> {
 
-                override fun onResponse(call: Call<String>, response: Response<String>) {
+                override fun onResponse(
+                    call: Call<String>,
+                    response: Response<String>
+                ) {
                     botaoCadastrar.isEnabled = true
                     botaoCadastrar.text = "Cadastrar"
 
@@ -407,28 +416,34 @@ class CadastroActivity : AppCompatActivity() {
                                 Toast.LENGTH_LONG
                             ).show()
 
-                            // Após cadastrar, volta para a tela de login.
+                            // Após o cadastro, retorna o usuário para a tela de login.
                             startActivity(
                                 Intent(
                                     this@CadastroActivity,
                                     MainActivity::class.java
                                 )
                             )
+
                             finish()
+
                         } else if (respostaServidor.contains("ERRO", ignoreCase = true)) {
                             Toast.makeText(
                                 this@CadastroActivity,
                                 "⚠️ $respostaServidor",
                                 Toast.LENGTH_LONG
                             ).show()
+
                         } else {
+                            // Trata respostas que não seguem o formato esperado.
                             Toast.makeText(
                                 this@CadastroActivity,
                                 "⚠️ Resposta inesperada do servidor: $respostaServidor",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
+
                     } else {
+                        // Exibe a mensagem retornada pelo backend quando disponível.
                         val erroServidor = response.errorBody()?.string()
 
                         Toast.makeText(
@@ -439,12 +454,19 @@ class CadastroActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<String>, t: Throwable) {
+                override fun onFailure(
+                    call: Call<String>,
+                    t: Throwable
+                ) {
                     botaoCadastrar.isEnabled = true
                     botaoCadastrar.text = "Cadastrar"
 
-                    // Log importante para descobrir o erro real no Logcat.
-                    Log.e("CADASTRO", "Falha ao cadastrar usuário: ${t.message}", t)
+                    // Registra o erro completo para análise no Logcat.
+                    Log.e(
+                        "CADASTRO",
+                        "Falha ao cadastrar usuário: ${t.message}",
+                        t
+                    )
 
                     Toast.makeText(
                         this@CadastroActivity,

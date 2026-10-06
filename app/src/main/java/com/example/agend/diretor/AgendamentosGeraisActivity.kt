@@ -1,11 +1,12 @@
 package com.example.agend.diretor
 
+import android.app.DatePickerDialog
 import android.content.Intent
-import com.example.agend.diretor.adapter.AgendamentosGeraisAdapter
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -15,14 +16,13 @@ import com.example.agend.R
 import com.example.agend.auth.ReservaResponse
 import com.example.agend.auth.RetrofitClient
 import com.example.agend.auth.SessionManager
+import com.example.agend.diretor.adapter.AgendamentosGeraisAdapter
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.app.DatePickerDialog
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import java.util.Calendar
-import android.widget.LinearLayout
 
 class AgendamentosGeraisActivity : AppCompatActivity() {
 
@@ -35,18 +35,18 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
 
     private var dataSelecionada: String = ""
 
-    // Lista com todas as reservas retornadas pelo back-end.
+    // Armazena todos os agendamentos retornados pelo backend.
     private val reservas = mutableListOf<ReservaResponse>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Carrega a tela de agendamentos gerais do diretor.
+        // Inicializa a tela de agendamentos gerais do diretor.
         setContentView(R.layout.activity_agendamentos_gerais)
 
-        //Botao voltar
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
+        // Configura o retorno para a tela anterior.
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
@@ -61,6 +61,7 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
             abrirDatePicker()
         }
 
+        // Atualiza os agendamentos da data selecionada.
         botaoAtualizar.setOnClickListener {
             if (dataSelecionada.isBlank()) {
                 layoutData.error = "Selecione uma data"
@@ -70,7 +71,7 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
             carregarAgendamentosGerais()
         }
 
-        // Define a data de hoje automaticamente.
+        // Define automaticamente a data atual.
         definirDataHoje()
 
         // Carrega os agendamentos do dia atual.
@@ -81,8 +82,13 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
         val calendario = Calendar.getInstance()
 
         val ano = calendario.get(Calendar.YEAR)
-        val mes = (calendario.get(Calendar.MONTH) + 1).toString().padStart(2, '0')
-        val dia = calendario.get(Calendar.DAY_OF_MONTH).toString().padStart(2, '0')
+        val mes = (calendario.get(Calendar.MONTH) + 1)
+            .toString()
+            .padStart(2, '0')
+
+        val dia = calendario.get(Calendar.DAY_OF_MONTH)
+            .toString()
+            .padStart(2, '0')
 
         dataSelecionada = "$ano-$mes-$dia"
         editData.setText(dataSelecionada)
@@ -98,15 +104,22 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
         val dialog = DatePickerDialog(
             this,
             { _, anoSelecionado, mesSelecionado, diaSelecionado ->
-                val mesFormatado = (mesSelecionado + 1).toString().padStart(2, '0')
-                val diaFormatado = diaSelecionado.toString().padStart(2, '0')
+                val mesFormatado =
+                    (mesSelecionado + 1).toString().padStart(2, '0')
 
-                dataSelecionada = "$anoSelecionado-$mesFormatado-$diaFormatado"
+                val diaFormatado =
+                    diaSelecionado.toString().padStart(2, '0')
+
+                dataSelecionada =
+                    "$anoSelecionado-$mesFormatado-$diaFormatado"
+
                 editData.setText(dataSelecionada)
 
+                // Remove o erro após a seleção da data.
                 layoutData.error = null
                 mostrarErro(null)
 
+                // Atualiza os agendamentos da nova data.
                 carregarAgendamentosGerais()
             },
             ano,
@@ -123,6 +136,7 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
         botaoAtualizar.isEnabled = false
         botaoAtualizar.text = "Carregando..."
 
+        // Consulta ao backend os agendamentos da data selecionada.
         RetrofitClient.api.listarReservasGerais(dataSelecionada)
             .enqueue(object : Callback<List<ReservaResponse>> {
 
@@ -140,14 +154,14 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
                         reservas.addAll(resposta)
 
                         if (reservas.isEmpty()) {
-                            // Estado vazio quando ainda não existem agendamentos.
+                            // Exibe o estado vazio quando não existem agendamentos.
                             listaAgendamentos.adapter = ArrayAdapter(
                                 this@AgendamentosGeraisActivity,
                                 android.R.layout.simple_list_item_1,
                                 listOf("Nenhum agendamento encontrado.")
                             )
                         } else {
-                            // Mostra os agendamentos em cards.
+                            // Exibe os agendamentos utilizando o adapter personalizado.
                             listaAgendamentos.adapter = AgendamentosGeraisAdapter(
                                 context = this@AgendamentosGeraisActivity,
                                 reservas = reservas
@@ -161,7 +175,10 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<List<ReservaResponse>>, t: Throwable) {
+                override fun onFailure(
+                    call: Call<List<ReservaResponse>>,
+                    t: Throwable
+                ) {
                     botaoAtualizar.isEnabled = true
                     botaoAtualizar.text = "Atualizar"
 
@@ -180,7 +197,10 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
         }
     }
 
-    private fun tratarErroSessaoOuServidor(codigo: Int, erro: String?) {
+    private fun tratarErroSessaoOuServidor(
+        codigo: Int,
+        erro: String?
+    ) {
         if (codigo == 401 || codigo == 403) {
             Toast.makeText(
                 this,
@@ -188,15 +208,17 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
 
-            // Limpa o token em memória.
+            // Remove o token da sessão em memória.
             RetrofitClient.token = null
 
-            // Limpa a sessão salva no celular.
+            // Remove os dados da sessão persistida.
             SessionManager(this).limparSessao()
 
-            // Volta para o login e limpa a pilha de telas.
+            // Retorna ao login e remove as telas protegidas da pilha.
             val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
             startActivity(intent)
             finish()
         } else {

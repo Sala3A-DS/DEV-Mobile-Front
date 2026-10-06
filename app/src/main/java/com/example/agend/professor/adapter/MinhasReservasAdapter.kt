@@ -28,32 +28,42 @@ class MinhasReservasAdapter(
         return position.toLong()
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+    override fun getView(
+        position: Int,
+        convertView: View?,
+        parent: ViewGroup?
+    ): View {
+        // Reutiliza a view existente ou cria um novo card de reserva.
         val view = convertView ?: LayoutInflater.from(context)
             .inflate(R.layout.item_minha_reserva, parent, false)
 
         val textoSala = view.findViewById<TextView>(R.id.textoSalaReserva)
         val textoTurma = view.findViewById<TextView>(R.id.textoTurmaReserva)
-        val textoFinalidade = view.findViewById<TextView>(R.id.textoFinalidadeMinhaReserva)
+        val textoFinalidade =
+            view.findViewById<TextView>(R.id.textoFinalidadeMinhaReserva)
         val textoData = view.findViewById<TextView>(R.id.textoDataReserva)
         val textoHorario = view.findViewById<TextView>(R.id.textoHorarioReserva)
         val textoStatus = view.findViewById<TextView>(R.id.textoStatusReserva)
-        val botaoCancelar = view.findViewById<MaterialButton>(R.id.botaoCancelarReserva)
+        val botaoCancelar =
+            view.findViewById<MaterialButton>(R.id.botaoCancelarReserva)
 
         val reserva = reservas[position]
 
+        // Define um valor padrão quando a turma não foi informada.
         val turma = if (reserva.turma.isNullOrBlank()) {
             "Não informada"
         } else {
             reserva.turma
         }
 
+        // Define um valor padrão quando a finalidade não foi informada.
         val finalidade = if (reserva.opcaoUsoNome.isNullOrBlank()) {
             "Não informada"
         } else {
             reserva.opcaoUsoNome
         }
 
+        // Preenche os dados da reserva no card.
         textoSala.text = reserva.salaNome
         textoTurma.text = "Turma: $turma"
         textoFinalidade.text = "Finalidade: $finalidade"
@@ -62,6 +72,7 @@ class MinhasReservasAdapter(
             "Horário: ${reserva.periodoAula}ª aula - ${reserva.horarioInicio} às ${reserva.horarioFim}"
         textoStatus.text = "Status: ${reserva.status}"
 
+        // Encaminha a reserva selecionada para o fluxo de cancelamento.
         botaoCancelar.setOnClickListener {
             onCancelarClick(reserva)
         }

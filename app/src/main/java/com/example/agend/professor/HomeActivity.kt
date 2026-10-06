@@ -20,7 +20,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Tela principal do professor/coordenador.
+        // Inicializa a tela principal do professor e coordenador.
         setContentView(R.layout.activity_home)
 
         val textoBemVindo = findViewById<TextView>(R.id.textoBemVindo)
@@ -31,7 +31,7 @@ class HomeActivity : AppCompatActivity() {
         val botaoMinhasReservas = findViewById<Button>(R.id.botaoMinhasReservas)
         val botaoSair = findViewById<Button>(R.id.botaoSairProfessor)
 
-        // Recebe os dados enviados pela tela de login ou pela sessão salva.
+        // Recupera os dados enviados pelo login ou pela sessão restaurada.
         email = intent.getStringExtra("email") ?: ""
         nome = intent.getStringExtra("nome") ?: "Usuário"
         cargo = intent.getStringExtra("cargo") ?: "PROFESSOR"
@@ -44,7 +44,7 @@ class HomeActivity : AppCompatActivity() {
             else -> "Usuário"
         }
 
-        // Abre a tela de reserva de sala.
+        // Abre a tela de reserva e encaminha os dados da sessão atual.
         botaoReservarSala.setOnClickListener {
             val intent = Intent(this, ReservarSalaActivity::class.java)
             intent.putExtra("email", email)
@@ -53,7 +53,7 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Abre a tela de reservas do professor.
+        // Abre a tela com as reservas realizadas pelo usuário.
         botaoMinhasReservas.setOnClickListener {
             val intent = Intent(this, MinhasReservasActivity::class.java)
             intent.putExtra("email", email)
@@ -62,18 +62,20 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Sai da conta, limpa o token em memória e remove a sessão salva no celular.
+        // Encerra a sessão atual e remove os dados de autenticação persistidos.
         botaoSair.setOnClickListener {
             RetrofitClient.token = null
             SessionManager(this).limparSessao()
 
             val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
             startActivity(intent)
             finish()
         }
 
-        // Icone de Info
+        // Abre o diálogo com as informações e recursos do aplicativo.
         val botaoInfoApp = findViewById<TextView>(R.id.botaoInfoApp)
 
         botaoInfoApp.setOnClickListener {

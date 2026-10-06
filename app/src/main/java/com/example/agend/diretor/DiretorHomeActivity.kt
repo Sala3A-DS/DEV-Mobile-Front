@@ -25,7 +25,7 @@ class DiretorHomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Carrega a tela inicial do diretor/admin.
+        // Inicializa a tela principal do diretor/admin.
         setContentView(R.layout.activity_diretor_home)
 
         val textoNomeDiretor = findViewById<TextView>(R.id.textoNomeDiretor)
@@ -37,12 +37,12 @@ class DiretorHomeActivity : AppCompatActivity() {
         botaoSabadoLetivo = findViewById(R.id.botaoSabadoLetivo)
         val botaoSairDiretor = findViewById<Button>(R.id.botaoSairDiretor)
 
-        // Recebe dados enviados pela tela de login ou pela sessão salva.
+        // Recupera o nome enviado pelo login ou pela sessão restaurada.
         val nome = intent.getStringExtra("nome") ?: "Diretor"
 
         textoNomeDiretor.text = "Olá, $nome"
 
-        // Abre a tela de cadastro de espaço/sala.
+        // Abre a tela de cadastro de espaço ou sala.
         botaoCadastrarSala.setOnClickListener {
             startActivity(Intent(this, CadastrarSalaActivity::class.java))
         }
@@ -52,24 +52,27 @@ class DiretorHomeActivity : AppCompatActivity() {
             startActivity(Intent(this, MinhasSalasActivity::class.java))
         }
 
-        // Abre a tela com todos os agendamentos feitos.
+        // Abre a tela com todos os agendamentos realizados.
         botaoAgendamentosGerais.setOnClickListener {
             startActivity(Intent(this, AgendamentosGeraisActivity::class.java))
         }
 
+        // Abre a tela de gerenciamento das opções de uso.
         botaoOpcoesUso.setOnClickListener {
             startActivity(Intent(this, GerenciarOpcoesUsoActivity::class.java))
         }
 
+        // Abre a tela de gerenciamento dos períodos de aula.
         botaoPeriodosAula.setOnClickListener {
             startActivity(Intent(this, GerenciarPeriodosAulaActivity::class.java))
         }
 
+        // Alterna o status de sábado letivo.
         botaoSabadoLetivo.setOnClickListener {
             atualizarSabadoLetivo(!sabadoLetivoAtivo)
         }
 
-        // Sai da conta, limpa o token em memória e remove a sessão salva no celular.
+        // Encerra a sessão atual e retorna ao login.
         botaoSairDiretor.setOnClickListener {
             RetrofitClient.token = null
             SessionManager(this).limparSessao()
@@ -80,18 +83,22 @@ class DiretorHomeActivity : AppCompatActivity() {
             finish()
         }
 
-        // Icone de Info
+        // Abre o diálogo com as informações e recursos do aplicativo.
         val botaoInfoApp = findViewById<TextView>(R.id.botaoInfoApp)
 
         botaoInfoApp.setOnClickListener {
             AppInfoDialog.mostrar(this)
         }
+
+        // Carrega a configuração atual de sábado letivo.
         carregarConfiguracaoSistema()
     }
+
     private fun carregarConfiguracaoSistema() {
         botaoSabadoLetivo.isEnabled = false
         botaoSabadoLetivo.text = "Sábado letivo: carregando..."
 
+        // Consulta ao backend o status atual da configuração do sistema.
         RetrofitClient.api.buscarConfiguracaoSistema()
             .enqueue(object : Callback<ConfiguracaoSistemaResponse> {
 
@@ -107,6 +114,7 @@ class DiretorHomeActivity : AppCompatActivity() {
                         atualizarTextoBotaoSabado()
                     } else {
                         botaoSabadoLetivo.text = "Erro ao carregar sábado letivo"
+
                         Toast.makeText(
                             this@DiretorHomeActivity,
                             "Erro ao carregar configuração.",
@@ -117,7 +125,10 @@ class DiretorHomeActivity : AppCompatActivity() {
                     botaoSabadoLetivo.isEnabled = true
                 }
 
-                override fun onFailure(call: Call<ConfiguracaoSistemaResponse>, t: Throwable) {
+                override fun onFailure(
+                    call: Call<ConfiguracaoSistemaResponse>,
+                    t: Throwable
+                ) {
                     botaoSabadoLetivo.isEnabled = true
                     botaoSabadoLetivo.text = "Erro ao carregar sábado letivo"
 
@@ -138,6 +149,7 @@ class DiretorHomeActivity : AppCompatActivity() {
             sabadoLetivo = novoValor
         )
 
+        // Envia ao backend o novo status de sábado letivo.
         RetrofitClient.api.atualizarSabadoLetivo(request)
             .enqueue(object : Callback<ConfiguracaoSistemaResponse> {
 
@@ -176,7 +188,10 @@ class DiretorHomeActivity : AppCompatActivity() {
                     botaoSabadoLetivo.isEnabled = true
                 }
 
-                override fun onFailure(call: Call<ConfiguracaoSistemaResponse>, t: Throwable) {
+                override fun onFailure(
+                    call: Call<ConfiguracaoSistemaResponse>,
+                    t: Throwable
+                ) {
                     botaoSabadoLetivo.isEnabled = true
                     atualizarTextoBotaoSabado()
 
@@ -190,6 +205,7 @@ class DiretorHomeActivity : AppCompatActivity() {
     }
 
     private fun atualizarTextoBotaoSabado() {
+        // Atualiza o texto conforme o status atual da configuração.
         botaoSabadoLetivo.text = if (sabadoLetivoAtivo) {
             "Sábado letivo: ativado"
         } else {

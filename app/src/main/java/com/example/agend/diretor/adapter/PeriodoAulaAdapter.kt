@@ -29,6 +29,7 @@ class PeriodoAulaAdapter(
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        // Reutiliza a view existente ou infla o layout do item.
         val view = convertView ?: LayoutInflater.from(context)
             .inflate(R.layout.item_periodo_aula, parent, false)
 
@@ -39,9 +40,11 @@ class PeriodoAulaAdapter(
 
         val periodo = periodos[position]
 
+        // Exibe o número e o horário do período.
         textoNumero.text = "${periodo.numero}ª aula"
         textoHorario.text = "${periodo.horarioInicio} às ${periodo.horarioFim}"
 
+        // Atualiza o status e a ação disponível para o período.
         if (periodo.ativo) {
             textoStatus.text = "Status: ativo"
             botaoAlterarStatus.text = "Desativar"
@@ -50,7 +53,7 @@ class PeriodoAulaAdapter(
             botaoAlterarStatus.text = "Ativar"
         }
 
-        // Envia o período selecionado para a Activity alterar o status.
+        // Encaminha a alteração de status para a Activity.
         botaoAlterarStatus.setOnClickListener {
             onAlterarStatus(periodo)
         }

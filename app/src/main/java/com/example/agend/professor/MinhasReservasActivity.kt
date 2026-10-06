@@ -27,18 +27,18 @@ class MinhasReservasActivity : AppCompatActivity() {
     private lateinit var textoErro: TextView
     private lateinit var botaoAtualizar: Button
 
-    // Lista com as reservas retornadas pelo back-end.
+    // Armazena as reservas retornadas pelo backend.
     private val reservas = mutableListOf<ReservaResponse>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Carrega a tela de minhas reservas.
+        // Inicializa a tela de reservas do usuário.
         setContentView(R.layout.activity_minhas_reservas)
 
-        //Botao voltar
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
+        // Configura o retorno para a tela anterior.
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
@@ -47,7 +47,7 @@ class MinhasReservasActivity : AppCompatActivity() {
         textoErro = findViewById(R.id.textoErroMinhasReservas)
         botaoAtualizar = findViewById(R.id.botaoAtualizarReservas)
 
-        // Atualiza manualmente a lista de reservas.
+        // Permite atualizar manualmente a lista de reservas.
         botaoAtualizar.setOnClickListener {
             carregarMinhasReservas()
         }
@@ -61,6 +61,7 @@ class MinhasReservasActivity : AppCompatActivity() {
         botaoAtualizar.isEnabled = false
         botaoAtualizar.text = "Carregando..."
 
+        // Solicita ao backend as reservas do usuário autenticado.
         RetrofitClient.api.listarMinhasReservas()
             .enqueue(object : Callback<List<ReservaResponse>> {
 
@@ -78,14 +79,14 @@ class MinhasReservasActivity : AppCompatActivity() {
                         reservas.addAll(resposta)
 
                         if (reservas.isEmpty()) {
-                            // Estado vazio: mostra uma mensagem simples quando não há reservas.
+                            // Exibe uma mensagem quando não existem reservas cadastradas.
                             listaReservas.adapter = ArrayAdapter(
                                 this@MinhasReservasActivity,
                                 android.R.layout.simple_list_item_1,
                                 listOf("Você ainda não possui reservas.")
                             )
                         } else {
-                            // Usa o adapter customizado para exibir cada reserva em formato de card.
+                            // Exibe as reservas utilizando o adapter personalizado.
                             listaReservas.adapter = MinhasReservasAdapter(
                                 context = this@MinhasReservasActivity,
                                 reservas = reservas,
@@ -117,13 +118,14 @@ class MinhasReservasActivity : AppCompatActivity() {
             return
         }
 
-        // Se a turma vier vazia por alguma reserva antiga, mostra um texto padrão.
+        // Define um texto padrão para reservas antigas sem turma informada.
         val turma = if (reserva.turma.isBlank()) {
             "não informada"
         } else {
             reserva.turma
         }
 
+        // Solicita a confirmação antes de cancelar a reserva.
         AlertDialog.Builder(this)
             .setTitle("Cancelar reserva")
             .setMessage(
@@ -139,6 +141,7 @@ class MinhasReservasActivity : AppCompatActivity() {
     private fun cancelarReserva(reservaId: String) {
         mostrarErro(null)
 
+        // Envia ao backend a solicitação de cancelamento da reserva.
         RetrofitClient.api.cancelarReserva(reservaId)
             .enqueue(object : Callback<ReservaResponse> {
 
@@ -153,7 +156,7 @@ class MinhasReservasActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG
                         ).show()
 
-                        // Recarrega a lista para remover/atualizar a reserva cancelada.
+                        // Atualiza a lista após o cancelamento.
                         carregarMinhasReservas()
                     } else {
                         tratarErroSessaoOuServidor(
@@ -187,15 +190,17 @@ class MinhasReservasActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
 
-            // Limpa o token em memória.
+            // Remove o token da sessão em memória.
             RetrofitClient.token = null
 
-            // Limpa a sessão salva no celular.
+            // Remove os dados da sessão persistida.
             SessionManager(this).limparSessao()
 
-            // Volta para o login e limpa a pilha de telas.
+            // Retorna ao login e remove as telas anteriores da pilha.
             val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
             startActivity(intent)
             finish()
         } else {

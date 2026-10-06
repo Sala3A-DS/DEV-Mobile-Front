@@ -26,16 +26,16 @@ class MinhasSalasActivity : AppCompatActivity() {
     private lateinit var textoErro: TextView
     private lateinit var botaoAtualizar: Button
 
-    // Lista com as salas retornadas pelo back-end.
+    // Armazena as salas retornadas pelo backend.
     private val salas = mutableListOf<SalaResponse>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Carrega a tela de salas cadastradas pelo diretor.
+        // Inicializa a tela de salas cadastradas pelo diretor.
         setContentView(R.layout.activity_minhas_salas)
 
-        //Botao voltar
+        // Configura o botão de retorno para fechar a tela atual.
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
@@ -46,11 +46,12 @@ class MinhasSalasActivity : AppCompatActivity() {
         textoErro = findViewById(R.id.textoErroMinhasSalas)
         botaoAtualizar = findViewById(R.id.botaoAtualizarMinhasSalas)
 
-        // Atualiza manualmente a lista de salas.
+        // Permite atualizar manualmente a lista de salas.
         botaoAtualizar.setOnClickListener {
             carregarMinhasSalas()
         }
 
+        // Carrega as salas ao abrir a tela.
         carregarMinhasSalas()
     }
 
@@ -60,6 +61,7 @@ class MinhasSalasActivity : AppCompatActivity() {
         botaoAtualizar.isEnabled = false
         botaoAtualizar.text = "Carregando..."
 
+        // Consulta ao backend as salas cadastradas pelo diretor.
         RetrofitClient.api.listarMinhasSalas()
             .enqueue(object : Callback<List<SalaResponse>> {
 
@@ -77,14 +79,14 @@ class MinhasSalasActivity : AppCompatActivity() {
                         salas.addAll(resposta)
 
                         if (salas.isEmpty()) {
-                            // Estado vazio: mostra mensagem simples quando não há salas.
+                            // Exibe uma mensagem quando não existem salas cadastradas.
                             listaMinhasSalas.adapter = ArrayAdapter(
                                 this@MinhasSalasActivity,
                                 android.R.layout.simple_list_item_1,
                                 listOf("Você ainda não possui salas cadastradas.")
                             )
                         } else {
-                            // Mostra as salas em cards.
+                            // Exibe as salas utilizando o adapter personalizado.
                             listaMinhasSalas.adapter = MinhasSalasAdapter(
                                 context = this@MinhasSalasActivity,
                                 salas = salas
@@ -125,18 +127,19 @@ class MinhasSalasActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
 
-            // Limpa o token em memória.
+            // Remove o token da sessão em memória.
             RetrofitClient.token = null
 
-            // Limpa a sessão salva no celular.
+            // Remove os dados da sessão persistida.
             SessionManager(this).limparSessao()
 
-            // Volta para o login e limpa a pilha de telas.
+            // Retorna ao login e remove as telas protegidas da pilha.
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
         } else {
+            // Exibe a mensagem retornada pelo backend ou o código HTTP.
             mostrarErro(erro ?: "Erro no servidor: $codigo")
         }
     }

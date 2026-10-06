@@ -1,11 +1,18 @@
 package com.example.agend.senha
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.agend.R
@@ -16,22 +23,14 @@ import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.content.Context
-import android.view.MotionEvent
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.LinearLayout
 
 class EsqueciSenhaActivity : AppCompatActivity() {
 
-    //Sair da funcao do teclado
+    // Remove o foco e oculta o teclado ao tocar fora de um campo de texto.
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
             val viewAtual = currentFocus
 
-            // Se o foco atual estiver em um campo de texto, verifica se o toque foi fora dele.
             if (viewAtual is EditText) {
                 val areaDoCampo = android.graphics.Rect()
                 viewAtual.getGlobalVisibleRect(areaDoCampo)
@@ -42,11 +41,11 @@ class EsqueciSenhaActivity : AppCompatActivity() {
                 )
 
                 if (tocouForaDoCampo) {
-                    // Remove o foco do campo.
                     viewAtual.clearFocus()
 
-                    // Esconde o teclado.
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val imm =
+                        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
                     imm.hideSoftInputFromWindow(viewAtual.windowToken, 0)
                 }
             }
@@ -55,16 +54,16 @@ class EsqueciSenhaActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(event)
     }
 
-    // TAG usada para filtrar os logs no Logcat.
+    // Identifica os logs desta Activity no Logcat.
     private val TAG = "ESQUECI_SENHA"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //Carrega pagina
+        // Inicializa a tela de recuperação de senha.
         setContentView(R.layout.activity_esqueci_senha)
 
-        //Botao voltar
+        // Configura o botão de retorno para fechar a tela atual.
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
         layoutVoltarTopo.setOnClickListener {
@@ -76,16 +75,16 @@ class EsqueciSenhaActivity : AppCompatActivity() {
         val botaoEnviar = findViewById<Button>(R.id.botaoEnviarCodigo)
         val textoErro = findViewById<TextView>(R.id.textoErroEsqueci)
 
-        // Limpa automaticamente o erro quando o usuário começa a corrigir o e-mail.
-        // Isso faz o label voltar para a cor normal.
+        // Remove os erros da tela enquanto o usuário corrige o e-mail.
         editEmail.addTextChangedListener(object : TextWatcher {
+
             override fun beforeTextChanged(
                 s: CharSequence?,
                 start: Int,
                 count: Int,
                 after: Int
             ) {
-                // Não é necessário tratar antes da mudança.
+                // Nenhuma ação necessária antes da alteração.
             }
 
             override fun onTextChanged(
@@ -99,64 +98,66 @@ class EsqueciSenhaActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                // Não é necessário tratar depois da mudança.
+                // Nenhuma ação necessária após a alteração.
             }
         })
 
         botaoEnviar.setOnClickListener {
             val email = editEmail.text.toString().trim()
 
-            // Limpa erros anteriores da tela.
+            // Limpa os erros exibidos antes de iniciar uma nova validação.
             textoErro.visibility = View.GONE
             layoutEmail.error = null
 
-            // Valida se o e-mail foi preenchido.
+            // Valida se o campo de e-mail foi preenchido.
             if (email.isEmpty()) {
                 layoutEmail.error = "Informe o e-mail"
                 return@setOnClickListener
             }
 
-            // Valida se o e-mail tem formato correto.
+            // Valida o formato do e-mail informado.
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 layoutEmail.error = "Informe um e-mail válido (ex: nome@dominio.com)"
                 return@setOnClickListener
             }
 
-            // Bloqueia o botão para evitar vários envios ao mesmo tempo.
+            // Evita múltiplas solicitações enquanto o envio está em andamento.
             botaoEnviar.isEnabled = false
             botaoEnviar.text = "Enviando..."
 
-            // Log para confirmar qual e-mail está sendo enviado ao back-end.
+            // Registra no Logcat o início da solicitação de recuperação.
             Log.d(TAG, "Enviando solicitação de recuperação para: $email")
 
+            // Solicita ao backend o envio do código de recuperação.
             RetrofitClient.api.forgotPassword(ForgotPasswordRequest(email))
                 .enqueue(object : Callback<String> {
 
-                    override fun onResponse(call: Call<String>, response: Response<String>) {
+                    override fun onResponse(
+                        call: Call<String>,
+                        response: Response<String>
+                    ) {
                         botaoEnviar.isEnabled = true
                         botaoEnviar.text = "Enviar Código"
 
-                        // Lê o corpo de sucesso, se existir.
+                        // Obtém as respostas de sucesso e erro retornadas pelo servidor.
                         val respostaServidor = response.body() ?: ""
-
-                        // Lê o corpo de erro, se existir.
                         val erroServidor = response.errorBody()?.string()
 
-                        // Logs importantes para descobrir o retorno real do servidor.
+                        // Registra no Logcat os dados da resposta para facilitar a análise.
                         Log.d(TAG, "Código HTTP: ${response.code()}")
                         Log.d(TAG, "Resposta sucesso: $respostaServidor")
                         Log.d(TAG, "Resposta erro: $erroServidor")
 
                         if (response.isSuccessful) {
-                            // Verifica se o servidor retornou sucesso.
-                            // ignoreCase evita erro caso venha "Sucesso", "sucesso", "SUCESSO", etc.
+
+                            // Confirma se o backend informou que o código foi enviado.
                             if (respostaServidor.contains("SUCESSO", ignoreCase = true)) {
                                 val intent = Intent(
                                     this@EsqueciSenhaActivity,
                                     ConfirmarCodigoActivity::class.java
                                 )
 
-                                // Passa o e-mail para a próxima tela validar o código.
+                                // Encaminha o e-mail para a validação do código na próxima tela.
                                 intent.putExtra("email", email)
 
                                 startActivity(intent)
@@ -180,12 +181,14 @@ class EsqueciSenhaActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun onFailure(call: Call<String>, t: Throwable) {
+                    override fun onFailure(
+                        call: Call<String>,
+                        t: Throwable
+                    ) {
                         botaoEnviar.isEnabled = true
                         botaoEnviar.text = "Enviar Código"
 
-                        // Log mais importante para descobrir o erro real.
-                        // Aqui pode aparecer timeout, erro de DNS, SSL, conexão recusada, etc.
+                        // Registra a exceção completa para identificar a causa da falha.
                         Log.e(TAG, "Falha na conexão com o servidor", t)
 
                         textoErro.text = "⚠️ Falha na conexão com o servidor."
