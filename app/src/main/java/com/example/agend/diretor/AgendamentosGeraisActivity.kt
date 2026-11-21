@@ -1,5 +1,7 @@
 package com.example.agend.diretor
 
+import androidx.core.view.ViewCompat
+import com.example.agend.utils.AcessibilidadeUtils
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
@@ -51,11 +53,26 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
             finish()
         }
 
+        // Anuncia o retorno como botão para o TalkBack.
+        AcessibilidadeUtils.marcarComoBotao(layoutVoltarTopo)
+
+        // Define o título da tela para navegação por títulos no TalkBack.
+        ViewCompat.setAccessibilityHeading(
+            findViewById<TextView>(R.id.textoTituloAgendamentos),
+            true
+        )
+
         listaAgendamentos = findViewById(R.id.listaAgendamentosGerais)
         textoErro = findViewById(R.id.textoErroAgendamentosGerais)
         botaoAtualizar = findViewById(R.id.botaoAtualizarAgendamentosGerais)
         layoutData = findViewById(R.id.layoutDataAgendamentosGerais)
         editData = findViewById(R.id.editDataAgendamentosGerais)
+
+        // Anuncia automaticamente as mensagens de erro da tela.
+        ViewCompat.setAccessibilityLiveRegion(
+            textoErro,
+            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
+        )
 
         editData.setOnClickListener {
             abrirDatePicker()
@@ -92,6 +109,10 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
 
         dataSelecionada = "$ano-$mes-$dia"
         editData.setText(dataSelecionada)
+
+        // Lê a data em formato falado, em vez de ano-mês-dia.
+        editData.contentDescription =
+            "Data dos agendamentos: ${AcessibilidadeUtils.falarData(dataSelecionada)}"
     }
 
     private fun abrirDatePicker() {
@@ -114,6 +135,10 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
                     "$anoSelecionado-$mesFormatado-$diaFormatado"
 
                 editData.setText(dataSelecionada)
+
+                // Atualiza a leitura falada com a nova data.
+                editData.contentDescription =
+                    "Data dos agendamentos: ${AcessibilidadeUtils.falarData(dataSelecionada)}"
 
                 // Remove o erro após a seleção da data.
                 layoutData.error = null
@@ -157,7 +182,7 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
                             // Exibe o estado vazio quando não existem agendamentos.
                             listaAgendamentos.adapter = ArrayAdapter(
                                 this@AgendamentosGeraisActivity,
-                                android.R.layout.simple_list_item_1,
+                                R.layout.item_lista_vazia,
                                 listOf("Nenhum agendamento encontrado.")
                             )
                         } else {
@@ -167,6 +192,15 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
                                 reservas = reservas
                             )
                         }
+
+                        // Informa o resultado da consulta para quem usa o TalkBack.
+                        listaAgendamentos.announceForAccessibility(
+                            when (reservas.size) {
+                                0 -> "Nenhum agendamento encontrado"
+                                1 -> "1 agendamento carregado"
+                                else -> "${reservas.size} agendamentos carregados"
+                            }
+                        )
                     } else {
                         tratarErroSessaoOuServidor(
                             response.code(),

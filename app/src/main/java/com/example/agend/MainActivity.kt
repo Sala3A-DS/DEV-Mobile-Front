@@ -1,5 +1,7 @@
 package com.example.agend
 
+import androidx.core.view.ViewCompat
+import com.example.agend.utils.AcessibilidadeUtils
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -75,6 +77,22 @@ class MainActivity : AppCompatActivity() {
         val textoCadastro = findViewById<TextView>(R.id.textoCadastro)
         val textoErro = findViewById<TextView>(R.id.textoErroLogin)
         val textoEsqueci = findViewById<TextView>(R.id.textoEsqueciSenha)
+
+        // Anuncia automaticamente as mensagens de erro do login.
+        ViewCompat.setAccessibilityLiveRegion(
+            textoErro,
+            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
+        )
+
+        // Anuncia os textos clicáveis como botões.
+        AcessibilidadeUtils.marcarComoBotao(textoCadastro)
+        AcessibilidadeUtils.marcarComoBotao(textoEsqueci)
+
+        // Define o título da tela para navegação por títulos no TalkBack.
+        ViewCompat.setAccessibilityHeading(
+            findViewById<TextView>(R.id.textoTituloLogin),
+            true
+        )
 
         // Limpa o estado de erro enquanto o usuário corrige o e-mail.
         editEmail.addTextChangedListener(object : TextWatcher {

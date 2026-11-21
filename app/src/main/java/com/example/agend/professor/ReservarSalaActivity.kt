@@ -1,5 +1,11 @@
 package com.example.agend.professor
 
+import com.example.agend.utils.NarradorAcessibilidade
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.ViewCompat
+import com.example.agend.utils.AcessibilidadeUtils
+import java.text.SimpleDateFormat
+import java.util.Locale
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
@@ -43,6 +49,7 @@ class ReservarSalaActivity : AppCompatActivity() {
     private lateinit var textoErro: TextView
     private lateinit var textoTituloHorarios: TextView
     private lateinit var listaHorarios: ListView
+    private lateinit var narrador: NarradorAcessibilidade
 
     private val salas = mutableListOf<SalaResponse>()
     private val nomesSalas = mutableListOf<String>()
@@ -128,6 +135,9 @@ class ReservarSalaActivity : AppCompatActivity() {
 
         val layoutVoltarTopo = findViewById<LinearLayout>(R.id.layoutVoltarTopo)
 
+        // Anuncia o retorno como botão para o TalkBack.
+        AcessibilidadeUtils.marcarComoBotao(layoutVoltarTopo)
+
         // Configura o retorno para a tela anterior.
         layoutVoltarTopo.setOnClickListener {
             finish()
@@ -145,6 +155,42 @@ class ReservarSalaActivity : AppCompatActivity() {
         textoTituloHorarios = findViewById(R.id.textoTituloHorarios)
         listaHorarios = findViewById(R.id.listaHorariosDisponiveis)
 
+        // Define os títulos da tela para navegação por títulos no TalkBack.
+        ViewCompat.setAccessibilityHeading(
+            findViewById<TextView>(R.id.textoTituloReserva),
+            true
+        )
+        ViewCompat.setAccessibilityHeading(textoTituloHorarios, true)
+
+        // Anuncia automaticamente as mensagens de erro da reserva.
+        ViewCompat.setAccessibilityLiveRegion(
+            textoErro,
+            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
+        )
+
+        // Inicializa a narração e avisa quando a voz em português não está disponível.
+        narrador = NarradorAcessibilidade(this) {
+            Toast.makeText(
+                this,
+                "Voz em português indisponível neste aparelho.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+        // Narra as informações da sala selecionada ao tocar no botão.
+        findViewById<Button>(R.id.botaoOuvirSala).setOnClickListener {
+            val sala = salaSelecionada
+
+            if (sala == null) {
+                narrador.falar("Nenhuma sala selecionada.")
+            } else {
+                narrador.falar(
+                    "${sala.nomeEspaco}. Localização ${sala.localizacao}. " +
+                            "Sala número ${sala.numeroSala}."
+                )
+            }
+        }
+
         // Permite rolar a lista de horários sem interferência do ScrollView pai.
         listaHorarios.setOnTouchListener { view, _ ->
             view.parent.requestDisallowInterceptTouchEvent(true)
@@ -159,6 +205,13 @@ class ReservarSalaActivity : AppCompatActivity() {
         configurarEventos()
         carregarSalas()
         carregarOpcoesUso()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // Libera o motor de voz ao fechar a tela.
+        narrador.liberar()
     }
 
     private fun configurarAdapters() {
@@ -340,7 +393,7 @@ class ReservarSalaActivity : AppCompatActivity() {
                 return@setOnItemClickListener
             }
 
-            criarReserva(disponibilidade)
+            confirmarReserva(disponibilidade)
         }
     }
 
@@ -375,6 +428,14 @@ class ReservarSalaActivity : AppCompatActivity() {
                     mesSelecionado,
                     diaSelecionado
                 )
+
+                // Lê a data em formato falado, em vez de ano-mês-dia.
+                val dataFalada = SimpleDateFormat(
+                    "d 'de' MMMM 'de' yyyy",
+                    Locale("pt", "BR")
+                ).format(calendarioSelecionado.time)
+
+                editDataReserva.contentDescription = "Data da reserva: $dataFalada"
 
                 val diaSemana =
                     calendarioSelecionado.get(Calendar.DAY_OF_WEEK)
@@ -505,6 +566,11 @@ class ReservarSalaActivity : AppCompatActivity() {
                     )
 
                     textoTituloHorarios.visibility = View.VISIBLE
+                    // Informa quantos horários estão livres após cada consulta.
+                    val livres = disponibilidades.count { it.disponivel }
+                    listaHorarios.announceForAccessibility(
+                        "Horários atualizados: $livres disponíveis de ${disponibilidades.size}"
+                    )
                     listaHorarios.visibility = View.VISIBLE
                 } else {
                     tratarErroSessaoOuServidor(
@@ -524,6 +590,33 @@ class ReservarSalaActivity : AppCompatActivity() {
                 mostrarErro("Falha na conexão ao consultar disponibilidade.")
             }
         })
+    }
+
+    // Solicita a confirmação antes de criar a reserva, evitando toques acidentais.
+    private fun confirmarReserva(disponibilidade: DisponibilidadeSalaResponse) {
+        val sala = salaSelecionada ?: return
+
+        // Garante que a turma esteja preenchida antes de abrir a confirmação.
+        if (editTurmaReserva.text.toString().isBlank()) {
+            layoutTurmaReserva.error = "Informe a turma que usará o espaço"
+            mostrarErro("Informe a turma antes de reservar.")
+            return
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Confirmar reserva")
+            .setMessage(
+                "Deseja reservar ${sala.nomeEspaco} em " +
+                        "${AcessibilidadeUtils.falarData(dataSelecionada)}, " +
+                        "${disponibilidade.periodoAula}ª aula, " +
+                        "das ${AcessibilidadeUtils.falarHorario(disponibilidade.horarioInicio)} " +
+                        "às ${AcessibilidadeUtils.falarHorario(disponibilidade.horarioFim)}?"
+            )
+            .setPositiveButton("Sim, reservar") { _, _ ->
+                criarReserva(disponibilidade)
+            }
+            .setNegativeButton("Não", null)
+            .show()
     }
 
     private fun criarReserva(disponibilidade: DisponibilidadeSalaResponse) {

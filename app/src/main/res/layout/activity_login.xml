@@ -17,6 +17,7 @@
         android:contentDescription="Logo YaRooms" />
 
     <TextView
+        android:id="@+id/textoTituloLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bem-vindo ao YaRooms"
@@ -31,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="⚠️ E-mail ou senha incorretos"
-        android:textColor="#FF5252"
+        android:textColor="#FF8080"
         android:visibility="gone"
         android:layout_marginBottom="16dp"/>
 
@@ -51,6 +52,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:inputType="textEmailAddress"
+            android:autofillHints="emailAddress"
             android:hint="E-mail"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -71,6 +73,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:inputType="textPassword"
+            android:autofillHints="password"
             android:hint="Senha"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,6 +83,8 @@
         android:layout_height="wrap_content"
         android:text="Esqueci minha senha"
         android:textColor="@color/yarooms_gold_light"
+        android:minHeight="48dp"
+        android:gravity="center_vertical"
         android:layout_gravity="end"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp"
@@ -102,6 +107,8 @@
         android:layout_height="wrap_content"
         android:text="Não tem uma conta? Cadastre-se"
         android:textColor="@color/yarooms_gold"
+        android:minHeight="48dp"
+        android:gravity="center_vertical"
         android:layout_marginTop="32dp"
         android:padding="8dp"/>
 

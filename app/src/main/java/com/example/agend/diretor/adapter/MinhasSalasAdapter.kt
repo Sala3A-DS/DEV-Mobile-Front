@@ -50,6 +50,18 @@ class MinhasSalasAdapter(
             "Status: Inativa"
         }
 
+        // Une nome, localização, número e status em uma única leitura do TalkBack.
+        val statusFalado = if (sala.ativa) "ativa" else "inativa"
+
+        textoNomeEspaco.contentDescription =
+            "${sala.nomeEspaco}. Localização ${sala.localizacao}. " +
+                    "Sala número ${sala.numeroSala}. Situação: $statusFalado"
+
+        // Evita a leitura duplicada dos textos internos do card.
+        listOf(textoLocalizacaoSala, textoNumeroSala, textoStatusSala).forEach {
+            it.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        }
+
         return view
     }
 }

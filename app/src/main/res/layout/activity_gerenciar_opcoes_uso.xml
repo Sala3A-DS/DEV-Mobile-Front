@@ -16,6 +16,7 @@
         <include layout="@layout/include_botao_voltar_topo" />
 
         <TextView
+            android:id="@+id/textoTituloOpcoesUso"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Opções de uso"
@@ -43,8 +44,8 @@
             android:layout_marginBottom="12dp"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/yarooms_gold"
-            app:boxStrokeErrorColor="@color/yarooms_error"
-            app:errorTextColor="@color/yarooms_error"
+            app:boxStrokeErrorColor="@color/yarooms_error_light"
+            app:errorTextColor="@color/yarooms_error_light"
             app:hintTextColor="@color/yarooms_gold_light">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -71,7 +72,7 @@
             android:id="@+id/textoErroOpcoesUso"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/yarooms_error"
+            android:textColor="@color/yarooms_error_light"
             android:textSize="14sp"
             android:visibility="gone"
             android:layout_marginTop="14dp"

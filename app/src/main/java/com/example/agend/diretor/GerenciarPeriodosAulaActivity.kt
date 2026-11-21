@@ -1,5 +1,7 @@
 package com.example.agend.diretor
 
+import androidx.core.view.ViewCompat
+import com.example.agend.utils.AcessibilidadeUtils
 import com.example.agend.auth.GerarPeriodosRequest
 import android.content.Intent
 import android.os.Bundle
@@ -69,9 +71,27 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
+        // Anuncia o retorno como botão para o TalkBack.
+        AcessibilidadeUtils.marcarComoBotao(layoutVoltarTopo)
+
+        // Define os títulos da tela para navegação por títulos no TalkBack.
+        listOf(
+            R.id.textoTituloPeriodos,
+            R.id.textoSubtituloGerar,
+            R.id.textoSubtituloHorarios
+        ).forEach {
+            ViewCompat.setAccessibilityHeading(findViewById<TextView>(it), true)
+        }
+
 
         listaPeriodos = findViewById(R.id.listaPeriodosAula)
         textoErro = findViewById(R.id.textoErroPeriodosAula)
+
+        // Anuncia automaticamente as mensagens de erro da tela.
+        ViewCompat.setAccessibilityLiveRegion(
+            textoErro,
+            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
+        )
 
         // Permite rolar a lista sem que o ScrollView externo intercepte o toque.
         listaPeriodos.setOnTouchListener { view, _ ->
@@ -222,6 +242,34 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
                     R.color.yarooms_gold_light
             )
         )
+
+        // Informa o filtro selecionado, já que a seleção é indicada apenas pela cor.
+        listOf(
+            Triple("MANHA", "Manhã", botaoFiltroManha),
+            Triple("TARDE", "Tarde", botaoFiltroTarde),
+            Triple("NOITE", "Noite", botaoFiltroNoite)
+        ).forEach { (turno, nome, botao) ->
+            botao.contentDescription =
+                if (turnoFiltroSelecionado == turno) "$nome, selecionado" else "$nome, não selecionado"
+        }
+    }
+
+    // Informa o resultado do filtro para quem usa o TalkBack.
+    private fun anunciarFiltro() {
+        val turnoFalado = when (turnoFiltroSelecionado) {
+            "MANHA" -> "manhã"
+            "TARDE" -> "tarde"
+            else -> "noite"
+        }
+
+        val total = periodos.count {
+            it.turno.equals(turnoFiltroSelecionado, ignoreCase = true)
+        }
+
+        listaPeriodos.announceForAccessibility(
+            "Turno $turnoFalado: " +
+                    if (total == 0) "nenhum período cadastrado" else "$total períodos"
+        )
     }
 
     private fun carregarPeriodos() {
@@ -272,7 +320,7 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
 
             listaPeriodos.adapter = ArrayAdapter(
                 this,
-                android.R.layout.simple_list_item_1,
+                R.layout.item_lista_vazia,
                 listOf("Nenhum período cadastrado para $nomeTurno.")
             )
             return
@@ -393,6 +441,11 @@ class GerenciarPeriodosAulaActivity : AppCompatActivity() {
                     response: Response<PeriodoAulaResponse>
                 ) {
                     if (response.isSuccessful) {
+                        // Informa o novo estado, já que a lista é recriada após a alteração.
+                        listaPeriodos.announceForAccessibility(
+                            "${periodo.numero}ª aula ${if (periodo.ativo) "desativada" else "ativada"}"
+                        )
+
                         // Recarrega a lista para refletir o novo status.
                         carregarPeriodos()
                     } else {

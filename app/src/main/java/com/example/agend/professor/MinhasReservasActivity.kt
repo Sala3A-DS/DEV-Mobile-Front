@@ -1,5 +1,7 @@
 package com.example.agend.professor
 
+import androidx.core.view.ViewCompat
+import com.example.agend.utils.AcessibilidadeUtils
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -43,9 +45,24 @@ class MinhasReservasActivity : AppCompatActivity() {
             finish()
         }
 
+        // Anuncia o retorno como botão para o TalkBack.
+        AcessibilidadeUtils.marcarComoBotao(layoutVoltarTopo)
+
+        // Define o título da tela para navegação por títulos no TalkBack.
+        ViewCompat.setAccessibilityHeading(
+            findViewById<TextView>(R.id.textoTituloMinhasReservas),
+            true
+        )
+
         listaReservas = findViewById(R.id.listaMinhasReservas)
         textoErro = findViewById(R.id.textoErroMinhasReservas)
         botaoAtualizar = findViewById(R.id.botaoAtualizarReservas)
+
+        // Anuncia automaticamente as mensagens de erro da tela.
+        ViewCompat.setAccessibilityLiveRegion(
+            textoErro,
+            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
+        )
 
         // Permite atualizar manualmente a lista de reservas.
         botaoAtualizar.setOnClickListener {
@@ -82,7 +99,7 @@ class MinhasReservasActivity : AppCompatActivity() {
                             // Exibe uma mensagem quando não existem reservas cadastradas.
                             listaReservas.adapter = ArrayAdapter(
                                 this@MinhasReservasActivity,
-                                android.R.layout.simple_list_item_1,
+                                R.layout.item_lista_vazia,
                                 listOf("Você ainda não possui reservas.")
                             )
                         } else {
@@ -95,6 +112,15 @@ class MinhasReservasActivity : AppCompatActivity() {
                                 }
                             )
                         }
+
+                        // Informa o resultado da consulta para quem usa o TalkBack.
+                        listaReservas.announceForAccessibility(
+                            when (reservas.size) {
+                                0 -> "Você ainda não possui reservas"
+                                1 -> "1 reserva carregada"
+                                else -> "${reservas.size} reservas carregadas"
+                            }
+                        )
                     } else {
                         tratarErroSessaoOuServidor(
                             response.code(),
@@ -129,7 +155,7 @@ class MinhasReservasActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("Cancelar reserva")
             .setMessage(
-                "Deseja cancelar a reserva da sala ${reserva.salaNome}, turma $turma, em ${reserva.data}, ${reserva.periodoAula}ª aula?"
+                "Deseja cancelar a reserva da sala ${reserva.salaNome}, turma $turma, em ${AcessibilidadeUtils.falarData(reserva.data)}, ${reserva.periodoAula}ª aula?"
             )
             .setPositiveButton("Sim, cancelar") { _, _ ->
                 cancelarReserva(reserva.id)

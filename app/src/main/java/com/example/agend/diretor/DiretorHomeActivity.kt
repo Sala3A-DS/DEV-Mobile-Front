@@ -1,5 +1,7 @@
 package com.example.agend.diretor
 
+import androidx.core.view.ViewCompat
+import com.example.agend.utils.AcessibilidadeUtils
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -41,6 +43,12 @@ class DiretorHomeActivity : AppCompatActivity() {
         val nome = intent.getStringExtra("nome") ?: "Diretor"
 
         textoNomeDiretor.text = "Olá, $nome"
+
+        // Define o título da tela para navegação por títulos no TalkBack.
+        ViewCompat.setAccessibilityHeading(
+            findViewById<TextView>(R.id.textoTituloDiretor),
+            true
+        )
 
         // Abre a tela de cadastro de espaço ou sala.
         botaoCadastrarSala.setOnClickListener {
@@ -85,6 +93,9 @@ class DiretorHomeActivity : AppCompatActivity() {
 
         // Abre o diálogo com as informações e recursos do aplicativo.
         val botaoInfoApp = findViewById<TextView>(R.id.botaoInfoApp)
+
+        // Anuncia o ícone de informações como botão para o TalkBack.
+        AcessibilidadeUtils.marcarComoBotao(botaoInfoApp)
 
         botaoInfoApp.setOnClickListener {
             AppInfoDialog.mostrar(this)
@@ -165,9 +176,9 @@ class DiretorHomeActivity : AppCompatActivity() {
                         atualizarTextoBotaoSabado()
 
                         val mensagem = if (sabadoLetivoAtivo) {
-                            "Sábado letivo ativado."
+                            "Sábado letivo ligado."
                         } else {
-                            "Sábado letivo desativado."
+                            "Sábado letivo desligado."
                         }
 
                         Toast.makeText(

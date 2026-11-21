@@ -1,5 +1,9 @@
 package com.example.agend.professor
 
+import android.view.View
+import androidx.core.view.AccessibilityDelegateCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -44,6 +48,15 @@ class HomeActivity : AppCompatActivity() {
             else -> "Usuário"
         }
 
+        // Unifica saudação, nome e cargo em uma única leitura do TalkBack.
+        textoNomeUsuario.contentDescription = "Bem-vindo, $nome, ${textoCargoUsuario.text}"
+        textoBemVindo.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        textoCargoUsuario.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+
+        // Define a pergunta principal como título da tela.
+        val textoPergunta = findViewById<TextView>(R.id.textoPergunta)
+        ViewCompat.setAccessibilityHeading(textoPergunta, true)
+
         // Abre a tela de reserva e encaminha os dados da sessão atual.
         botaoReservarSala.setOnClickListener {
             val intent = Intent(this, ReservarSalaActivity::class.java)
@@ -77,6 +90,17 @@ class HomeActivity : AppCompatActivity() {
 
         // Abre o diálogo com as informações e recursos do aplicativo.
         val botaoInfoApp = findViewById<TextView>(R.id.botaoInfoApp)
+
+        // Anuncia o ícone de informações como botão para o TalkBack.
+        ViewCompat.setAccessibilityDelegate(botaoInfoApp, object : AccessibilityDelegateCompat() {
+            override fun onInitializeAccessibilityNodeInfo(
+                host: View,
+                info: AccessibilityNodeInfoCompat
+            ) {
+                super.onInitializeAccessibilityNodeInfo(host, info)
+                info.className = Button::class.java.name
+            }
+        })
 
         botaoInfoApp.setOnClickListener {
             AppInfoDialog.mostrar(this)

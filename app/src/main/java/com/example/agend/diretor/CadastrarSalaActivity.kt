@@ -1,5 +1,7 @@
 package com.example.agend.diretor
 
+import androidx.core.view.ViewCompat
+import com.example.agend.utils.AcessibilidadeUtils
 import android.content.Context
 import android.os.Bundle
 import android.view.MotionEvent
@@ -96,6 +98,15 @@ class CadastrarSalaActivity : AppCompatActivity() {
             finish()
         }
 
+        // Anuncia o retorno como botão para o TalkBack.
+        AcessibilidadeUtils.marcarComoBotao(layoutVoltarTopo)
+
+        // Define o título da tela para navegação por títulos no TalkBack.
+        ViewCompat.setAccessibilityHeading(
+            findViewById<TextView>(R.id.textoTituloCadastrarSala),
+            true
+        )
+
         // Inicializa os campos e componentes do formulário.
         val layoutNome = findViewById<TextInputLayout>(R.id.layoutNomeSala)
         val layoutLocalizacao = findViewById<TextInputLayout>(R.id.layoutBlocoSala)
@@ -107,6 +118,12 @@ class CadastrarSalaActivity : AppCompatActivity() {
 
         val botaoSalvar = findViewById<Button>(R.id.botaoSalvarSala)
         val textoErro = findViewById<TextView>(R.id.textoErroSala)
+
+        // Anuncia automaticamente as mensagens de erro do cadastro.
+        ViewCompat.setAccessibilityLiveRegion(
+            textoErro,
+            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
+        )
 
         // Remove automaticamente os erros durante a edição dos campos.
         configurarLimpezaErro(editNome, layoutNome, textoErro)

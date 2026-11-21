@@ -56,6 +56,17 @@ class OpcaoUsoAdapter(
             onAlterarStatus(opcao)
         }
 
+        // Une nome e situação em uma única leitura do TalkBack.
+        textoNome.contentDescription =
+            "${opcao.nome}. Situação: ${if (opcao.ativa) "ativa" else "desativada"}"
+
+        // Evita a leitura duplicada do texto de status.
+        textoStatus.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+
+        // Identifica a opção no botão, senão todos diriam apenas "Desativar".
+        botaoAlterarStatus.contentDescription =
+            "${if (opcao.ativa) "Desativar" else "Ativar"} opção ${opcao.nome}"
+
         return view
     }
 }

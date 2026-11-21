@@ -11,6 +11,7 @@
     <include layout="@layout/include_botao_voltar_topo" />
 
     <TextView
+        android:id="@+id/textoTituloEsqueci"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="RECUPERAR ACESSO"
@@ -46,6 +47,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:inputType="textEmailAddress"
+            android:autofillHints="emailAddress"
             android:hint="Seu e-mail"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -54,7 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="⚠️ E-mail não encontrado"
-        android:textColor="#FF5252"
+        android:textColor="@color/yarooms_error_light"
         android:visibility="gone"
         android:layout_marginTop="12dp"
         android:textStyle="bold"/>

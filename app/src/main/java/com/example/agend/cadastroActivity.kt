@@ -1,5 +1,7 @@
 package com.example.agend
 
+import androidx.core.view.ViewCompat
+import com.example.agend.utils.AcessibilidadeUtils
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -81,6 +83,10 @@ class CadastroActivity : AppCompatActivity() {
         })
     }
 
+    // Monta a leitura de um requisito informando se foi atendido.
+    private fun descreverRequisito(texto: String, atendido: Boolean): String =
+        if (atendido) "$texto: atendido" else "$texto: não atendido"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -93,6 +99,16 @@ class CadastroActivity : AppCompatActivity() {
         layoutVoltarTopo.setOnClickListener {
             finish()
         }
+
+        // Identifica o botão de voltar para o TalkBack.
+        layoutVoltarTopo.contentDescription = "Voltar"
+        AcessibilidadeUtils.marcarComoBotao(layoutVoltarTopo)
+
+        // Define o título da tela para navegação por títulos no TalkBack.
+        ViewCompat.setAccessibilityHeading(
+            findViewById<TextView>(R.id.textoTituloCadastro),
+            true
+        )
 
         // Campos de entrada e seus respectivos containers de validação.
         val layoutNome = findViewById<TextInputLayout>(R.id.layoutNome)
@@ -131,6 +147,12 @@ class CadastroActivity : AppCompatActivity() {
         val barra4 = findViewById<View>(R.id.barra4)
         val textoForca = findViewById<TextView>(R.id.textoForcaSenha)
 
+        // Anuncia a mudança do nível de força durante a digitação.
+        ViewCompat.setAccessibilityLiveRegion(
+            textoForca,
+            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
+        )
+
         // Indicadores dos requisitos mínimos da senha.
         val reqMaiuscula = findViewById<TextView>(R.id.reqMaiuscula)
         val reqMinuscula = findViewById<TextView>(R.id.reqMinuscula)
@@ -145,6 +167,9 @@ class CadastroActivity : AppCompatActivity() {
         radioGrupo.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId == R.id.radioOutros) {
                 layoutCargoPersonalizado.visibility = View.VISIBLE
+                layoutCargoPersonalizado.announceForAccessibility(
+                    "Campo de cargo exibido após o campo de e-mail"
+                )
             } else {
                 layoutCargoPersonalizado.visibility = View.GONE
                 layoutCargoPersonalizado.error = null
@@ -225,6 +250,18 @@ class CadastroActivity : AppCompatActivity() {
                 reqMinimo.setTextColor(if (temMinimo) corOk else corErro)
                 reqNumero.setTextColor(if (temNumero) corOk else corErro)
                 reqEspecial.setTextColor(if (temEspecial) corOk else corErro)
+
+                // Descreve o estado de cada requisito sem depender dos símbolos ✓ e ✗.
+                reqMaiuscula.contentDescription =
+                    descreverRequisito("Pelo menos 1 letra maiúscula", temMaiuscula)
+                reqMinuscula.contentDescription =
+                    descreverRequisito("Pelo menos 1 letra minúscula", temMinuscula)
+                reqMinimo.contentDescription =
+                    descreverRequisito("Mínimo de 8 caracteres", temMinimo)
+                reqNumero.contentDescription =
+                    descreverRequisito("Pelo menos 1 número", temNumero)
+                reqEspecial.contentDescription =
+                    descreverRequisito("Pelo menos 1 caractere especial", temEspecial)
 
                 // Calcula o nível de força com base nos requisitos atendidos.
                 val pontos = listOf(

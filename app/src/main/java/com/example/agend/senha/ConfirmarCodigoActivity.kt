@@ -1,5 +1,7 @@
 package com.example.agend.senha
 
+import androidx.core.view.ViewCompat
+import com.example.agend.utils.AcessibilidadeUtils
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -27,6 +29,9 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
 
     private var countDownTimer: CountDownTimer? = null
     private val EXPIRACAO_MS = 1 * 60 * 1000L // Tempo de validade do código.
+
+    // Controla o aviso único de 30 segundos restantes.
+    private var avisouTrintaSegundos = false
 
     private lateinit var camposCodigo: List<EditText>
 
@@ -83,6 +88,21 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
         )
 
         textoEmailEnv.text = "Enviamos um código para $email"
+
+        // Define o título da tela para navegação por títulos no TalkBack.
+        ViewCompat.setAccessibilityHeading(
+            findViewById<TextView>(R.id.textoTituloCodigo),
+            true
+        )
+
+        // Anuncia automaticamente as mensagens de erro da verificação.
+        ViewCompat.setAccessibilityLiveRegion(
+            textoErro,
+            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
+        )
+
+        // Anuncia o texto de reenvio como botão.
+        AcessibilidadeUtils.marcarComoBotao(botaoReenviar)
 
         configurarCamposCodigo()
         iniciarContagem(textoExpiracao)
@@ -206,6 +226,8 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
 
     private fun configurarCamposCodigo() {
         camposCodigo.forEachIndexed { index, campo ->
+            // Identifica cada campo para o TalkBack.
+            campo.contentDescription = "Dígito ${index + 1} de 6 do código"
 
             campo.addTextChangedListener(object : TextWatcher {
 
@@ -271,6 +293,7 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
 
     private fun iniciarContagem(textoExpiracao: TextView) {
         countDownTimer?.cancel()
+        avisouTrintaSegundos = false
 
         // Controla o período de validade do código exibido na tela.
         countDownTimer = object : CountDownTimer(EXPIRACAO_MS, 1000) {
@@ -289,11 +312,18 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
                         0xFFFFD54F.toInt()
                     }
                 )
+
+                // Avisa uma única vez quando restam 30 segundos.
+                if (millisUntilFinished <= 30_000 && !avisouTrintaSegundos) {
+                    avisouTrintaSegundos = true
+                    textoExpiracao.announceForAccessibility("O código expira em 30 segundos")
+                }
             }
 
             override fun onFinish() {
                 textoExpiracao.text = "⚠️ Código expirado! Reenvie um novo."
                 textoExpiracao.setTextColor(0xFFEF5350.toInt())
+                textoExpiracao.announceForAccessibility("Código expirado. Reenvie um novo código.")
             }
         }.start()
     }

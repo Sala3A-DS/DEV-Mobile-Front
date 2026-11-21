@@ -1,5 +1,7 @@
 package com.example.agend.senha
 
+import androidx.core.view.ViewCompat
+import com.example.agend.utils.AcessibilidadeUtils
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -70,10 +72,26 @@ class EsqueciSenhaActivity : AppCompatActivity() {
             finish()
         }
 
+        // Identifica o botão de voltar para o TalkBack.
+        layoutVoltarTopo.contentDescription = "Voltar"
+        AcessibilidadeUtils.marcarComoBotao(layoutVoltarTopo)
+
+        // Define o título da tela para navegação por títulos no TalkBack.
+        ViewCompat.setAccessibilityHeading(
+            findViewById<TextView>(R.id.textoTituloEsqueci),
+            true
+        )
+
         val layoutEmail = findViewById<TextInputLayout>(R.id.layoutEmailEsqueci)
         val editEmail = findViewById<TextInputEditText>(R.id.editEmailEsqueci)
         val botaoEnviar = findViewById<Button>(R.id.botaoEnviarCodigo)
         val textoErro = findViewById<TextView>(R.id.textoErroEsqueci)
+
+        // Anuncia automaticamente as mensagens de erro do envio do código.
+        ViewCompat.setAccessibilityLiveRegion(
+            textoErro,
+            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
+        )
 
         // Remove os erros da tela enquanto o usuário corrige o e-mail.
         editEmail.addTextChangedListener(object : TextWatcher {

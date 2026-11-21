@@ -1,5 +1,6 @@
 package com.example.agend.professor.adapter
 
+import com.example.agend.utils.AcessibilidadeUtils
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -76,6 +77,25 @@ class MinhasReservasAdapter(
         botaoCancelar.setOnClickListener {
             onCancelarClick(reserva)
         }
+
+        // Une todos os dados da reserva em uma única leitura do TalkBack.
+        textoSala.contentDescription =
+            "${reserva.salaNome}. Turma $turma. Finalidade $finalidade. " +
+                    "${AcessibilidadeUtils.falarData(reserva.data)}, " +
+                    "${reserva.periodoAula}ª aula, " +
+                    "das ${AcessibilidadeUtils.falarHorario(reserva.horarioInicio)} " +
+                    "às ${AcessibilidadeUtils.falarHorario(reserva.horarioFim)}. " +
+                    "Status ${reserva.status}".lowercase()
+
+        // Evita a leitura duplicada dos textos internos do card.
+        listOf(textoTurma, textoFinalidade, textoData, textoHorario, textoStatus).forEach {
+            it.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        }
+
+        // Identifica a reserva no botão de cancelar.
+        botaoCancelar.contentDescription =
+            "Cancelar reserva de ${reserva.salaNome} em " +
+                    "${AcessibilidadeUtils.falarData(reserva.data)}, ${reserva.periodoAula}ª aula"
 
         return view
     }

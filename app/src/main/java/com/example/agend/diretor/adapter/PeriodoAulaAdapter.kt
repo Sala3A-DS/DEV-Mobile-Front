@@ -1,5 +1,6 @@
 package com.example.agend.diretor.adapter
 
+import com.example.agend.utils.AcessibilidadeUtils
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -57,6 +58,22 @@ class PeriodoAulaAdapter(
         botaoAlterarStatus.setOnClickListener {
             onAlterarStatus(periodo)
         }
+
+        // Une número, horário e situação em uma única leitura do TalkBack.
+        textoNumero.contentDescription =
+            "${periodo.numero}ª aula, " +
+                    "das ${AcessibilidadeUtils.falarHorario(periodo.horarioInicio)} " +
+                    "às ${AcessibilidadeUtils.falarHorario(periodo.horarioFim)}. " +
+                    "Situação: ${if (periodo.ativo) "ativo" else "desativado"}"
+
+        // Evita a leitura duplicada dos textos internos do card.
+        listOf(textoHorario, textoStatus).forEach {
+            it.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        }
+
+        // Identifica o período no botão, senão todos diriam apenas "Desativar".
+        botaoAlterarStatus.contentDescription =
+            "${if (periodo.ativo) "Desativar" else "Ativar"} ${periodo.numero}ª aula"
 
         return view
     }

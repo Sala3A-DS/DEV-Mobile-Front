@@ -1,5 +1,6 @@
 package com.example.agend.senha
 
+import androidx.core.view.ViewCompat
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -87,6 +88,10 @@ class NovaSenhaActivity : AppCompatActivity() {
         })
     }
 
+    // Monta a leitura de um requisito informando se foi atendido.
+    private fun descreverRequisito(texto: String, atendido: Boolean): String =
+        if (atendido) "$texto: atendido" else "$texto: não atendido"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -104,6 +109,18 @@ class NovaSenhaActivity : AppCompatActivity() {
         val botaoSalvar = findViewById<Button>(R.id.botaoSalvarSenha)
         val textoErro = findViewById<TextView>(R.id.textoErroNovaSenha)
 
+        // Define o título da tela para navegação por títulos no TalkBack.
+        ViewCompat.setAccessibilityHeading(
+            findViewById<TextView>(R.id.textoTituloNovaSenha),
+            true
+        )
+
+        // Anuncia automaticamente as mensagens de erro ao salvar a senha.
+        ViewCompat.setAccessibilityLiveRegion(
+            textoErro,
+            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
+        )
+
         // Configura a remoção automática dos erros durante a edição dos campos.
         configurarLimpezaErro(editNova, layoutNova, textoErro)
         configurarLimpezaErro(editConfirmar, layoutConfirmar, textoErro)
@@ -114,6 +131,13 @@ class NovaSenhaActivity : AppCompatActivity() {
         val barra3 = findViewById<View>(R.id.barra3)
         val barra4 = findViewById<View>(R.id.barra4)
         val textoForca = findViewById<TextView>(R.id.textoForcaSenha)
+
+        // Anuncia a mudança do nível de força durante a digitação.
+        ViewCompat.setAccessibilityLiveRegion(
+            textoForca,
+            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
+        )
+
         val reqMinimo = findViewById<TextView>(R.id.reqMinimo)
         val reqMaiuscula = findViewById<TextView>(R.id.reqMaiuscula)
         val reqMinuscula = findViewById<TextView>(R.id.reqMinuscula)
@@ -175,6 +199,16 @@ class NovaSenhaActivity : AppCompatActivity() {
                 atualiza(reqMinuscula, temMinuscula, "Pelo menos 1 letra minúscula")
                 atualiza(reqNumero, temNumero, "Pelo menos 1 número")
                 atualiza(reqEspecial, temEspecial, "Pelo menos 1 caractere especial (!@#\$...)")
+
+                // Descreve o estado de cada requisito sem depender dos símbolos ✓ e ✗.
+                reqMinimo.contentDescription = descreverRequisito("Mínimo de 8 caracteres", temMinimo)
+                reqMaiuscula.contentDescription =
+                    descreverRequisito("Pelo menos 1 letra maiúscula", temMaiuscula)
+                reqMinuscula.contentDescription =
+                    descreverRequisito("Pelo menos 1 letra minúscula", temMinuscula)
+                reqNumero.contentDescription = descreverRequisito("Pelo menos 1 número", temNumero)
+                reqEspecial.contentDescription =
+                    descreverRequisito("Pelo menos 1 caractere especial", temEspecial)
 
                 val pontos = listOf(
                     temMinimo,

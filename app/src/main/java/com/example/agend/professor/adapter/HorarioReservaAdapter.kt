@@ -1,5 +1,6 @@
 package com.example.agend.professor.adapter
 
+import com.example.agend.utils.AcessibilidadeUtils
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -51,7 +52,7 @@ class HorarioReservaAdapter(
             // Destaca o horário como disponível para reserva.
             textoStatus.text = "Disponível para reserva"
             textoStatus.setTextColor(
-                context.getColor(R.color.yarooms_gold)
+                context.getColor(R.color.yarooms_gold_light)
             )
             cardHorario.alpha = 1.0f
             cardHorario.strokeColor = context.getColor(R.color.yarooms_gold)
@@ -61,11 +62,29 @@ class HorarioReservaAdapter(
                 "Ocupado por ${horario.professorNome ?: "outro professor"}"
 
             textoStatus.setTextColor(
-                context.getColor(android.R.color.holo_red_light)
+                context.getColor(R.color.yarooms_error_light)
             )
+            cardHorario.alpha = 1.0f
             cardHorario.alpha = 0.65f
             cardHorario.strokeColor =
                 context.getColor(android.R.color.darker_gray)
+        }
+
+        // Une período, horário e situação em uma única leitura do TalkBack.
+        val situacao = if (horario.disponivel) {
+            "disponível para reserva"
+        } else {
+            "ocupado por ${horario.professorNome ?: "outro professor"}"
+        }
+
+        view.contentDescription =
+            "${horario.periodoAula}ª aula, " +
+                    "das ${AcessibilidadeUtils.falarHorario(horario.horarioInicio)} " +
+                    "às ${AcessibilidadeUtils.falarHorario(horario.horarioFim)}, $situacao"
+
+        // Evita a leitura duplicada dos textos internos do card.
+        listOf(textoPeriodo, textoHora, textoStatus).forEach {
+            it.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         }
 
         return view

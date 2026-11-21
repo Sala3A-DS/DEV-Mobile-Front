@@ -11,18 +11,19 @@ object AppInfoDialog {
             .setTitle("Sobre o YaRooms")
             .setMessage(
                 """
-                Versão: 4.5.3
+                Versão: 5.0.0
                 
                 O YaRooms é um aplicativo para agendamento de espaços escolares.
                 
                 Recursos principais:
-                • Cadastro e login de usuários
-                • Recuperação de senha por e-mail
-                • Cadastro de espaços pelo diretor
-                • Reserva de salas por professores
-                • Consulta de disponibilidade
-                • Cancelamento de reservas
-                • Painel administrativo do diretor
+                - Cadastro e login de usuários
+                - Recuperação de senha por e-mail
+                - Cadastro de espaços pelo diretor
+                - Reserva de salas por professores
+                - Consulta de disponibilidade
+                - Cancelamento de reservas
+                - Painel administrativo do diretor
+                - Acessibilidade de Áudiodescrição
                 
                 Plataforma atual:
                 Android

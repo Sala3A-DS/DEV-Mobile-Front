@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Status: CONFIRMADA"
-            android:textColor="@color/yarooms_gold"
+            android:textColor="@color/yarooms_gold_light"
             android:textSize="14sp"
             android:textStyle="bold"
             android:layout_marginTop="8dp" />
@@ -76,7 +76,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/botaoCancelarReserva"
             android:layout_width="wrap_content"
-            android:layout_height="44dp"
+            android:layout_height="48dp"
             android:text="Cancelar"
             android:textAllCaps="false"
             android:textColor="@color/white"

@@ -1,5 +1,6 @@
 package com.example.agend.diretor.adapter
 
+import com.example.agend.utils.AcessibilidadeUtils
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -63,6 +64,28 @@ class AgendamentosGeraisAdapter(
         textoHorario.text =
             "Horário: ${reserva.periodoAula}ª aula - ${reserva.horarioInicio} às ${reserva.horarioFim}"
         textoStatus.text = "Status: ${reserva.status}"
+
+        // Une todos os dados do agendamento em uma única leitura do TalkBack.
+        textoSala.contentDescription =
+            "${reserva.salaNome}. Professor ${reserva.professorNome}. " +
+                    "Turma $turma. Finalidade $finalidade. " +
+                    "${AcessibilidadeUtils.falarData(reserva.data)}, " +
+                    "${reserva.periodoAula}ª aula, " +
+                    "das ${AcessibilidadeUtils.falarHorario(reserva.horarioInicio)} " +
+                    "às ${AcessibilidadeUtils.falarHorario(reserva.horarioFim)}. " +
+                    "Status ${reserva.status}".lowercase()
+
+        // Evita a leitura duplicada dos textos internos do card.
+        listOf(
+            textoProfessor,
+            textoTurma,
+            textoFinalidade,
+            textoData,
+            textoHorario,
+            textoStatus
+        ).forEach {
+            it.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        }
 
         return view
     }

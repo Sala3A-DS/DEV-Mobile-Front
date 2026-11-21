@@ -1,5 +1,7 @@
 package com.example.agend.diretor
 
+import androidx.core.view.ViewCompat
+import com.example.agend.utils.AcessibilidadeUtils
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -47,11 +49,26 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
             finish()
         }
 
+        // Anuncia o retorno como botão para o TalkBack.
+        AcessibilidadeUtils.marcarComoBotao(layoutVoltarTopo)
+
+        // Define o título da tela para navegação por títulos no TalkBack.
+        ViewCompat.setAccessibilityHeading(
+            findViewById<TextView>(R.id.textoTituloOpcoesUso),
+            true
+        )
+
         layoutNome = findViewById(R.id.layoutNomeOpcaoUso)
         editNome = findViewById(R.id.editNomeOpcaoUso)
         botaoCadastrar = findViewById(R.id.botaoCadastrarOpcaoUso)
         listaOpcoes = findViewById(R.id.listaOpcoesUso)
         textoErro = findViewById(R.id.textoErroOpcoesUso)
+
+        // Anuncia automaticamente as mensagens de erro da tela.
+        ViewCompat.setAccessibilityLiveRegion(
+            textoErro,
+            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
+        )
 
         // Inicia o cadastro da opção informada pelo administrador.
         botaoCadastrar.setOnClickListener {
@@ -169,7 +186,7 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
         if (opcoes.isEmpty()) {
             listaOpcoes.adapter = ArrayAdapter(
                 this,
-                android.R.layout.simple_list_item_1,
+                R.layout.item_lista_vazia,
                 listOf("Nenhuma opção cadastrada.")
             )
             return
@@ -208,6 +225,11 @@ class GerenciarOpcoesUsoActivity : AppCompatActivity() {
                     response: Response<OpcaoUsoResponse>
                 ) {
                     if (response.isSuccessful) {
+                        // Informa o novo estado, já que a lista é recriada após a alteração.
+                        listaOpcoes.announceForAccessibility(
+                            "Opção ${opcao.nome} ${if (novoStatus) "ativada" else "desativada"}"
+                        )
+
                         // Recarrega a lista para refletir o novo status.
                         carregarOpcoes()
                     } else {

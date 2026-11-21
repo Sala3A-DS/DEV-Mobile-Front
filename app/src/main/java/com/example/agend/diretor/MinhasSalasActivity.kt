@@ -1,5 +1,7 @@
 package com.example.agend.diretor
 
+import androidx.core.view.ViewCompat
+import com.example.agend.utils.AcessibilidadeUtils
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -42,9 +44,24 @@ class MinhasSalasActivity : AppCompatActivity() {
             finish()
         }
 
+        // Anuncia o retorno como botão para o TalkBack.
+        AcessibilidadeUtils.marcarComoBotao(layoutVoltarTopo)
+
+        // Define o título da tela para navegação por títulos no TalkBack.
+        ViewCompat.setAccessibilityHeading(
+            findViewById<TextView>(R.id.textoTituloMinhasSalas),
+            true
+        )
+
         listaMinhasSalas = findViewById(R.id.listaMinhasSalas)
         textoErro = findViewById(R.id.textoErroMinhasSalas)
         botaoAtualizar = findViewById(R.id.botaoAtualizarMinhasSalas)
+
+        // Anuncia automaticamente as mensagens de erro da tela.
+        ViewCompat.setAccessibilityLiveRegion(
+            textoErro,
+            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
+        )
 
         // Permite atualizar manualmente a lista de salas.
         botaoAtualizar.setOnClickListener {
@@ -82,7 +99,7 @@ class MinhasSalasActivity : AppCompatActivity() {
                             // Exibe uma mensagem quando não existem salas cadastradas.
                             listaMinhasSalas.adapter = ArrayAdapter(
                                 this@MinhasSalasActivity,
-                                android.R.layout.simple_list_item_1,
+                                R.layout.item_lista_vazia,
                                 listOf("Você ainda não possui salas cadastradas.")
                             )
                         } else {
@@ -92,6 +109,15 @@ class MinhasSalasActivity : AppCompatActivity() {
                                 salas = salas
                             )
                         }
+
+                        // Informa o resultado da consulta para quem usa o TalkBack.
+                        listaMinhasSalas.announceForAccessibility(
+                            when (salas.size) {
+                                0 -> "Você ainda não possui salas cadastradas"
+                                1 -> "1 sala carregada"
+                                else -> "${salas.size} salas carregadas"
+                            }
+                        )
                     } else {
                         tratarErroSessaoOuServidor(
                             response.code(),

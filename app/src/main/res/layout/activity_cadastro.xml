@@ -15,6 +15,7 @@
         <include layout="@layout/include_botao_voltar_topo" />
 
         <TextView
+            android:id="@+id/textoTituloCadastro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CRIAR CONTA"
@@ -41,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:hint="Nome Completo"
+                android:autofillHints="personName"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:hint="E-mail"
+                android:autofillHints="emailAddress"
                 android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,6 +99,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:hint="Senha"
+                android:autofillHints="newPassword"
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -115,6 +119,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:textColor="#FFFFFF"
+                android:autofillHints="newPassword"
                 android:textColorHint="#E5C78B" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -133,10 +138,33 @@
                 android:layout_height="6dp"
                 android:orientation="horizontal"
                 android:weightSum="4">
-                <View android:id="@+id/barra1" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#44FFFFFF"/>
-                <View android:id="@+id/barra2" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#44FFFFFF"/>
-                <View android:id="@+id/barra3" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#44FFFFFF"/>
-                <View android:id="@+id/barra4" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="#44FFFFFF"/>
+                <View android:id="@+id/barra1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="4dp"
+                    android:importantForAccessibility="no"
+                    android:background="#44FFFFFF"/>
+                <View android:id="@+id/barra2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="4dp"
+                    android:importantForAccessibility="no"
+                    android:background="#44FFFFFF"/>
+                <View android:id="@+id/barra3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="4dp"
+                    android:importantForAccessibility="no"
+                    android:background="#44FFFFFF"/>
+                <View android:id="@+id/barra4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:importantForAccessibility="no"
+                    android:background="#44FFFFFF"/>
             </LinearLayout>
 
             <TextView android:id="@+id/textoForcaSenha" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Força da senha" android:textColor="@color/yarooms_gold_light" android:textSize="12sp" android:textStyle="bold" android:layout_marginTop="6dp"/>
