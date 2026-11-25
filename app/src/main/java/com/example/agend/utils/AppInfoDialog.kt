@@ -11,7 +11,7 @@ object AppInfoDialog {
             .setTitle("Sobre o YaRooms")
             .setMessage(
                 """
-                Versão: 5.0.0
+                Versão: 5.0.2
                 
                 O YaRooms é um aplicativo para agendamento de espaços escolares.
                 
@@ -23,7 +23,40 @@ object AppInfoDialog {
                 - Consulta de disponibilidade
                 - Cancelamento de reservas
                 - Painel administrativo do diretor
-                - Acessibilidade de Áudiodescrição
+                
+                Desenvolvido por:
+                 - Documentção e Requsisitos
+                Kevin Vieira
+                Miguel Lima
+                Ana Clara
+                Marcella de Oliveira
+                Maicon Douglas
+                Maria Eduarda Izzo
+
+                - Prototipagem
+                João Victor
+                Maria Eduarda Alves
+                Filipe de Jesus
+                Gabriel de Sousa
+                Dhyan Gabriel
+
+                - Desenvolvimento
+                Icaro de Oliveira (Mobile)
+                Giovany Veloso (Mobile)
+                Gustavo Henrique (Web)
+                Leonardo Oliveira (Web) 
+                Brian José (Web)
+                Henry Gabriel (Mobile)
+                Bryan Rodrigues (Mobile)
+
+                - Eventos
+                Kauã Lima
+                Matheus Gonçalves
+                Emerson Gabriel
+                Eduardo Barreto
+                Lara Rodrigues
+                Miguel Cardoso
+                Douglas do Carmo
                 
                 Plataforma atual:
                 Android

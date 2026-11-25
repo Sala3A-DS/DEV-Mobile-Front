@@ -55,6 +55,12 @@ class MinhasReservasActivity : AppCompatActivity() {
         )
 
         listaReservas = findViewById(R.id.listaMinhasReservas)
+        // Permite rolar a lista sem interferência do ScrollView pai.
+        listaReservas.setOnTouchListener { view, _ ->
+            view.parent.requestDisallowInterceptTouchEvent(true)
+            false
+        }
+
         textoErro = findViewById(R.id.textoErroMinhasReservas)
         botaoAtualizar = findViewById(R.id.botaoAtualizarReservas)
 

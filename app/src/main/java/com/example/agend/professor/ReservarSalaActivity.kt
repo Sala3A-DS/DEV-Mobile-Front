@@ -1,6 +1,5 @@
 package com.example.agend.professor
 
-import com.example.agend.utils.NarradorAcessibilidade
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import com.example.agend.utils.AcessibilidadeUtils
@@ -49,7 +48,6 @@ class ReservarSalaActivity : AppCompatActivity() {
     private lateinit var textoErro: TextView
     private lateinit var textoTituloHorarios: TextView
     private lateinit var listaHorarios: ListView
-    private lateinit var narrador: NarradorAcessibilidade
 
     private val salas = mutableListOf<SalaResponse>()
     private val nomesSalas = mutableListOf<String>()
@@ -168,29 +166,6 @@ class ReservarSalaActivity : AppCompatActivity() {
             ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE
         )
 
-        // Inicializa a narração e avisa quando a voz em português não está disponível.
-        narrador = NarradorAcessibilidade(this) {
-            Toast.makeText(
-                this,
-                "Voz em português indisponível neste aparelho.",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-
-        // Narra as informações da sala selecionada ao tocar no botão.
-        findViewById<Button>(R.id.botaoOuvirSala).setOnClickListener {
-            val sala = salaSelecionada
-
-            if (sala == null) {
-                narrador.falar("Nenhuma sala selecionada.")
-            } else {
-                narrador.falar(
-                    "${sala.nomeEspaco}. Localização ${sala.localizacao}. " +
-                            "Sala número ${sala.numeroSala}."
-                )
-            }
-        }
-
         // Permite rolar a lista de horários sem interferência do ScrollView pai.
         listaHorarios.setOnTouchListener { view, _ ->
             view.parent.requestDisallowInterceptTouchEvent(true)
@@ -205,13 +180,6 @@ class ReservarSalaActivity : AppCompatActivity() {
         configurarEventos()
         carregarSalas()
         carregarOpcoesUso()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // Libera o motor de voz ao fechar a tela.
-        narrador.liberar()
     }
 
     private fun configurarAdapters() {

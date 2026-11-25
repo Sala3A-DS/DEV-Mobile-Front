@@ -91,18 +91,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/botaoOuvirSala"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Ouvir informações da sala"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:textColor="@color/yarooms_blue_dark"
-            android:backgroundTint="@color/yarooms_gold_light"
-            app:cornerRadius="8dp"
-            android:layout_marginBottom="18dp" />
-
         <!-- CARD DE SELEÇÃO DE TURNO -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"

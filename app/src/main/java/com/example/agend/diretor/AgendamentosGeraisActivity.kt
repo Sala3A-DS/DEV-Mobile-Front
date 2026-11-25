@@ -63,6 +63,12 @@ class AgendamentosGeraisActivity : AppCompatActivity() {
         )
 
         listaAgendamentos = findViewById(R.id.listaAgendamentosGerais)
+        // Permite rolar a lista sem interferência do ScrollView pai.
+        listaAgendamentos.setOnTouchListener { view, _ ->
+            view.parent.requestDisallowInterceptTouchEvent(true)
+            false
+        }
+
         textoErro = findViewById(R.id.textoErroAgendamentosGerais)
         botaoAtualizar = findViewById(R.id.botaoAtualizarAgendamentosGerais)
         layoutData = findViewById(R.id.layoutDataAgendamentosGerais)

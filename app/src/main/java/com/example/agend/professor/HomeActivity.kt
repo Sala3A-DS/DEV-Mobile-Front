@@ -45,7 +45,12 @@ class HomeActivity : AppCompatActivity() {
         textoCargoUsuario.text = when (cargo.uppercase()) {
             "COORDENADOR" -> "Coordenador(a)"
             "PROFESSOR" -> "Professor(a)"
-            else -> "Usuário"
+            else -> if (cargo.isBlank()) {
+                "Usuário"
+            } else {
+                // Exibe o cargo personalizado com a primeira letra maiúscula.
+                cargo.trim().lowercase().replaceFirstChar { it.uppercase() }
+            }
         }
 
         // Unifica saudação, nome e cargo em uma única leitura do TalkBack.

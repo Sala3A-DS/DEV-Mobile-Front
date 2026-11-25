@@ -54,6 +54,12 @@ class MinhasSalasActivity : AppCompatActivity() {
         )
 
         listaMinhasSalas = findViewById(R.id.listaMinhasSalas)
+        // Permite rolar a lista sem interferência do ScrollView pai.
+        listaMinhasSalas.setOnTouchListener { view, _ ->
+            view.parent.requestDisallowInterceptTouchEvent(true)
+            false
+        }
+
         textoErro = findViewById(R.id.textoErroMinhasSalas)
         botaoAtualizar = findViewById(R.id.botaoAtualizarMinhasSalas)
 
