@@ -1,3 +1,5 @@
+import java.net.URI
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,14 +8,21 @@ plugins {
 
 android {
     namespace = "com.example.agend"
-    compileSdk = 34
+    compileSdk = 35
+
+    buildFeatures { buildConfig = true }
 
     defaultConfig {
+        val apiUrl = providers.gradleProperty("yaroomsApiUrl")
+            .getOrElse("https://dev-mobile-back-production.up.railway.app/").trimEnd('/') + "/"
+        require(URI(apiUrl).let { it.scheme == "https" && it.host != null })
+        buildConfigField("String", "API_BASE_URL", "\"$apiUrl\"")
+
         applicationId = "com.example.agend"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "5.0.2"
+        versionCode = 3
+        versionName = "5.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -42,6 +51,8 @@ dependencies {
 
     implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-ai")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")

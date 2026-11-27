@@ -100,7 +100,7 @@ class NovaSenhaActivity : AppCompatActivity() {
 
         val email = intent.getStringExtra("email") ?: ""
 
-        // O código de verificação já foi validado na tela anterior.
+        val codigo = intent.getStringExtra("codigo") ?: ""
 
         val layoutNova = findViewById<TextInputLayout>(R.id.layoutNovaSenha)
         val layoutConfirmar = findViewById<TextInputLayout>(R.id.layoutConfirmarSenha)
@@ -309,7 +309,7 @@ class NovaSenhaActivity : AppCompatActivity() {
             botaoSalvar.text = "Salvando..."
 
             // Envia o e-mail e a nova senha para o backend.
-            RetrofitClient.api.resetPassword(ResetPasswordRequest(email, nova))
+            RetrofitClient.api.resetPassword(ResetPasswordRequest(email, nova, codigo))
                 .enqueue(object : Callback<String> {
 
                     override fun onResponse(

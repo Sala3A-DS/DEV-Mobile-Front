@@ -37,7 +37,8 @@ data class VerifyCodeRequest(
 
 data class ResetPasswordRequest(
     val email: String,
-    val novaSenha: String
+    val novaSenha: String,
+    val codigo: String
 )
 
 // Modelos utilizados pelos agendamentos legados.

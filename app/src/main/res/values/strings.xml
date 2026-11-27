@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">YaRooms</string>
+    <string name="assistente_titulo">Assistente YaRooms</string>
+    <string name="assistente_pergunta">Pergunte sobre o YaRooms</string>
+    <string name="assistente_enviar">Enviar</string>
+    <string name="assistente_voltar">Voltar</string>
 </resources>

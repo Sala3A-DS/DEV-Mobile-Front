@@ -78,6 +78,7 @@ class MinhasReservasActivity : AppCompatActivity() {
         carregarMinhasReservas()
     }
 
+    private val conta by lazy { SessionManager(this).getEmail() }
     private fun carregarMinhasReservas() {
         mostrarErro(null)
 
@@ -98,35 +99,8 @@ class MinhasReservasActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val resposta = response.body() ?: emptyList()
 
-                        reservas.clear()
-                        reservas.addAll(resposta)
-
-                        if (reservas.isEmpty()) {
-                            // Exibe uma mensagem quando não existem reservas cadastradas.
-                            listaReservas.adapter = ArrayAdapter(
-                                this@MinhasReservasActivity,
-                                R.layout.item_lista_vazia,
-                                listOf("Você ainda não possui reservas.")
-                            )
-                        } else {
-                            // Exibe as reservas utilizando o adapter personalizado.
-                            listaReservas.adapter = MinhasReservasAdapter(
-                                context = this@MinhasReservasActivity,
-                                reservas = reservas,
-                                onCancelarClick = { reserva ->
-                                    confirmarCancelamento(reserva)
-                                }
-                            )
-                        }
-
-                        // Informa o resultado da consulta para quem usa o TalkBack.
-                        listaReservas.announceForAccessibility(
-                            when (reservas.size) {
-                                0 -> "Você ainda não possui reservas"
-                                1 -> "1 reserva carregada"
-                                else -> "${reservas.size} reservas carregadas"
-                            }
-                        )
+                        com.example.agend.ReservaLocal(this@MinhasReservasActivity).use { it.salvar(conta, resposta) }
+                        exibir(resposta)
                     } else {
                         tratarErroSessaoOuServidor(
                             response.code(),
@@ -139,9 +113,44 @@ class MinhasReservasActivity : AppCompatActivity() {
                     botaoAtualizar.isEnabled = true
                     botaoAtualizar.text = "Atualizar"
 
-                    mostrarErro("Falha na conexão ao carregar reservas.")
+                    val copia = com.example.agend.ReservaLocal(this@MinhasReservasActivity).use { it.ler(conta) }
+                    if (copia != null) exibir(copia)
+                    mostrarErro(if (copia == null) "Sem conexão. Nenhuma consulta salva." else "Sem conexão. Exibindo a última consulta salva.")
+
                 }
             })
+    }
+
+    private fun exibir(resposta: List<ReservaResponse>) {
+        reservas.clear()
+        reservas.addAll(resposta)
+
+        if (reservas.isEmpty()) {
+            // Exibe uma mensagem quando não existem reservas cadastradas.
+            listaReservas.adapter = ArrayAdapter(
+                this@MinhasReservasActivity,
+                R.layout.item_lista_vazia,
+                listOf("Você ainda não possui reservas.")
+            )
+        } else {
+            // Exibe as reservas utilizando o adapter personalizado.
+            listaReservas.adapter = MinhasReservasAdapter(
+                context = this@MinhasReservasActivity,
+                reservas = reservas,
+                onCancelarClick = { reserva ->
+                    confirmarCancelamento(reserva)
+                }
+            )
+        }
+
+        // Informa o resultado da consulta para quem usa o TalkBack.
+        listaReservas.announceForAccessibility(
+            when (reservas.size) {
+                0 -> "Você ainda não possui reservas"
+                1 -> "1 reserva carregada"
+                else -> "${reservas.size} reservas carregadas"
+            }
+        )
     }
 
     private fun confirmarCancelamento(reserva: ReservaResponse) {

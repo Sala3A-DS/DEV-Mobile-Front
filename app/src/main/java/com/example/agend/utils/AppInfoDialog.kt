@@ -1,6 +1,7 @@
 package com.example.agend.utils
 
 import android.content.Context
+import com.example.agend.BuildConfig
 import androidx.appcompat.app.AlertDialog
 
 object AppInfoDialog {
@@ -11,7 +12,7 @@ object AppInfoDialog {
             .setTitle("Sobre o YaRooms")
             .setMessage(
                 """
-                Versão: 5.0.2
+                Versão: ${BuildConfig.VERSION_NAME}
                 
                 O YaRooms é um aplicativo para agendamento de espaços escolares.
                 

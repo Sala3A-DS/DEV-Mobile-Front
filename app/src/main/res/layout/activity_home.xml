@@ -99,6 +99,20 @@
             android:layout_marginTop="16dp" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/assistente"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/yarooms_blue_dark"
+            android:text="@string/assistente_titulo"
+            android:textAllCaps="false"
+            android:textColor="@color/yarooms_gold_light"
+            android:textStyle="bold"
+            app:cornerRadius="8dp"
+            app:strokeColor="@color/yarooms_gold"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/botaoSairProfessor"
             android:layout_width="180dp"
             android:layout_height="48dp"

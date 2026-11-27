@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    private const val BASE_URL = "https://dev-mobile-back.onrender.com/"
+    private val BASE_URL = com.example.agend.BuildConfig.API_BASE_URL
 
     // Armazena o token JWT da sessão atual.
     var token: String? = null
@@ -31,7 +31,7 @@ object RetrofitClient {
             val originalRequest = chain.request()
 
             // Obtém o caminho da URL para identificar a rota.
-            val path = originalRequest.url().encodedPath()
+            val path = originalRequest.url.encodedPath
 
             // Define as rotas de autenticação que não exigem token.
             val isPublicAuthRoute =
@@ -50,7 +50,13 @@ object RetrofitClient {
                 }
             }
 
-            chain.proceed(requestBuilder.build())
+            // As rotas de envio de e-mail podem aguardar o SMTP.
+            val clientChain = when (path) {
+                "/api/auth/forgot-password", "/api/auth/reset-password" ->
+                    chain.withReadTimeout(30, TimeUnit.SECONDS)
+                else -> chain
+            }
+            clientChain.proceed(requestBuilder.build())
         }
         .build()
 

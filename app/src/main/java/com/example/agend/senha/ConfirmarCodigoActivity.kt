@@ -145,6 +145,7 @@ class ConfirmarCodigoActivity : AppCompatActivity() {
                             )
 
                             intent.putExtra("email", email)
+                            intent.putExtra("codigo", codigo)
                             startActivity(intent)
                             finish()
                         } else {

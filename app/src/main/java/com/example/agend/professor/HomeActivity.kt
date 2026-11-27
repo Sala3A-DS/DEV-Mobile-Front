@@ -26,6 +26,10 @@ class HomeActivity : AppCompatActivity() {
 
         // Inicializa a tela principal do professor e coordenador.
         setContentView(R.layout.activity_home)
+        findViewById<Button>(R.id.assistente).setOnClickListener {
+            startActivity(Intent(this, com.example.agend.AssistenteActivity::class.java))
+        }
+
 
         val textoBemVindo = findViewById<TextView>(R.id.textoBemVindo)
         val textoNomeUsuario = findViewById<TextView>(R.id.textoNomeUsuario)

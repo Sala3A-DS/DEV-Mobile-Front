@@ -29,6 +29,10 @@ class DiretorHomeActivity : AppCompatActivity() {
 
         // Inicializa a tela principal do diretor/admin.
         setContentView(R.layout.activity_diretor_home)
+        findViewById<Button>(R.id.assistente).setOnClickListener {
+            startActivity(Intent(this, com.example.agend.AssistenteActivity::class.java))
+        }
+
 
         val textoNomeDiretor = findViewById<TextView>(R.id.textoNomeDiretor)
         val botaoCadastrarSala = findViewById<Button>(R.id.botaoCadastrarSala)
