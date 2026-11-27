@@ -7,6 +7,9 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.agend.auth.SessionManager
+import com.example.agend.gemini.GeminiApiException
+import com.example.agend.gemini.GeminiChat
+import com.example.agend.gemini.GeminiKeyStore
 import com.google.firebase.Firebase
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.GenerativeBackend
@@ -27,13 +30,33 @@ class AssistenteActivity : AppCompatActivity() {
         ou executar ações. Se o guia não esclarecer a dúvida, diga isso. Nunca peça senhas.
     """.trimIndent()
 
-    private val chat by lazy {
-        val perfil = SessionManager(this).getCargo()
+    private val instrucao by lazy {
+        "$guia\nPerfil atual: ${SessionManager(this).getCargo()}"
+    }
+    private val chaves by lazy { GeminiKeyStore(applicationContext) }
+    private val chatPessoal by lazy { GeminiChat(instrucao) }
+    private val chatPadrao by lazy {
         Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
             modelName = "gemini-flash-latest",
-            systemInstruction = content { text("$guia\nPerfil atual: $perfil") }
+            systemInstruction = content { text(instrucao) }
         ).startChat()
     }
+
+    private suspend fun responder(pergunta: String): String? {
+        val chave = try {
+            chaves.ler()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            throw GeminiApiException("Salve a chave do Gemini novamente nas Configurações.")
+        }
+        return if (chave == null) {
+            chatPadrao.sendMessage(pergunta).text
+        } else {
+            chatPessoal.enviar(chave, pergunta)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_assistente)
@@ -50,12 +73,14 @@ class AssistenteActivity : AppCompatActivity() {
             enviar.text = "Respondendo…"
             lifecycleScope.launch {
                 try {
-                    val resposta = chat.sendMessage(pergunta).text
+                    val resposta = responder(pergunta)
                     mensagem("YaRooms", resposta ?: "Tente reformular sua pergunta.", false)
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
-                    mensagem("YaRooms", "O assistente está indisponível. Tente enviar novamente.", false)
+                    val motivo = (e as? GeminiApiException)?.mensagemUsuario
+                        ?: "O assistente está indisponível. Tente enviar novamente."
+                    mensagem("YaRooms", motivo, false)
                     if (campo.text.isEmpty()) campo.setText(pergunta)
                 } finally {
                     enviar.isEnabled = true

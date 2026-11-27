@@ -12,6 +12,17 @@
         android:orientation="vertical"
         android:padding="24dp">
 
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/configuracoes"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/app_settings_title"
+            android:padding="12dp"
+            app:srcCompat="@drawable/ic_ya_settings"
+            app:tint="@color/yarooms_gold_light" />
+
         <TextView
             android:id="@+id/textoTituloDiretor"
             android:layout_width="match_parent"

@@ -21,8 +21,8 @@ android {
         applicationId = "com.example.agend"
         minSdk = 24
         targetSdk = 34
-        versionCode = 3
-        versionName = "5.0.4"
+        versionCode = 4
+        versionName = "5.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

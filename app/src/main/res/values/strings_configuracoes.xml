@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_settings_title">Configurações</string>
+    <string name="app_settings_back">Voltar</string>
+    <string name="gemini_settings_title">Assistente Gemini</string>
+    <string name="gemini_settings_description">Use uma chave do Google AI Studio para conversar com o assistente. A chave fica criptografada no aparelho e segue direto para o Google nas solicitações do chat.</string>
+    <string name="gemini_configured">Chave pessoal salva</string>
+    <string name="gemini_default">Conexão padrão do app</string>
+    <string name="gemini_api_key">Chave da API Gemini</string>
+    <string name="gemini_replacement_key">Nova chave da API Gemini</string>
+    <string name="gemini_save_key">Salvar chave</string>
+    <string name="gemini_remove_key">Remover chave</string>
+    <string name="gemini_ai_studio">Abrir Google AI Studio</string>
+    <string name="gemini_browser_error">Não foi possível abrir o navegador.</string>
+    <string name="gemini_key_format_error">Cole uma chave válida do Google AI Studio.</string>
+    <string name="gemini_store_error">Não foi possível salvar a chave neste aparelho.</string>
+    <string name="gemini_delete_error">Não foi possível remover a chave. Tente novamente.</string>
+</resources>

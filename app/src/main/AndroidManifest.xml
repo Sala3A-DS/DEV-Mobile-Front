@@ -14,6 +14,7 @@
 
         <!-- SplashScreen: agora é a primeira tela aberta ao iniciar o app -->
         <activity android:name=".AssistenteActivity" android:exported="false" />
+        <activity android:name=".ConfiguracoesActivity" android:exported="false" />
         <activity
             android:name=".SplashActivity"
             android:exported="true">

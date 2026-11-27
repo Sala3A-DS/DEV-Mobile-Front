@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.agend.ConfiguracoesActivity
 import com.example.agend.MainActivity
 import com.example.agend.R
 import com.example.agend.auth.RetrofitClient
@@ -26,6 +27,9 @@ class HomeActivity : AppCompatActivity() {
 
         // Inicializa a tela principal do professor e coordenador.
         setContentView(R.layout.activity_home)
+        findViewById<View>(R.id.configuracoes).setOnClickListener {
+            startActivity(Intent(this, ConfiguracoesActivity::class.java))
+        }
         findViewById<Button>(R.id.assistente).setOnClickListener {
             startActivity(Intent(this, com.example.agend.AssistenteActivity::class.java))
         }
